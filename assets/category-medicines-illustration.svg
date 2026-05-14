@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Medicamentos">
+  <defs>
+    <linearGradient id="med-bg" x1="28" y1="28" x2="212" y2="212" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#edf8ff"/>
+      <stop offset="1" stop-color="#f5fff8"/>
+    </linearGradient>
+    <linearGradient id="box-front" x1="56" y1="80" x2="152" y2="178" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e8f5ef"/>
+    </linearGradient>
+    <filter id="med-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#075f3f" flood-opacity=".15"/>
+    </filter>
+  </defs>
+  <circle cx="120" cy="120" r="110" fill="url(#med-bg)"/>
+  <g filter="url(#med-shadow)">
+    <rect x="51" y="86" width="112" height="76" rx="12" fill="url(#box-front)"/>
+    <rect x="51" y="86" width="112" height="25" rx="12" fill="#0f6f4b"/>
+    <path d="M51 111h112" stroke="#075f3f" stroke-width="2" opacity=".2"/>
+    <rect x="70" y="123" width="54" height="12" rx="6" fill="#ff8f1c"/>
+    <rect x="70" y="141" width="74" height="8" rx="4" fill="#b6dacf"/>
+    <path d="M130 91h20v15h-20z" fill="#fff"/>
+    <path d="M140 94v9M135.5 98.5h9" stroke="#0f6f4b" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g filter="url(#med-shadow)">
+    <rect x="142" y="116" width="51" height="78" rx="16" fill="#ffffff"/>
+    <circle cx="158" cy="134" r="11" fill="#e8f3ff" stroke="#9ac3e8" stroke-width="3"/>
+    <circle cx="178" cy="134" r="11" fill="#e8f3ff" stroke="#9ac3e8" stroke-width="3"/>
+    <circle cx="158" cy="162" r="11" fill="#e8f3ff" stroke="#9ac3e8" stroke-width="3"/>
+    <circle cx="178" cy="162" r="11" fill="#e8f3ff" stroke="#9ac3e8" stroke-width="3"/>
+  </g>
+  <g transform="rotate(-18 79 176)" filter="url(#med-shadow)">
+    <rect x="55" y="164" width="48" height="18" rx="9" fill="#ff8f1c"/>
+    <rect x="79" y="164" width="24" height="18" rx="9" fill="#ffffff" opacity=".9"/>
+  </g>
+  <g transform="rotate(18 111 178)" filter="url(#med-shadow)">
+    <rect x="91" y="169" width="42" height="16" rx="8" fill="#39896a"/>
+    <rect x="112" y="169" width="21" height="16" rx="8" fill="#ffffff" opacity=".9"/>
+  </g>
+</svg>
