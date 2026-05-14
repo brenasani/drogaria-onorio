@@ -1,0 +1,13 @@
+.edge-profile/
+.edge-profile-mobile/
+.edge-profile-mobile-wide/
+Drogara Onorio/
+brandbook-pages/
+deploy/
+design/
+onorio-commerce/
+storage/
+tools/
+*.log
+*.err.log
+assets/*-source.jpg

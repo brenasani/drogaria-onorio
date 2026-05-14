@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="Serviços farmacêuticos">
+  <defs>
+    <linearGradient id="srvBg" x1="28" y1="18" x2="292" y2="312" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#efffff"/>
+      <stop offset=".45" stop-color="#cdeef2"/>
+      <stop offset="1" stop-color="#f7f1db"/>
+    </linearGradient>
+    <linearGradient id="srvSkin" x1="115" y1="75" x2="215" y2="235" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f1b08a"/>
+      <stop offset="1" stop-color="#bd7356"/>
+    </linearGradient>
+    <filter id="srvShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="11" flood-color="#30596a" flood-opacity=".2"/>
+    </filter>
+  </defs>
+  <rect width="320" height="320" fill="url(#srvBg)"/>
+  <circle cx="58" cy="78" r="50" fill="#ffffff" opacity=".58"/>
+  <circle cx="264" cy="242" r="68" fill="#fff2bd" opacity=".46"/>
+  <path d="M0 226c50-25 101-27 154-4 58 25 102 13 166-26v124H0z" fill="#ffffff" opacity=".38"/>
+  <g filter="url(#srvShadow)">
+    <path d="M90 294c8-70 34-106 80-106 49 0 78 36 87 106z" fill="#ffffff"/>
+    <path d="M108 294c7-45 25-72 62-72 38 0 57 27 68 72z" fill="#0b7254"/>
+    <circle cx="166" cy="122" r="45" fill="url(#srvSkin)"/>
+    <path d="M122 116c2-43 31-72 72-64 31 6 49 31 49 65-45 8-78 5-121-1z" fill="#28515f"/>
+    <rect x="131" y="62" width="74" height="27" rx="10" fill="#ffffff"/>
+    <path d="M158 75h20M168 65v20" stroke="#0b7254" stroke-width="7" stroke-linecap="round"/>
+    <path d="M75 209c30-21 69-21 102 0" fill="none" stroke="#f2b08d" stroke-width="22" stroke-linecap="round"/>
+    <rect x="54" y="174" width="84" height="58" rx="22" fill="#2f8ec2"/>
+    <rect x="70" y="190" width="52" height="18" rx="9" fill="#ffffff"/>
+    <path d="M72 260h58" stroke="#28515f" stroke-width="11" stroke-linecap="round"/>
+    <circle cx="72" cy="260" r="19" fill="#ffffff"/>
+    <path d="M63 260h18M72 251v18" stroke="#e65243" stroke-width="6" stroke-linecap="round"/>
+    <rect x="210" y="145" width="52" height="89" rx="18" fill="#ffffff"/>
+    <rect x="222" y="166" width="28" height="38" rx="7" fill="#dff7f4"/>
+    <path d="M229 185h14M236 178v14" stroke="#0b7254" stroke-width="5" stroke-linecap="round"/>
+    <path d="M242 237c13 15 31 14 42-1 12-16 3-40-18-41" fill="none" stroke="#28515f" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="266" cy="196" r="12" fill="#ffffff" stroke="#28515f" stroke-width="7"/>
+    <path d="M221 72l37 37" stroke="#2f8ec2" stroke-width="10" stroke-linecap="round"/>
+    <path d="M247 81l-35 35" stroke="#2f8ec2" stroke-width="10" stroke-linecap="round"/>
+    <rect x="223" y="61" width="35" height="24" rx="8" transform="rotate(45 240.5 73)" fill="#ffffff"/>
+  </g>
+</svg>

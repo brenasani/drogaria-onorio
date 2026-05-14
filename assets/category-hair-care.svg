@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="Cuidado com cabelo">
+  <defs>
+    <linearGradient id="hairBg" x1="30" y1="20" x2="286" y2="314" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff5fb"/>
+      <stop offset=".48" stop-color="#f3d9eb"/>
+      <stop offset="1" stop-color="#d9f5ef"/>
+    </linearGradient>
+    <linearGradient id="hairSkin" x1="130" y1="60" x2="210" y2="205" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f3b48e"/>
+      <stop offset="1" stop-color="#c1785a"/>
+    </linearGradient>
+    <linearGradient id="hairFlow" x1="126" y1="45" x2="234" y2="278" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3f201c"/>
+      <stop offset=".55" stop-color="#8b4b31"/>
+      <stop offset="1" stop-color="#c87a38"/>
+    </linearGradient>
+    <filter id="hairShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#633044" flood-opacity=".2"/>
+    </filter>
+  </defs>
+  <rect width="320" height="320" fill="url(#hairBg)"/>
+  <circle cx="68" cy="70" r="54" fill="#ffffff" opacity=".52"/>
+  <circle cx="260" cy="250" r="72" fill="#e6fff7" opacity=".52"/>
+  <path d="M0 242c41-30 86-34 137-14 63 24 111 18 183-25v117H0z" fill="#ffffff" opacity=".35"/>
+  <g filter="url(#hairShadow)">
+    <path d="M110 96c27-55 101-52 126 5 28 62-14 105 32 173-54 14-126 13-179-6 39-70-11-117 21-172z" fill="url(#hairFlow)"/>
+    <circle cx="174" cy="111" r="45" fill="url(#hairSkin)"/>
+    <path d="M130 119c33-8 58-26 79-55 24 16 36 42 35 70-48 4-83-2-114-15z" fill="#3b201c"/>
+    <path d="M118 288c11-72 31-109 68-109 40 0 63 38 72 109z" fill="#ffffff"/>
+    <path d="M131 288c7-48 22-78 54-78 33 0 49 30 58 78z" fill="#b54f89"/>
+    <path d="M214 88c34 56 24 111 58 175-24 9-55 8-77-5 30-51 31-111 19-170z" fill="#8b4b31"/>
+    <path d="M62 226c27-19 57-27 93-25" fill="none" stroke="#f2aacd" stroke-width="20" stroke-linecap="round"/>
+    <path d="M62 226c27-19 57-27 93-25" fill="none" stroke="#b54f89" stroke-width="6" stroke-linecap="round" stroke-dasharray="10 12"/>
+    <rect x="238" y="160" width="36" height="86" rx="13" transform="rotate(9 256 203)" fill="#ffffff"/>
+    <rect x="248" y="176" width="16" height="48" rx="8" transform="rotate(9 256 200)" fill="#f08aba"/>
+    <rect x="247" y="147" width="25" height="20" rx="7" transform="rotate(9 259 157)" fill="#8ed8ce"/>
+  </g>
+</svg>

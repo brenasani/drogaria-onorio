@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Protótipo de app de compras para a Drogaria Onório."
+    />
+    <title>Drogaria Onório | App de compras</title>
+    <link rel="icon" type="image/png" href="assets/onorio-avatar-transparent.png?v=2" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="top">
+      <header class="market-header">
+        <div class="market-header-main">
+          <a class="market-brand" href="#" aria-label="Drogaria Onório">
+            <img src="assets/onorio-logo.png" alt="Drogaria Onório" class="market-brand-logo" />
+          </a>
+
+          <form class="market-search" id="search-form" role="search">
+            <input
+              id="search-input"
+              type="search"
+              placeholder="O que deseja encontrar?"
+              autocomplete="off"
+            />
+            <button type="submit" aria-label="Buscar">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m21 21-4.35-4.35m1.35-5.15a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z" />
+              </svg>
+            </button>
+          </form>
+
+          <nav class="market-actions" aria-label="Ações da conta e cesta">
+            <button type="button" class="account-link" id="login-top">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M20 21a8 8 0 1 0-16 0" />
+                <path d="M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" />
+              </svg>
+              <span>
+                <strong>Cliente ON</strong>
+                <small>Entrar ou cadastrar</small>
+              </span>
+            </button>
+            <button type="button" class="orders-link" id="orders-top">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M6 7h12l1 14H5zM9 7a3 3 0 1 1 6 0" />
+              </svg>
+              <span>
+                <strong>Meus</strong>
+                <small>pedidos</small>
+              </span>
+            </button>
+            <button type="button" class="cart-pill" id="cart-pill" aria-label="Abrir cesta">
+              <span id="cart-count">0 Cesta</span>
+              <strong id="cart-total-pill">R$ 0,00</strong>
+            </button>
+          </nav>
+        </div>
+
+        <div class="market-menu">
+          <button type="button" class="cep-link" id="delivery-shortcut">
+            <span class="category-visual cep-photo" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 21s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z" />
+                <path d="M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+              </svg>
+            </span>
+            <span>Insira o CEP</span>
+          </button>
+
+          <nav class="category-strip market-categories" id="category-strip" aria-label="Categorias principais"></nav>
+        </div>
+      </header>
+
+      <main class="main-layout">
+        <section class="shop-panel" aria-label="Vitrine de produtos">
+          <section class="hero-offer campaign-carousel" id="campaign-carousel" aria-label="Campanhas da Drogaria Onório">
+            <div class="campaign-track">
+              <article class="campaign-slide is-active slide-offers" data-campaign-slide>
+                <div class="campaign-copy">
+                  <span>Ofertas do dia</span>
+                  <h1>Genéricos com descontos de até 95%.</h1>
+                  <p>Confira também campanhas leve 3 pague 2 em produtos selecionados.</p>
+                  <button type="button" class="primary-soft" id="see-offers">
+                    Ver ofertas
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      <path d="M5 12h14M13 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="campaign-photo" aria-hidden="true">
+                  <strong>até 95%</strong>
+                  <small>em genéricos selecionados</small>
+                </div>
+              </article>
+
+              <article class="campaign-slide slide-loyalty" data-campaign-slide>
+                <div class="campaign-copy">
+                  <span>Cliente ON</span>
+                  <h1>Cada compra vira ponto para abater no valor final.</h1>
+                  <p>A cada R$ 1,00 em compras, o cliente ganha 1 ponto. A cada 100 pontos, abate R$ 1,00.</p>
+                  <button type="button" class="primary-soft" data-campaign-action="loyalty">
+                    Conhecer pontos
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      <path d="M5 12h14M13 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="campaign-photo loyalty-badge" aria-hidden="true">
+                  <strong>R$ 1 = 1 ponto</strong>
+                  <small>100 pontos = R$ 1 de desconto</small>
+                </div>
+              </article>
+
+              <article class="campaign-slide slide-payment" data-campaign-slide>
+                <div class="campaign-copy">
+                  <span>Pagamento facilitado</span>
+                  <h1>Compre online e pague do seu jeito.</h1>
+                  <p>Aceitamos Pix, Mercado Pago, PicPay, boleto e crédito em até 3x sem juros, ou até 6x acima de R$ 1.000,00.</p>
+                  <button type="button" class="primary-soft" data-campaign-action="payment">
+                    Formas de pagamento
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      <path d="M5 12h14M13 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="campaign-photo" aria-hidden="true">
+                  <strong>Mercado Pago</strong>
+                  <small>Pix, boleto e crédito aceitos</small>
+                </div>
+              </article>
+
+              <article class="campaign-slide slide-vaccine" data-campaign-slide>
+                <div class="campaign-copy">
+                  <span>Vacinação</span>
+                  <h1>Cuidado preventivo também é farmácia.</h1>
+                  <p>Consulte disponibilidade de vacinas e serviços de saúde na unidade.</p>
+                  <button type="button" class="primary-soft" data-campaign-action="vaccine">
+                    Ver serviços
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      <path d="M5 12h14M13 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="campaign-photo" aria-hidden="true">
+                  <strong>Saúde em dia</strong>
+                  <small>orientação e atendimento</small>
+                </div>
+              </article>
+
+              <article class="campaign-slide slide-discount" data-campaign-slide>
+                <div class="campaign-copy">
+                  <span>Leve 3 pague 2</span>
+                  <h1>Mais produtos na cesta com economia.</h1>
+                  <p>Campanhas especiais para combinar itens participantes e pagar menos.</p>
+                  <button type="button" class="primary-soft" data-campaign-action="discount">
+                    Conferir descontos
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      <path d="M5 12h14M13 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="campaign-photo" aria-hidden="true">
+                  <strong>3 por 2</strong>
+                  <small>em produtos selecionados</small>
+                </div>
+              </article>
+            </div>
+
+          </section>
+
+          <section class="benefit-strip" aria-label="Vantagens de comprar na Onório">
+            <article data-info-page="cep" tabindex="0">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M3 13h13v6H3zM16 16h2.5l2-3H16zM6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+              </svg>
+              <span>Receba em até 1 hora com entrega rápida</span>
+            </article>
+            <article data-info-page="descontos" tabindex="0">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+              <span>Genéricos até 95% e ofertas leve 3 pague 2</span>
+            </article>
+            <article data-info-page="clienteon" tabindex="0">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M20 12v9H4v-9" />
+                <path d="M2 7h20v5H2z" />
+                <path d="M12 22V7" />
+                <path d="M12 7H7.5a2.5 2.5 0 1 1 2.1-3.9L12 7Z" />
+                <path d="M12 7h4.5a2.5 2.5 0 1 0-2.1-3.9L12 7Z" />
+              </svg>
+              <span>Cliente ON: use pontos para abater no total</span>
+            </article>
+            <article data-info-page="cep" tabindex="0">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4 10.5 12 4l8 6.5V20H4z" />
+                <path d="M9 20v-6h6v6" />
+              </svg>
+              <span>Retire na farmácia sem pegar fila</span>
+            </article>
+            <article data-catalog-route="medicamentos" tabindex="0">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m20 12-8 8-8-8 8-8z" />
+                <path d="M12 8v8M8 12h8" />
+              </svg>
+              <span>Descontos e benefícios em medicamentos</span>
+            </article>
+          </section>
+
+          <div class="section-heading">
+            <div>
+              <h2 id="product-heading">Mais comprados</h2>
+              <p id="product-subheading">Produtos selecionados para compra rápida.</p>
+            </div>
+            <button type="button" class="link-button" id="clear-filters">Ver todos</button>
+          </div>
+
+          <div class="product-grid" id="product-grid"></div>
+
+          <section class="shelf-section" aria-labelledby="super-offers-title">
+            <div class="shelf-heading">
+              <h2 id="super-offers-title">Genéricos e ofertas com até 95%</h2>
+              <div>
+                <button type="button" aria-label="Voltar ofertas">‹</button>
+                <button type="button" aria-label="Avançar ofertas">›</button>
+              </div>
+            </div>
+            <div class="mini-product-row">
+              <article class="mini-product-card">
+                <span class="discount-badge">-18%</span>
+                <button type="button" class="mini-add" data-add="nivea" aria-label="Adicionar Nivea">+</button>
+                <img class="mini-photo" src="assets/products/nivea.jpg" alt="Nivea Creme Lata 56g" loading="lazy" />
+                <small>Super oferta</small>
+                <h3>Nivea Creme Lata 56g</h3>
+                <p class="stars">★★★★★ <span>(461)</span></p>
+                <del>R$ 19,90</del>
+                <strong>R$ 15,90</strong>
+              </article>
+              <article class="mini-product-card">
+                <span class="discount-badge">-22%</span>
+                <button type="button" class="mini-add" data-add="protetor" aria-label="Adicionar protetor solar">+</button>
+                <img class="mini-photo" src="assets/products/protetor-solar.jpg" alt="Protetor Solar FPS 50" loading="lazy" />
+                <small>Leve agora</small>
+                <h3>Protetor Solar FPS 50</h3>
+                <p class="stars">★★★★★ <span>(83)</span></p>
+                <del>R$ 54,90</del>
+                <strong>R$ 42,90</strong>
+              </article>
+              <article class="mini-product-card">
+                <span class="discount-badge">-14%</span>
+                <button type="button" class="mini-add" data-add="benegrip" aria-label="Adicionar Benegrip">+</button>
+                <img class="mini-photo" src="assets/products/benegrip.webp" alt="Benegrip 20 comprimidos" loading="lazy" />
+                <small>Farmácia</small>
+                <h3>Benegrip 20 comprimidos</h3>
+                <p class="stars">★★★★★ <span>(72)</span></p>
+                <del>R$ 19,90</del>
+                <strong>R$ 16,90</strong>
+              </article>
+              <article class="mini-product-card">
+                <span class="discount-badge">-12%</span>
+                <button type="button" class="mini-add" data-add="colonia" aria-label="Adicionar colônia">+</button>
+                <img class="mini-photo" src="assets/products/colonia.webp" alt="Colônia Lavanda 100ml" loading="lazy" />
+                <small>Perfumaria</small>
+                <h3>Colônia Lavanda 100ml</h3>
+                <p class="stars">★★★★☆ <span>(49)</span></p>
+                <del>R$ 45,90</del>
+                <strong>R$ 39,90</strong>
+              </article>
+              <article class="mini-product-card">
+                <span class="discount-badge">-9%</span>
+                <button type="button" class="mini-add" data-add="vitamina-c" aria-label="Adicionar vitamina C">+</button>
+                <img class="mini-photo" src="assets/products/vitamina-c.webp" alt="Vitamina C 60 cápsulas" loading="lazy" />
+                <small>Bem-estar</small>
+                <h3>Vitamina C 60 cápsulas</h3>
+                <p class="stars">★★★★★ <span>(105)</span></p>
+                <del>R$ 32,90</del>
+                <strong>R$ 29,90</strong>
+              </article>
+              <article class="mini-product-card">
+                <span class="discount-badge">-6%</span>
+                <button type="button" class="mini-add" data-add="dorflex" aria-label="Adicionar Dorflex">+</button>
+                <img class="mini-photo" src="assets/products/dorflex.webp" alt="Dorflex 36 comprimidos" loading="lazy" />
+                <small>Mais buscado</small>
+                <h3>Dorflex 36 comprimidos</h3>
+                <p class="stars">★★★★★ <span>(219)</span></p>
+                <del>R$ 26,50</del>
+                <strong>R$ 24,90</strong>
+              </article>
+            </div>
+          </section>
+
+          <section class="shelf-section" aria-labelledby="week-title">
+            <div class="shelf-heading">
+              <h2 id="week-title">Destaque da semana</h2>
+              <div>
+                <button type="button" aria-label="Voltar destaques">‹</button>
+                <button type="button" aria-label="Avançar destaques">›</button>
+              </div>
+            </div>
+            <div class="mini-product-row">
+              <article class="mini-product-card">
+                <button type="button" class="mini-add" data-add="agua" aria-label="Adicionar Água Crystal">+</button>
+                <img class="mini-photo" src="assets/products/agua-crystal-500ml.jpg" alt="Água Crystal 500ml" loading="lazy" />
+                <small>Conveniência</small>
+                <h3>Água Crystal 500ml</h3>
+                <p class="stars">★★★★★ <span>(28)</span></p>
+                <strong>R$ 3,50</strong>
+              </article>
+              <article class="mini-product-card">
+                <span class="discount-badge">-8%</span>
+                <button type="button" class="mini-add" data-add="tylenol" aria-label="Adicionar Tylenol">+</button>
+                <img class="mini-photo" src="assets/products/tylenol-2.jpg" alt="Tylenol 500mg c/ 20" loading="lazy" />
+                <small>Farmácia</small>
+                <h3>Tylenol 500mg c/ 20</h3>
+                <p class="stars">★★★★★ <span>(92)</span></p>
+                <del>R$ 21,90</del>
+                <strong>R$ 19,90</strong>
+              </article>
+              <article class="mini-product-card">
+                <button type="button" class="mini-add" data-add="nivea" aria-label="Adicionar hidratante">+</button>
+                <img class="mini-photo" src="assets/products/nivea.jpg" alt="Hidratante cuidado diário" loading="lazy" />
+                <small>Dermocosmético</small>
+                <h3>Hidratante cuidado diário</h3>
+                <p class="stars">★★★★☆ <span>(37)</span></p>
+                <strong>R$ 15,90</strong>
+              </article>
+              <article class="mini-product-card">
+                <span class="discount-badge">-20%</span>
+                <button type="button" class="mini-add" data-add="protetor" aria-label="Adicionar protetor">+</button>
+                <img class="mini-photo" src="assets/products/protetor-solar.jpg" alt="Proteção solar facial" loading="lazy" />
+                <small>Verão</small>
+                <h3>Proteção solar facial</h3>
+                <p class="stars">★★★★★ <span>(64)</span></p>
+                <del>R$ 52,90</del>
+                <strong>R$ 42,90</strong>
+              </article>
+              <article class="mini-product-card">
+                <button type="button" class="mini-add" data-add="colonia" aria-label="Adicionar perfume">+</button>
+                <img class="mini-photo" src="assets/products/colonia.webp" alt="Perfume suave 100ml" loading="lazy" />
+                <small>Perfumaria</small>
+                <h3>Perfume suave 100ml</h3>
+                <p class="stars">★★★★★ <span>(51)</span></p>
+                <strong>R$ 39,90</strong>
+              </article>
+              <article class="mini-product-card">
+                <button type="button" class="mini-add" data-add="vitamina-c" aria-label="Adicionar suplemento">+</button>
+                <img class="mini-photo" src="assets/products/vitamina-c.webp" alt="Suplemento de rotina" loading="lazy" />
+                <small>Vida saudável</small>
+                <h3>Suplemento de rotina</h3>
+                <p class="stars">★★★★☆ <span>(41)</span></p>
+                <strong>R$ 29,90</strong>
+              </article>
+            </div>
+          </section>
+
+          <section class="brand-carousel-section" aria-labelledby="brand-carousel-title">
+            <h2 id="brand-carousel-title">Confira as melhores marcas</h2>
+            <div class="brand-marquee brand-marquee-auto" aria-label="Marcas parceiras em destaque">
+              <div class="brand-track">
+                <div class="brand-set">
+                <span class="brand-bubble">Libbs</span>
+                <span class="brand-bubble">ISDIN</span>
+                <span class="brand-bubble">Eucerin</span>
+                <span class="brand-bubble">Babysec</span>
+                <span class="brand-bubble">Dorflex</span>
+                <span class="brand-bubble">Principia</span>
+                <span class="brand-bubble">Johnson's</span>
+                <span class="brand-bubble">Rexona</span>
+                <span class="brand-bubble">Dove</span>
+                <span class="brand-bubble">Mantecorp</span>
+                <span class="brand-bubble">Colgate</span>
+                <span class="brand-bubble">Nivea</span>
+                <span class="brand-bubble">Cimed</span>
+                <span class="brand-bubble">Monange</span>
+                <span class="brand-bubble">Danone</span>
+                <span class="brand-bubble">La Roche</span>
+                <span class="brand-bubble">Vichy</span>
+                <span class="brand-bubble">Ninho</span>
+                <span class="brand-bubble">CeraVe</span>
+                <span class="brand-bubble">Neutrogena</span>
+                <span class="brand-bubble">Avène</span>
+                <span class="brand-bubble">Bioderma</span>
+                <span class="brand-bubble">Skinceuticals</span>
+                <span class="brand-bubble">Cetaphil</span>
+                <span class="brand-bubble">Needs</span>
+                <span class="brand-bubble">Granado</span>
+                <span class="brand-bubble">Phebo</span>
+                <span class="brand-bubble">Pantene</span>
+                <span class="brand-bubble">Seda</span>
+                <span class="brand-bubble">Elseve</span>
+                <span class="brand-bubble">Huggies</span>
+                <span class="brand-bubble">Pampers</span>
+                <span class="brand-bubble">Nestlé</span>
+                <span class="brand-bubble">Ensure</span>
+                <span class="brand-bubble">Benegrip</span>
+                <span class="brand-bubble">Tylenol</span>
+                <span class="brand-bubble">Buscopan</span>
+                <span class="brand-bubble">Salonpas</span>
+                <span class="brand-bubble">Medley</span>
+                <span class="brand-bubble">EMS</span>
+                <span class="brand-bubble">Neo Química</span>
+                <span class="brand-bubble">Hypera</span>
+                <span class="brand-bubble">Aché</span>
+                <span class="brand-bubble">Eurofarma</span>
+                <span class="brand-bubble">Bayer</span>
+                <span class="brand-bubble">Sanofi</span>
+                </div>
+                <div class="brand-set" aria-hidden="true">
+                <span class="brand-bubble">Libbs</span>
+                <span class="brand-bubble">ISDIN</span>
+                <span class="brand-bubble">Eucerin</span>
+                <span class="brand-bubble">Babysec</span>
+                <span class="brand-bubble">Dorflex</span>
+                <span class="brand-bubble">Principia</span>
+                <span class="brand-bubble">Johnson's</span>
+                <span class="brand-bubble">Rexona</span>
+                <span class="brand-bubble">Dove</span>
+                <span class="brand-bubble">Mantecorp</span>
+                <span class="brand-bubble">Colgate</span>
+                <span class="brand-bubble">Nivea</span>
+                <span class="brand-bubble">Cimed</span>
+                <span class="brand-bubble">Monange</span>
+                <span class="brand-bubble">Danone</span>
+                <span class="brand-bubble">La Roche</span>
+                <span class="brand-bubble">Vichy</span>
+                <span class="brand-bubble">Ninho</span>
+                <span class="brand-bubble">CeraVe</span>
+                <span class="brand-bubble">Neutrogena</span>
+                <span class="brand-bubble">Avène</span>
+                <span class="brand-bubble">Bioderma</span>
+                <span class="brand-bubble">Skinceuticals</span>
+                <span class="brand-bubble">Cetaphil</span>
+                <span class="brand-bubble">Needs</span>
+                <span class="brand-bubble">Granado</span>
+                <span class="brand-bubble">Phebo</span>
+                <span class="brand-bubble">Pantene</span>
+                <span class="brand-bubble">Seda</span>
+                <span class="brand-bubble">Elseve</span>
+                <span class="brand-bubble">Huggies</span>
+                <span class="brand-bubble">Pampers</span>
+                <span class="brand-bubble">Nestlé</span>
+                <span class="brand-bubble">Ensure</span>
+                <span class="brand-bubble">Benegrip</span>
+                <span class="brand-bubble">Tylenol</span>
+                <span class="brand-bubble">Buscopan</span>
+                <span class="brand-bubble">Salonpas</span>
+                <span class="brand-bubble">Medley</span>
+                <span class="brand-bubble">EMS</span>
+                <span class="brand-bubble">Neo Química</span>
+                <span class="brand-bubble">Hypera</span>
+                <span class="brand-bubble">Aché</span>
+                <span class="brand-bubble">Eurofarma</span>
+                <span class="brand-bubble">Bayer</span>
+                <span class="brand-bubble">Sanofi</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="care-section" aria-labelledby="care-title">
+            <div class="shelf-heading">
+              <h2 id="care-title">Cuidados que você merece</h2>
+              <div>
+                <button type="button" aria-label="Voltar cuidados">‹</button>
+                <button type="button" aria-label="Avançar cuidados">›</button>
+              </div>
+            </div>
+            <div class="care-grid">
+              <article class="care-card care-skin" data-catalog-route="beleza" tabindex="0">
+                <span>Produtos asiáticos</span>
+                <b>→</b>
+              </article>
+              <article class="care-card care-beauty" data-catalog-route="beleza" tabindex="0">
+                <span>Cuidados com a pele</span>
+                <b>→</b>
+              </article>
+              <article class="care-card care-family" data-catalog-route="medicamentos" tabindex="0">
+                <span>Cuidados no inverno</span>
+                <b>→</b>
+              </article>
+              <article class="care-card care-perfume" data-catalog-route="cabelo" tabindex="0">
+                <span>Perfumes</span>
+                <b>→</b>
+              </article>
+              <article class="care-card care-sun" data-catalog-route="beleza" tabindex="0">
+                <span>Proteção solar</span>
+                <b>→</b>
+              </article>
+            </div>
+          </section>
+
+          <section class="discount-hub" aria-labelledby="discount-hub-title">
+            <h2 id="discount-hub-title">Os melhores descontos você encontra aqui</h2>
+            <div class="discount-card-grid">
+              <article class="discount-card" data-info-page="pbm" tabindex="0">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M8 4h2.5a4.5 4.5 0 0 1 0 9H8a4.5 4.5 0 1 1 0-9Z" />
+                  <path d="M8 13h8a4.5 4.5 0 1 1 0 9h-2.5a4.5 4.5 0 0 1 0-9" />
+                  <path d="M8 4v9M16 13v9" />
+                </svg>
+                <strong>PBM Laboratórios</strong>
+                <span>Programas de desconto em medicamentos participantes.</span>
+                <button type="button" data-info-page="pbm">Saiba Mais &gt;</button>
+              </article>
+              <article class="discount-card" data-info-page="cupons" tabindex="0">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M4 5h10l6 6-9 9-7-7V5Z" />
+                  <path d="M9 9h.01M14 14h.01M8.5 15.5l7-7" />
+                </svg>
+                <strong>Cupons Onório</strong>
+                <span>Cupons próprios para campanhas online e retirada na loja.</span>
+                <button type="button" data-info-page="cupons">Saiba Mais &gt;</button>
+              </article>
+              <article class="discount-card" data-info-page="blackfriday" tabindex="0">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M6 8h12l-1 12H7L6 8Z" />
+                  <path d="M9 8a3 3 0 0 1 6 0" />
+                  <path d="M9 14h6M10 17h4" />
+                </svg>
+                <strong>Black Friday</strong>
+                <span>Espaço para ofertas sazonais e campanhas especiais.</span>
+                <button type="button" data-info-page="blackfriday">Saiba Mais &gt;</button>
+              </article>
+              <article class="discount-card discount-card-cta" data-info-page="descontos" tabindex="0">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M9 18 15 12 9 6" />
+                </svg>
+                <strong>Ver todos os descontos</strong>
+                <span>PBM, cupons, genéricos e ofertas da Onório.</span>
+              </article>
+            </div>
+          </section>
+
+          <section class="service-row" aria-label="Serviços da drogaria">
+            <article>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M3 13h13v6H3zM16 16h2.5l2-3H16zM6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM3 13l3-5h10" />
+              </svg>
+              <strong>Entrega rápida</strong>
+              <span>Receba com agilidade e segurança.</span>
+            </article>
+            <article>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4 10.5 12 4l8 6.5V20H4z" />
+                <path d="M9 20v-6h6v6" />
+              </svg>
+              <strong>Retire na loja</strong>
+              <span>Mais praticidade para você.</span>
+            </article>
+            <article>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M12 21a8 8 0 1 0-8-8" />
+                <path d="M7 18c.7-2.2 2.5-3.5 5-3.5s4.3 1.3 5 3.5M9 10h.01M15 10h.01" />
+              </svg>
+              <strong>Atendimento humanizado</strong>
+              <span>Estamos aqui para cuidar de você.</span>
+            </article>
+          </section>
+
+          <section class="health-space" aria-labelledby="health-title">
+            <div class="shelf-heading">
+              <h2 id="health-title">Espaço Mais Saúde</h2>
+              <div>
+                <button type="button" aria-label="Voltar serviços">‹</button>
+                <button type="button" aria-label="Avançar serviços">›</button>
+              </div>
+            </div>
+            <div class="service-card-row">
+              <article>
+                <div class="service-photo vaccine"></div>
+                <h3>Vacina contra gripe</h3>
+                <p>Consulte disponibilidade na unidade.</p>
+                <button type="button" data-info-page="vacinas">Consultar vacinas</button>
+              </article>
+              <article>
+                <div class="service-photo test"></div>
+                <h3>Testes rápidos</h3>
+                <p>Agende e retire dúvidas com a equipe.</p>
+                <button type="button" data-info-page="testes">Agendar teste</button>
+              </article>
+              <article>
+                <div class="service-photo clinic"></div>
+                <h3>Serviços farmacêuticos</h3>
+                <p>Orientação, cuidado e acompanhamento.</p>
+                <button type="button" data-info-page="servicos">Conferir serviços</button>
+              </article>
+              <article>
+                <div class="service-photo delivery"></div>
+                <h3>Compre e retire</h3>
+                <p>Faça o pedido online e busque na loja.</p>
+                <button type="button" data-info-page="cep">Ver como funciona</button>
+              </article>
+            </div>
+          </section>
+
+          <section class="footer-searches" aria-label="Buscas em alta">
+            <h2>Buscas em alta</h2>
+            <p>
+              Desodorante | Fralda | Absorvente | Shampoo | Sabonete | Dorflex |
+              Protetor solar | Hidratante | Vitamina C | Nivea | Benegrip
+            </p>
+          </section>
+        </section>
+
+        <aside class="cart-panel" id="cart-panel" aria-label="Meu carrinho">
+          <div class="cart-header">
+            <div>
+              <h2>Cesta</h2>
+              <span id="cart-caption">Nenhum item ainda</span>
+            </div>
+            <div class="cart-header-actions">
+              <button type="button" class="link-button" id="empty-cart">Limpar</button>
+              <button type="button" class="link-button" id="close-cart-panel">Fechar</button>
+            </div>
+          </div>
+
+          <div class="cart-items" id="cart-items"></div>
+
+          <div class="checkout-summary">
+            <div class="summary-line">
+              <span>Subtotal</span>
+              <strong id="subtotal">R$ 0,00</strong>
+            </div>
+            <div class="summary-line discount-line">
+              <span>Desconto Pix (5%)</span>
+              <strong id="pix-discount">R$ 0,00</strong>
+            </div>
+            <div class="summary-line discount-line">
+              <span>Desconto Cliente ON</span>
+              <strong id="points-discount">Perguntar no final</strong>
+            </div>
+            <div class="summary-line">
+              <span>Entrega</span>
+              <strong id="shipping">R$ 0,00</strong>
+            </div>
+            <div class="summary-line points-line">
+              <span>Cliente ON</span>
+              <strong id="points-earned">+0 pontos</strong>
+            </div>
+            <div class="summary-line total">
+              <span>Total</span>
+              <strong id="total">R$ 0,00</strong>
+            </div>
+          </div>
+
+          <fieldset class="delivery-options">
+            <legend>Como quer receber?</legend>
+            <label>
+              <input type="radio" name="delivery" value="pickup" checked />
+              <span class="radio-mark"></span>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4 10.5 12 4l8 6.5V20H4z" />
+                <path d="M9 20v-6h6v6" />
+              </svg>
+              <span>
+                <strong>Retirar na loja</strong>
+                <small>Em até 2h</small>
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="delivery" value="home" />
+              <span class="radio-mark"></span>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M3 13h13v6H3zM16 16h2.5l2-3H16zM6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 19a2 2 0 1 0 0-4 1 1 0 0 0 0 2Z" />
+              </svg>
+              <span>
+                <strong>Receber em casa</strong>
+                <small>A partir de R$ 6,90</small>
+              </span>
+            </label>
+          </fieldset>
+
+          <fieldset class="payment-options">
+            <legend>Forma de pagamento</legend>
+            <label>
+              <input type="radio" name="payment" value="Pix" checked />
+              <span class="radio-mark"></span>
+              <span>
+                <strong>Pix</strong>
+                <small>Ganhe 5% de desconto</small>
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="payment" value="Cartão" />
+              <span class="radio-mark"></span>
+              <span>
+                <strong>Cartão</strong>
+                <small>Até 6x acima de R$ 1.000,00</small>
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="payment" value="PicPay" />
+              <span class="radio-mark"></span>
+              <span>
+                <strong>PicPay</strong>
+                <small>Pagamento digital</small>
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="payment" value="Mercado Pago" />
+              <span class="radio-mark"></span>
+              <span>
+                <strong>Mercado Pago</strong>
+                <small>Checkout online</small>
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="payment" value="Boleto" />
+              <span class="radio-mark"></span>
+              <span>
+                <strong>Boleto</strong>
+                <small>Gerado na finalização</small>
+              </span>
+            </label>
+          </fieldset>
+
+          <button type="button" class="checkout-button" id="checkout-button">
+            Ir para cesta
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M5 12h14M13 5l7 7-7 7" />
+            </svg>
+          </button>
+        </aside>
+      </main>
+
+      <footer class="site-footer" aria-label="Rodapé da Drogaria Onório">
+        <div class="footer-help">
+          <a href="#" data-info-page="atendimento">
+            <strong>Central de atendimento</strong>
+            <span>Confira dúvidas frequentes ou fale com a gente.</span>
+          </a>
+          <a href="#" data-info-page="aplicativo">
+            <strong>Baixe nosso aplicativo</strong>
+            <span>Em breve, ofertas e benefícios no celular.</span>
+          </a>
+        </div>
+        <section class="footer-support" aria-label="Canais de ajuda">
+          <h3>Precisa de ajuda?</h3>
+          <div class="support-cards">
+            <a href="tel:+551634422440" class="support-card">
+              <span>
+                <small>Atendimento ao cliente</small>
+                <strong>(16) 3442-2440</strong>
+              </span>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.5 2.1L8 9.5a16 16 0 0 0 6.5 6.5l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.5.6A2 2 0 0 1 22 16.9Z" />
+              </svg>
+            </a>
+            <a href="mailto:onoriodrogaria@gmail.com" class="support-card">
+              <span>
+                <small>Entre em contato</small>
+                <strong>onoriodrogaria@gmail.com</strong>
+              </span>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4 4h16v16H4z" />
+                <path d="m4 7 8 6 8-6" />
+              </svg>
+            </a>
+            <a href="https://wa.me/5516997997878" class="support-card" target="_blank" rel="noopener">
+              <span>
+                <small>Compre pelo WhatsApp</small>
+                <strong>(16) 99799-7878</strong>
+              </span>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5Z" />
+                <path d="M8.7 8.7c.4 3.2 2.6 5.4 6.6 6.6" />
+              </svg>
+            </a>
+          </div>
+        </section>
+        <div class="footer-columns">
+          <div>
+            <h3>Institucional</h3>
+            <p>Nossa história</p>
+            <p>Nossas farmácias</p>
+            <p>Trabalhe conosco</p>
+            <p>Ética e compliance</p>
+          </div>
+          <div>
+            <h3>Serviços</h3>
+            <p>Compre e retire</p>
+            <p>Vacinação</p>
+            <p>Manipulação</p>
+            <p>Programa de descontos</p>
+          </div>
+          <div>
+            <h3>Perfil</h3>
+            <p>Criar nova conta</p>
+            <p>Alterar dados pessoais</p>
+            <p>Acompanhar pedido</p>
+            <p>Editar endereços</p>
+          </div>
+          <div>
+            <h3>Atendimento</h3>
+            <p>Central de atendimento</p>
+            <p>Tire dúvidas pelo WhatsApp</p>
+            <p>Troca ou devolução</p>
+            <p>Formas de pagamento</p>
+          </div>
+        </div>
+        <div class="footer-payment">
+          <div>
+            <h3>Formas de pagamento</h3>
+            <p>Parcele em até 3x sem juros, ou até 6x em compras acima de R$ 1.000,00.</p>
+            <div class="payment-flags" aria-label="Bandeiras e meios de pagamento aceitos">
+              <span class="flag visa">Visa</span>
+              <span class="flag mastercard">Mastercard</span>
+              <span class="flag amex">Amex</span>
+              <span class="flag elo">Elo</span>
+              <span class="flag mercado-pago">Mercado Pago</span>
+              <span class="flag picpay">PicPay</span>
+              <span class="flag boleto">Boleto</span>
+              <span class="flag pix">Pix</span>
+            </div>
+          </div>
+          <div class="trusted-store" aria-label="Loja confiável">
+            <strong>Onório</strong>
+            <span>loja confiável</span>
+          </div>
+        </div>
+        <div class="footer-social">
+          <h3>Nossas Redes</h3>
+          <div class="social-links">
+            <a href="#" data-info-page="atendimento" aria-label="Facebook da Drogaria Onório">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M14 8h2V4h-3a5 5 0 0 0-5 5v3H5v4h3v4h4v-4h3l1-4h-4V9a1 1 0 0 1 1-1Z" />
+              </svg>
+            </a>
+            <a href="#" data-info-page="atendimento" aria-label="Instagram da Drogaria Onório">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <rect x="4" y="4" width="16" height="16" rx="5" />
+                <path d="M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z" />
+                <path d="M17 7.5h.01" />
+              </svg>
+            </a>
+            <a href="#" data-info-page="atendimento" aria-label="X da Drogaria Onório">
+              <span>X</span>
+            </a>
+            <a href="#" data-info-page="atendimento" aria-label="LinkedIn da Drogaria Onório">
+              <span>in</span>
+            </a>
+          </div>
+        </div>
+        <div class="footer-brand">
+          <span>Onório</span>
+          <small>Drogaria</small>
+        </div>
+        <section class="footer-legal" id="legal-info" aria-label="Informações legais da Drogaria Onório">
+          <div class="back-to-top">
+            <span></span>
+            <a href="#top">Voltar ao Topo</a>
+            <span></span>
+          </div>
+          <p class="copyright">Copyright © Drogaria Onório. Todos os direitos reservados.</p>
+          <p>
+            A Drogaria Onório atua com compromisso, cuidado e excelência no atendimento, oferecendo produtos e serviços
+            farmacêuticos com segurança, confiança e qualidade para toda a família.
+          </p>
+          <p>
+            Loja 1: Av. Arnaldo Victaliano, 1191 - Iguatemi - Ribeirão Preto/SP | Tel: (16) 3618-0883 | E-mail:
+            drogariaciasaude@yahoo.com.br | Farmacêutica Responsável: Regivalda Henrique Pereira - CRF/SP a informar.
+          </p>
+          <p>
+            Loja 2: Av. Portugal, 2777 - Jardim Botânico - Ribeirão Preto/SP | Tel: (16) 3442-2440 | E-mail:
+            onoriodrogaria@gmail.com | Farmacêutica Responsável: Brena Corrêa Sani - CRF/SP 95.631.
+          </p>
+          <p>
+            SAC - Serviço de Atendimento ao Consumidor: telefone Loja 1: (16) 3618-0883 e Loja 2 Tel (16) 3442-2440
+            (segunda à sexta das 8h às 20h | sábado das 8h às 15h) ou através do e-mail onoriodrogaria@gmail.com.
+          </p>
+          <p>
+            As informações contidas neste site, incluindo promoções, ofertas de medicamentos e produtos, não devem ser
+            utilizadas para automedicação e não substituem, em hipótese alguma, a orientação ou medicação prescrita por
+            profissionais da área da saúde. Somente médicos e profissionais habilitados estão aptos a diagnosticar
+            problemas de saúde e indicar o tratamento adequado. Para mais informações, consulte o site da Anvisa.
+          </p>
+          <p>
+            Os preços, promoções e disponibilidade dos produtos são válidos para compras on-line, mediante disponibilidade
+            em estoque, e podem sofrer alterações ao longo do dia sem aviso prévio. As imagens presentes neste site são
+            meramente ilustrativas. Medicamentos sujeitos à prescrição médica serão comercializados conforme determinação
+            da legislação vigente. Antibióticos e medicamentos controlados seguem as normas da Portaria nº 344/98 do
+            Ministério da Saúde.
+          </p>
+          <p>
+            A Drogaria Onório preza pela privacidade e segurança dos dados de seus clientes, utilizando tecnologias e
+            processos para garantir uma experiência segura e confiável em seus canais de atendimento.
+          </p>
+        </section>
+      </footer>
+
+      <div class="cookie-bar" id="cookie-bar">
+        <p>
+          Durante sua navegação, usamos cookies para melhorar sua experiência e acompanhar a utilização dos nossos serviços.
+        </p>
+        <button type="button" data-info-page="cookies">Preferências de Cookies</button>
+        <button type="button" data-cookie-close>Rejeitar Todos</button>
+        <button type="button" data-cookie-close>Aceitar</button>
+      </div>
+
+      <nav class="bottom-nav" aria-label="Navegação principal">
+        <button type="button" class="is-active" id="home-nav">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M4 10.5 12 4l8 6.5V20H4z" />
+            <path d="M9 20v-6h6v6" />
+          </svg>
+          <span>Início</span>
+        </button>
+        <button type="button" id="categories-nav">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />
+          </svg>
+          <span>Categorias</span>
+        </button>
+        <button type="button" id="search-nav">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="m21 21-4.35-4.35m1.35-5.15a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z" />
+          </svg>
+          <span>Buscar</span>
+        </button>
+        <button type="button" id="orders-nav">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M6 7h12l1 14H5zM9 7a3 3 0 1 1 6 0" />
+          </svg>
+          <span>Pedidos</span>
+        </button>
+        <button type="button" id="account-nav">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M20 21a8 8 0 1 0-16 0" />
+            <path d="M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" />
+          </svg>
+          <span>Conta</span>
+        </button>
+      </nav>
+    </div>
+
+    <section class="checkout-flow" id="checkout-flow" hidden aria-live="polite"></section>
+
+    <div class="modal-backdrop" id="modal-backdrop" hidden>
+      <section class="order-modal" id="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button type="button" class="modal-close" id="modal-close" aria-label="Fechar">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+        <div id="modal-content"></div>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

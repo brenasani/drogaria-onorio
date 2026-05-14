@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="Mamãe e bebê">
+  <defs>
+    <linearGradient id="babyBg" x1="40" y1="20" x2="280" y2="310" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff7e5"/>
+      <stop offset=".52" stop-color="#ffe0b1"/>
+      <stop offset="1" stop-color="#d8f4e6"/>
+    </linearGradient>
+    <linearGradient id="skinA" x1="106" y1="54" x2="204" y2="230" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6b68f"/>
+      <stop offset="1" stop-color="#bf7457"/>
+    </linearGradient>
+    <linearGradient id="skinB" x1="160" y1="128" x2="230" y2="246" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffd0ae"/>
+      <stop offset="1" stop-color="#d88e68"/>
+    </linearGradient>
+    <filter id="babyShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="11" stdDeviation="11" flood-color="#8b5c3b" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  <rect width="320" height="320" fill="url(#babyBg)"/>
+  <circle cx="68" cy="76" r="52" fill="#ffffff" opacity=".44"/>
+  <circle cx="268" cy="245" r="70" fill="#f6c7dd" opacity=".28"/>
+  <path d="M0 232c49-28 98-30 146-8s105 25 174-17v113H0z" fill="#ffffff" opacity=".42"/>
+  <g filter="url(#babyShadow)">
+    <path d="M90 298c5-74 31-119 77-119 48 0 76 45 83 119z" fill="#0b7254"/>
+    <path d="M111 167c18-32 76-34 103 0 24 30 17 77-12 92-32 17-84 5-102-28-11-21-5-45 11-64z" fill="#f6a64e"/>
+    <circle cx="160" cy="111" r="52" fill="url(#skinA)"/>
+    <path d="M103 116c-3-46 28-84 75-80 34 3 61 29 63 67-42 9-86 4-138 13z" fill="#4a2d25"/>
+    <path d="M109 117c4 47 24 78 63 90-42 4-76-22-86-61-4-16 4-26 23-29z" fill="#4a2d25"/>
+    <path d="M79 197c9-20 30-25 52-10l33 22-22 43-43-19c-20-9-28-21-20-36z" fill="#0b7254"/>
+    <path d="M160 222c7-39 36-68 72-60 37 8 58 50 40 86-18 35-75 48-104 21-14-13-16-29-8-47z" fill="#f6f8ff"/>
+    <circle cx="213" cy="173" r="35" fill="url(#skinB)"/>
+    <path d="M184 175c9-31 46-38 68-11-18 13-39 18-68 11z" fill="#5a3828"/>
+    <path d="M190 225c22 18 47 15 74 1 1 29-23 52-55 52-25 0-42-18-42-38 0-9 7-16 23-15z" fill="#c4ecf9"/>
+    <path d="M139 215c16 13 35 24 55 32" fill="none" stroke="#f4b18a" stroke-width="21" stroke-linecap="round"/>
+  </g>
+</svg>
