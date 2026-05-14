@@ -34,14 +34,14 @@
           </form>
 
           <nav class="market-actions" aria-label="Ações da conta e cesta">
-            <button type="button" class="account-link" id="login-top">
+            <button type="button" class="account-link" id="login-top" aria-label="Entrar ou cadastrar na Drogaria Onório">
               <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M20 21a8 8 0 1 0-16 0" />
                 <path d="M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" />
               </svg>
               <span>
-                <strong>Cliente ON</strong>
-                <small>Entrar ou cadastrar</small>
+                <strong id="account-title">Cliente Onório</strong>
+                <small id="account-subtitle">Entrar ou cadastrar</small>
               </span>
             </button>
             <button type="button" class="orders-link" id="orders-top">
@@ -53,8 +53,8 @@
                 <small>pedidos</small>
               </span>
             </button>
-            <button type="button" class="cart-pill" id="cart-pill" aria-label="Abrir cesta">
-              <span id="cart-count">0 Cesta</span>
+            <button type="button" class="cart-pill" id="cart-pill" aria-label="0 itens na cesta. Total R$ 0,00.">
+              <span id="cart-count">0 itens</span>
               <strong id="cart-total-pill">R$ 0,00</strong>
             </button>
           </nav>
@@ -461,7 +461,7 @@
             </div>
           </section>
 
-          <section class="care-section" aria-labelledby="care-title">
+          <section class="care-section" aria-labelledby="care-title" hidden>
             <div class="shelf-heading">
               <h2 id="care-title">Cuidados que você merece</h2>
               <div>
@@ -626,12 +626,8 @@
               <strong id="subtotal">R$ 0,00</strong>
             </div>
             <div class="summary-line discount-line">
-              <span>Desconto Pix (5%)</span>
-              <strong id="pix-discount">R$ 0,00</strong>
-            </div>
-            <div class="summary-line discount-line">
-              <span>Desconto Cliente ON</span>
-              <strong id="points-discount">Perguntar no final</strong>
+              <span>Pontos Cliente ON</span>
+              <strong id="points-discount">até - R$ 0,00</strong>
             </div>
             <div class="summary-line">
               <span>Entrega</span>
@@ -674,7 +670,7 @@
             </label>
           </fieldset>
 
-          <fieldset class="payment-options">
+          <fieldset class="payment-options" hidden>
             <legend>Forma de pagamento</legend>
             <label>
               <input type="radio" name="payment" value="Pix" checked />

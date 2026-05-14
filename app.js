@@ -400,6 +400,7 @@ const state = {
   coupon: "",
   loggedIn: false,
   usePoints: false,
+  currentOrder: null,
   customer: {
     name: "Brena Sani",
     fullName: "Brena Corrêa Sani",
@@ -441,6 +442,32 @@ const PIX_MERCHANT_NAME = "DROGARIA ONORIO";
 const PIX_MERCHANT_CITY = "RIBEIRAO PRETO";
 const roundMoney = (value) => Math.round((value + Number.EPSILON) * 100) / 100;
 
+function getCustomerHeaderName() {
+  return state.customer.name || state.customer.fullName || "Cliente Onório";
+}
+
+function updateAccountHeader() {
+  const accountButton = document.querySelector("#login-top");
+  const accountTitle = document.querySelector("#account-title");
+  const accountSubtitle = document.querySelector("#account-subtitle");
+
+  if (!accountTitle || !accountSubtitle) {
+    return;
+  }
+
+  if (state.loggedIn) {
+    const customerName = getCustomerHeaderName();
+    accountTitle.textContent = customerName;
+    accountSubtitle.textContent = "Minha conta";
+    accountButton?.setAttribute("aria-label", `Minha conta de ${customerName}`);
+    return;
+  }
+
+  accountTitle.textContent = "Cliente Onório";
+  accountSubtitle.textContent = "Entrar ou cadastrar";
+  accountButton?.setAttribute("aria-label", "Entrar ou cadastrar na Drogaria Onório");
+}
+
 const pickupStores = [
   {
     id: "loja-portugal",
@@ -448,6 +475,9 @@ const pickupStores = [
     address: "Jd Botânico - Ribeirão Preto/SP",
     time: "Retirada grátis em até 60 minutos",
     fullAddress: "Av. Portugal, 2777 - Jardim Botânico - Ribeirão Preto/SP",
+    phone: "(16) 3442-2440",
+    phoneHref: "+551634422440",
+    email: "onoriodrogaria@gmail.com",
     lat: -21.2099552,
     lng: -47.7908571,
   },
@@ -457,6 +487,9 @@ const pickupStores = [
     address: "Iguatemi - Ribeirão Preto/SP",
     time: "Retirada grátis em até 60 minutos",
     fullAddress: "Av. Arnaldo Victaliano, 1191 - Iguatemi - Ribeirão Preto/SP",
+    phone: "(16) 3618-0883",
+    phoneHref: "+551636180883",
+    email: "drogariaciasaude@yahoo.com.br",
     lat: -21.1957848,
     lng: -47.7804726,
   },
@@ -951,6 +984,16 @@ function pointsToDiscount(points = LOYALTY_EXAMPLE_BALANCE) {
   return roundMoney(points / LOYALTY_POINTS_PER_REAL_DISCOUNT);
 }
 
+function getCustomerPointsBalance() {
+  return state.customer.points ?? LOYALTY_EXAMPLE_BALANCE;
+}
+
+function availablePointsDiscountForCart(subtotal = 0, pixDiscount = 0) {
+  const availableDiscount = pointsToDiscount(getCustomerPointsBalance());
+  const maxDiscount = Math.max(0, subtotal - pixDiscount);
+  return roundMoney(Math.min(availableDiscount, maxDiscount));
+}
+
 function maxCardInstallments(total) {
   return total > 1000 ? 6 : 3;
 }
@@ -1123,10 +1166,20 @@ function checkoutItemsList(items, variant = "wide") {
 }
 
 function orderSummaryCard(buttonLabel = "Prosseguir", route = "#login", options = {}) {
-  const { subtotal, pixDiscount, pointsDiscount, shipping, total, items, pointsEarned } = calculateCart();
+  const { subtotal, pixDiscount, pointsDiscount, availablePointsDiscount, shipping, total, items, pointsEarned } = calculateCart();
   const count = getCartItemCount(items);
   const showButton = options.showButton !== false;
+  const showPixDiscountLine = options.showPixDiscountLine === true && state.customer.payment === "Pix";
   const showPix = state.customer.payment === "Pix";
+  const showDeliveryLine = state.delivery === "home";
+  const showPointsDiscountLine = state.usePoints && pointsDiscount > 0;
+  const summaryHint = state.customer.payment === "Cartão" ? cardInstallmentText(total) : "";
+  const paymentSummaryHint = normalizeText(state.customer.payment) === "cartao" ? cardInstallmentText(total) : "";
+  const pointsSummary = state.usePoints
+    ? `- ${formatCurrency(pointsDiscount)}`
+    : availablePointsDiscount
+      ? `até - ${formatCurrency(availablePointsDiscount)}`
+      : "sem pontos";
 
   return `
     <aside class="checkout-summary-card">
@@ -1135,23 +1188,23 @@ function orderSummaryCard(buttonLabel = "Prosseguir", route = "#login", options 
         <span>Subtotal (${count})</span>
         <strong>${formatCurrency(subtotal)}</strong>
       </div>
-      <div class="summary-line discount-line">
+      ${showPixDiscountLine ? `<div class="summary-line discount-line">
         <span>${showPix ? "Desconto Pix 5%" : "Desconto Pix disponível"}</span>
         <strong>${showPix ? `- ${formatCurrency(pixDiscount)}` : "aplique no pagamento"}</strong>
-      </div>
-      <div class="summary-line">
+      </div>` : ""}
+      ${showDeliveryLine ? `<div class="summary-line">
         <span>${state.delivery === "home" ? `Entrega domicílio${state.deliveryQuote ? ` (${formatDistance(state.deliveryQuote.distanceKm)})` : ""}` : "Retirada na loja"}</span>
         <strong>${shipping ? formatCurrency(shipping) : "Grátis"}</strong>
-      </div>
-      <div class="summary-line points-discount-line">
-        <span>${state.usePoints ? "Pontos Cliente ON" : "Cliente ON"}</span>
-        <strong>${state.usePoints ? `- ${formatCurrency(pointsDiscount)}` : "perguntar no pagamento"}</strong>
-      </div>
+      </div>` : ""}
+      ${showPointsDiscountLine ? `<div class="summary-line points-discount-line">
+        <span>Pontos Cliente ON</span>
+        <strong>- ${formatCurrency(pointsDiscount)}</strong>
+      </div>` : ""}
       <div class="summary-line total">
         <span>Total</span>
         <strong>${formatCurrency(total)}</strong>
       </div>
-      <small>${state.customer.payment === "Cartão" ? cardInstallmentText(total) : `Cliente ON: +${pointsEarned} pontos nesta compra`}</small>
+      ${paymentSummaryHint ? `<small>${paymentSummaryHint}</small>` : ""}
       ${showButton ? `<button type="button" class="checkout-primary" data-route="${route}">${buttonLabel}</button>` : ""}
       <button type="button" class="checkout-secondary-text" data-route="#home">Continuar comprando</button>
     </aside>
@@ -1242,7 +1295,7 @@ function customerReviewCard(pointsEarned = 0) {
 }
 
 function renderReviewPage() {
-  const { items, subtotal, pixDiscount, shipping, total, pointsEarned } = calculateCart();
+  const { items, subtotal, shipping, total, pointsEarned } = calculateCart();
   const body = `
     <button type="button" class="checkout-back" data-route="#home">‹ Voltar para a loja</button>
     <div class="review-grid">
@@ -1271,7 +1324,6 @@ function renderReviewPage() {
           <button type="button" data-apply-coupon>Adicionar</button>
         </div>
         <div class="summary-line"><span>Subtotal</span><strong>${formatCurrency(subtotal)}</strong></div>
-        <div class="summary-line discount-line"><span>Desconto Pix</span><strong>${state.customer.payment === "Pix" ? `- ${formatCurrency(pixDiscount)}` : "selecionar Pix"}</strong></div>
         <div class="summary-line"><span>Frete</span><strong>${state.delivery === "home" ? formatCurrency(shipping) : "Calcule o CEP"}</strong></div>
         <div class="summary-line total"><span>Total</span><strong>${formatCurrency(total)}</strong></div>
         <button type="button" class="checkout-primary" data-route="#entrega">Avançar</button>
@@ -1434,10 +1486,10 @@ function buildPixPayload(amount) {
 }
 
 function renderPaymentPage() {
-  const { total, pixDiscount, pointsDiscount } = calculateCart();
+  const { total, pixDiscount, pointsDiscount, availablePointsDiscount } = calculateCart();
   const pixPayload = buildPixPayload(total);
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=190x190&margin=8&data=${encodeURIComponent(pixPayload)}`;
-  const availablePointsDiscount = pointsToDiscount();
+  const pointsBalance = getCustomerPointsBalance();
 
   return `
     ${checkoutHeader()}
@@ -1450,13 +1502,13 @@ function renderPaymentPage() {
             <div>
               <span>Cliente ON</span>
               <strong>Deseja utilizar seus pontos para abater no valor da compra?</strong>
-              <small>Saldo exemplo: ${LOYALTY_EXAMPLE_BALANCE} pontos = ${formatCurrency(availablePointsDiscount)} de desconto. A cada 100 pontos, abate R$ 1,00.</small>
+              <small>Saldo disponível: ${pointsBalance} pontos = ${formatCurrency(availablePointsDiscount)} para abater neste pedido. A cada 100 pontos, abate R$ 1,00.</small>
             </div>
             <div class="points-choice-row">
               <button type="button" class="${state.usePoints ? "is-active" : ""}" data-use-points="true">Sim, usar pontos</button>
               <button type="button" class="${!state.usePoints ? "is-active" : ""}" data-use-points="false">Não usar agora</button>
             </div>
-            ${state.usePoints ? `<em>Desconto Cliente ON aplicado: - ${formatCurrency(pointsDiscount)}</em>` : ""}
+            ${state.usePoints ? `<em>Desconto Cliente ON aplicado: - ${formatCurrency(pointsDiscount)}</em>` : `<em>Os pontos só entram no total se o cliente confirmar aqui.</em>`}
           </section>
           <label class="payment-choice ${state.customer.payment === "Pix" ? "is-selected" : ""}">
             <input type="radio" name="checkout-payment" value="Pix" ${state.customer.payment === "Pix" ? "checked" : ""} data-payment-select="Pix" />
@@ -1575,7 +1627,7 @@ function renderPaymentPage() {
             </div>
           ` : ""}
         </section>
-        ${orderSummaryCard("Finalizar", "#finalizado", { showButton: true })}
+        ${orderSummaryCard("Finalizar", "#finalizado", { showButton: true, showPixDiscountLine: true })}
       </div>
     </main>
   `;
@@ -1887,9 +1939,9 @@ function calculateCart() {
   const subtotal = roundMoney(items.reduce((sum, item) => sum + item.price * item.quantity, 0));
   const pointsEarned = Math.floor(subtotal * LOYALTY_POINTS_PER_REAL);
   const pixDiscount = state.customer.payment === "Pix" ? roundMoney(subtotal * PIX_DISCOUNT_RATE) : 0;
-  const maxPointsDiscount = Math.max(0, subtotal - pixDiscount);
+  const availablePointsDiscount = availablePointsDiscountForCart(subtotal, pixDiscount);
   const pointsDiscount = state.usePoints && subtotal > 0
-    ? roundMoney(Math.min(pointsToDiscount(), maxPointsDiscount))
+    ? availablePointsDiscount
     : 0;
   const shipping = state.delivery === "home" && subtotal > 0 ? currentDeliveryFee() : 0;
   return {
@@ -1897,6 +1949,7 @@ function calculateCart() {
     subtotal,
     pointsEarned,
     pixDiscount,
+    availablePointsDiscount,
     pointsDiscount,
     shipping,
     total: roundMoney(Math.max(0, subtotal - pixDiscount - pointsDiscount + shipping)),
@@ -1904,7 +1957,10 @@ function calculateCart() {
 }
 
 function renderCart() {
+  updateAccountHeader();
+
   const cartItems = document.querySelector("#cart-items");
+  const cartPill = document.querySelector("#cart-pill");
   const cartCount = document.querySelector("#cart-count");
   const cartCaption = document.querySelector("#cart-caption");
   const cartTotalPill = document.querySelector("#cart-total-pill");
@@ -1917,17 +1973,25 @@ function renderCart() {
   const loyaltyProgressFillEl = document.querySelector("#loyalty-progress-fill");
   const totalEl = document.querySelector("#total");
   const checkoutButton = document.querySelector("#checkout-button");
-  const { items, subtotal, pointsEarned, pixDiscount, pointsDiscount, shipping, total } = calculateCart();
+  const { items, subtotal, pointsEarned, pixDiscount, pointsDiscount, availablePointsDiscount, shipping, total } = calculateCart();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const cartItemLabel = `${itemCount} ${itemCount === 1 ? "item" : "itens"}`;
 
-  cartCount.textContent = `${itemCount} Cesta`;
+  cartCount.textContent = cartItemLabel;
   cartTotalPill.textContent = formatCurrency(total);
+  cartPill.setAttribute("aria-label", `${cartItemLabel} na cesta. Total ${formatCurrency(total)}.`);
   cartCaption.textContent =
     itemCount === 0 ? "Nenhum item ainda" : `${itemCount} ${itemCount === 1 ? "item" : "itens"}`;
   subtotalEl.textContent = formatCurrency(subtotal);
-  pixDiscountEl.textContent = pixDiscount ? `- ${formatCurrency(pixDiscount)}` : "R$ 0,00";
+  if (pixDiscountEl) {
+    pixDiscountEl.textContent = pixDiscount ? `- ${formatCurrency(pixDiscount)}` : "R$ 0,00";
+  }
   if (pointsDiscountEl) {
-    pointsDiscountEl.textContent = state.usePoints ? `- ${formatCurrency(pointsDiscount)}` : "Perguntar no final";
+    pointsDiscountEl.textContent = state.usePoints
+      ? `- ${formatCurrency(pointsDiscount)}`
+      : availablePointsDiscount
+        ? `até - ${formatCurrency(availablePointsDiscount)}`
+        : "Sem pontos";
   }
   shippingEl.textContent = shipping ? formatCurrency(shipping) : "R$ 0,00";
   pointsEarnedEl.textContent = `+${pointsEarned} ${pointsEarned === 1 ? "ponto" : "pontos"}`;
@@ -2310,6 +2374,7 @@ function bindEvents() {
       event.preventDefault();
       state.loggedIn = true;
       state.customer.email = document.querySelector("[data-checkout-customer='email']")?.value.trim() || state.customer.email;
+      updateAccountHeader();
       showToast("Login confirmado para o protótipo.");
       navigateTo("#revisao");
       return;

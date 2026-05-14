@@ -222,6 +222,10 @@ svg {
   white-space: nowrap;
 }
 
+.account-link > span {
+  min-width: 0;
+}
+
 .account-link svg,
 .orders-link svg {
   width: 24px;
@@ -236,6 +240,12 @@ svg {
   font-size: 13px;
   font-weight: 600;
   line-height: 1.2;
+}
+
+.account-link strong {
+  max-width: 132px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .account-link small,
@@ -853,6 +863,13 @@ svg {
 
 .summary-line.points-discount-line strong {
   color: var(--green-dark);
+}
+
+.summary-points-note {
+  margin: -4px 0 2px;
+  color: #607069;
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .summary-line.total {
