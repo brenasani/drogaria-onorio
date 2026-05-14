@@ -1633,6 +1633,67 @@ function renderPaymentPage() {
   `;
 }
 
+function generateOrderNumber() {
+  const now = new Date();
+  const date = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0"),
+  ].join("");
+  const time = [
+    String(now.getHours()).padStart(2, "0"),
+    String(now.getMinutes()).padStart(2, "0"),
+    String(now.getSeconds()).padStart(2, "0"),
+  ].join("");
+  const random = Math.floor(1000 + Math.random() * 9000);
+  return `ON-${date}-${time}-${random}`;
+}
+
+function buildOrderSnapshot() {
+  const cart = calculateCart();
+  const store = getSelectedStore();
+  const now = new Date();
+  const savings = roundMoney(cart.pixDiscount + cart.pointsDiscount);
+
+  return {
+    number: generateOrderNumber(),
+    pickupCode: `RET-${String(Math.floor(100000 + Math.random() * 900000))}`,
+    createdAt: now.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }),
+    customerName: state.customer.fullName || state.customer.name || "Cliente Onório",
+    customerEmail: state.customer.email || "e-mail cadastrado",
+    customerPhone: state.customer.phone || "telefone cadastrado",
+    delivery: state.delivery,
+    payment: state.customer.payment || "A combinar",
+    store: { ...store },
+    items: cart.items.map((item) => ({
+      id: item.id,
+      name: item.name,
+      detail: item.detail,
+      tag: item.tag || item.category,
+      image: item.image,
+      quantity: item.quantity,
+      price: item.price,
+      lineTotal: roundMoney(item.price * item.quantity),
+    })),
+    subtotal: cart.subtotal,
+    pixDiscount: cart.pixDiscount,
+    pointsDiscount: cart.pointsDiscount,
+    shipping: cart.shipping,
+    total: cart.total,
+    savings,
+    pointsEarned: cart.pointsEarned,
+  };
+}
+
+function finalizeCurrentOrder() {
+  state.currentOrder = buildOrderSnapshot();
+  return state.currentOrder;
+}
+
+function getCurrentOrder() {
+  return state.currentOrder || finalizeCurrentOrder();
+}
+
 function renderFinishedPage() {
   const { total, pointsEarned, pointsDiscount } = calculateCart();
   return `
