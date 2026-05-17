@@ -2,99 +2,168 @@ const categories = [
   {
     id: "all",
     label: "Top ofertas",
+    showInMenu: false,
     icon: "discount",
     tone: "deal",
     art: "offer",
-    image: "assets/category-top-offers-illustration.svg",
+    image: "assets/category-offers-v2.jpg",
     products: ["assets/products/benegrip.webp", "assets/products/nivea.jpg"],
     badge: "%",
     photoOnly: true,
     query: "oferta",
     routeKey: "top-ofertas",
+    description: "Ofertas do dia, genéricos com desconto, leve 3 pague 2 e campanhas especiais da Drogaria Onório.",
+    subcategories: ["Genéricos até 95%", "Leve 3 pague 2", "Ofertas do dia", "PBM laboratórios", "Cliente ON"],
   },
   {
     id: "Medicamentos",
     label: "Medicamentos",
-    icon: "pill",
+    icon: "medicineBox",
     tone: "medicine",
     art: "cold",
-    image: "assets/category-medicines-illustration.svg",
+    image: "assets/category-medicine-real-v2.png",
     products: ["assets/products/dorflex.webp", "assets/products/tylenol-2.jpg"],
     photoOnly: true,
     routeKey: "medicamentos",
+    productCategories: ["Medicamentos"],
+    description: "Medicamentos de referência, genéricos, similares e produtos isentos de prescrição, sempre com orientação responsável.",
+    subcategories: ["Medicamentos de referência", "Genéricos", "Similares", "OTC / MIPs sem receita", "Controlados", "Antibióticos", "Injetáveis"],
   },
   {
-    id: "Suplementos",
-    label: "Vida saudável",
-    icon: "bottle",
-    tone: "wellness",
-    art: "wellness",
-    image: "assets/category-wellness-real.jpg",
-    photoOnly: true,
-    routeKey: "vida-saudavel",
-  },
-  {
-    id: "Mamãe e bebê",
-    label: "Mamãe e bebê",
-    icon: "baby",
-    tone: "baby",
-    art: "baby",
-    image: "assets/category-mom-baby-real.jpg",
-    photoOnly: true,
-    routeKey: "mamae-bebe",
+    id: "Higiene pessoal",
+    label: "Higiene pessoal",
+    icon: "hygiene",
+    tone: "hygiene",
+    art: "oral",
+    image: "assets/category-hygiene-real.jpg",
+    products: ["assets/products/colgate-total-12-90g.webp", "assets/products/rexona-clinical-150ml.jpg"],
+    sceneIcon: "sparkle",
+    routeKey: "higiene-pessoal",
+    productIds: ["colgate", "rexona", "dove-sabonete", "always-noturno", "oralb-power", "gillette-fusion", "listerine-cool-mint", "fio-dental-oralb", "escova-colgate-macia", "clareador-colgate", "nivea-men-barba"],
+    description: "Tudo para higiene diária, saúde bucal, cuidado masculino e itens de uso recorrente.",
+    subcategories: ["Sabonetes", "Desodorantes", "Creme dental", "Escovas", "Enxaguante bucal", "Fio dental", "Clareadores", "Masculino completo"],
   },
   {
     id: "Cosméticos",
     label: "Beleza",
-    icon: "tube",
+    icon: "beauty",
     tone: "beauty",
     art: "beauty",
     image: "assets/category-beauty.jpg",
-    products: ["assets/products/nivea.jpg", "assets/products/protetor-solar.jpg"],
-    photoOnly: true,
+    products: ["assets/products/neutrogena-hydro-boost-50g.jpg", "assets/products/protetor-solar.jpg"],
+    sceneIcon: "sparkle",
     routeKey: "beleza",
+    productCategories: ["Cosméticos", "Perfumaria"],
+    description: "Beleza, dermocosméticos, cabelo, proteção solar, maquiagem, perfumes e rotina de skincare.",
+    subcategories: ["Shampoo", "Condicionador", "Skincare", "Protetor solar", "Maquiagem", "Perfumes", "Dermocosméticos"],
   },
   {
-    id: "Perfumaria",
-    label: "Cabelo",
-    icon: "shampoo",
-    tone: "hair",
-    art: "hair",
-    image: "assets/category-hair-real.jpg",
-    photoOnly: true,
-    routeKey: "cabelo",
+    id: "Mamãe e bebê",
+    label: "Mamãe e bebê",
+    icon: "family",
+    tone: "baby",
+    art: "baby",
+    image: "assets/category-mom-baby-client.jpg",
+    products: ["assets/products/fralda-babysec-premium-g.webp", "assets/products/johnsons-baby-shampoo-400ml.jpg"],
+    sceneIcon: "baby",
+    routeKey: "mamae-bebe",
+    productCategories: ["Mamãe e bebê"],
+    description: "Produtos para bebê, maternidade, gestante, pós-parto e cuidados da família.",
+    subcategories: ["Fraldas infantil", "Lenços umedecidos", "Mamadeiras", "Chupetas", "Fórmulas infantis", "Gestante e pós-parto"],
   },
   {
-    id: "Conveniência",
-    label: "Higiene pessoal",
-    icon: "sparkle",
-    tone: "hygiene",
-    art: "oral",
-    image: "assets/category-hygiene-v2.jpg",
-    photoOnly: true,
-    routeKey: "higiene-pessoal",
+    id: "Suplementos",
+    label: "Bem-estar e saúde",
+    icon: "wellness",
+    tone: "wellness",
+    art: "wellness",
+    image: "assets/category-wellness-real.jpg",
+    products: ["assets/products/centrum-az-30.jpg", "assets/products/omega3-catarinense-60.png"],
+    sceneIcon: "bottle",
+    routeKey: "bem-estar-saude",
+    productIds: ["ensure-baunilha", "centrum-az", "omega3-catarinense", "lavitan-az", "vitamina-c", "barrinha-proteina", "snack-fit-castanhas"],
+    productCategories: ["Suplementos"],
+    description: "Vitaminas, suplementos, imunidade, produtos naturais e itens para rotina de saúde.",
+    subcategories: ["Vitaminas", "Suplementos", "Ômega 3", "Imunidade", "Fitness", "Produtos naturais"],
+  },
+  {
+    id: "Primeiros socorros",
+    label: "Primeiros socorros",
+    icon: "firstAid",
+    tone: "first-aid",
+    image: "assets/category-first-aid-kit.svg",
+    products: ["assets/products/prescription-box.svg", "assets/products/tylenol-2.jpg"],
+    sceneIcon: "shield",
+    routeKey: "primeiros-socorros",
+    productIds: ["curativo-band-aid", "agua-oxigenada", "micropore", "gaze-esteril", "termometro-digital", "bolsa-termica", "soro-fisiologico"],
+    description: "Itens essenciais para pequenos cuidados do dia a dia e suporte em casa.",
+    subcategories: ["Curativos", "Gaze", "Esparadrapo", "Termômetros", "Bolsas térmicas"],
+  },
+  {
+    id: "Equipamentos e acessórios",
+    label: "Equipamentos",
+    icon: "equipment",
+    tone: "equipment",
+    image: "assets/category-equipment-real.webp",
+    sceneIcon: "vaccine",
+    routeKey: "equipamentos-acessorios",
+    productIds: ["aparelho-pressao-gtech", "glicosimetro-gtech", "nebulizador-inalador", "mascaras-tripla", "muleta-aluminio"],
+    description: "Acessórios e equipamentos para monitoramento e cuidado de saúde.",
+    subcategories: ["Aparelho de pressão", "Glicemia", "Nebulizador", "Muletas", "Máscaras"],
+  },
+  {
+    id: "Cuidados especiais",
+    label: "Cuidados especiais",
+    icon: "specialCare",
+    tone: "special-care",
+    image: "assets/category-special-care-elderly.jpg",
+    products: ["assets/products/ensure-baunilha-850g.jpg", "assets/products/centrum-az-30.jpg"],
+    sceneIcon: "heart",
+    routeKey: "cuidados-especiais",
+    productIds: ["ensure-baunilha", "centrum-az", "fralda-geriatrica-bigfral", "glucerna-baunilha", "fitas-glicemia", "seringa-insulina", "creme-preventivo-assaduras"],
+    description: "Produtos para cuidados contínuos, idosos, diabetes e necessidades específicas.",
+    subcategories: ["Geriátricos", "Incontinência", "Diabetes", "Ostomia"],
+  },
+  {
+    id: "Conveniência rápida",
+    label: "Conveniência",
+    icon: "convenience",
+    tone: "convenience",
+    image: "assets/category-convenience-drinks.svg",
+    products: ["assets/products/agua-crystal-500ml.jpg", "assets/products/ensure-baunilha-850g.jpg"],
+    sceneIcon: "basket",
+    routeKey: "conveniencia",
+    productIds: ["agua", "coca-cola-lata", "monster-energy", "barrinha-proteina", "pilha-duracell", "snack-fit-castanhas"],
+    description: "Itens rápidos para completar a compra: bebidas, snacks, utilidades e conveniência.",
+    subcategories: ["Snacks fit", "Água", "Refrigerante", "Energético", "Barrinhas", "Pilhas", "Utilidades"],
   },
   {
     id: "Pet",
-    label: "Pet",
-    icon: "heart",
+    label: "Linha pet",
+    icon: "paw",
     tone: "pet",
     art: "pet",
-    image: "assets/category-pet-v2.jpg",
+    image: "assets/category-line-pet.jpg",
     sceneIcon: "heart",
     photoOnly: true,
     routeKey: "pet",
+    productCategories: ["Pet"],
+    productIds: ["shampoo-pet", "tapete-higienico-pet", "antipulgas-pet", "biscoito-pet"],
+    description: "Cuidados básicos para cães e gatos, com produtos pet de higiene e rotina.",
+    subcategories: ["Cachorros", "Gatos", "Shampoo pet", "Higiene pet", "Cuidados diários"],
   },
   {
-    id: "all",
+    id: "Serviços",
     label: "Serviços",
-    icon: "vaccine",
+    icon: "pharmacyService",
     tone: "services",
     art: "services",
     image: "assets/category-services-real.jpg",
     photoOnly: true,
     scrollTarget: "health-title",
     routeKey: "servicos",
+    description: "Serviços farmacêuticos disponíveis na Drogaria Onório, com atendimento humanizado.",
+    subcategories: ["Aferição de pressão", "Teste de glicemia", "Aplicação GLP-1", "Colocação de brincos", "Curativos", "Oximetria"],
   },
 ];
 
@@ -837,6 +906,1282 @@ const products = [
   },
 ];
 
+const expandedCatalogProducts = [
+  {
+    id: "listerine-cool-mint",
+    name: "Listerine Cool Mint",
+    detail: "Enxaguante bucal 500ml",
+    category: "Conveniência",
+    subcategory: "Enxaguante bucal",
+    keywords: "higiene pessoal saude bucal boca enxaguatorio",
+    price: 21.9,
+    oldPrice: 26.9,
+    color: "#dff7f7",
+    ink: "#006a75",
+    round: false,
+    image: "assets/products/hygiene-care-kit.svg",
+    tag: "Higiene pessoal",
+    promo: "-19%",
+    description: "Enxaguante bucal para completar a rotina de higiene oral e complementar a compra de creme dental e escova.",
+    caution: "Confira modo de uso e idade recomendada na embalagem.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "fio-dental-oralb",
+    name: "Oral-B Essential Floss",
+    detail: "Fio dental 50m",
+    category: "Conveniência",
+    subcategory: "Fio dental",
+    keywords: "higiene pessoal saude bucal fio dental dental",
+    price: 13.9,
+    color: "#f2fbff",
+    ink: "#0d5d8a",
+    round: false,
+    image: "assets/products/hygiene-care-kit.svg",
+    tag: "Saúde bucal",
+    description: "Fio dental para rotina diária de higiene bucal, indicado para compra recorrente.",
+    caution: "Produto sujeito a variação de marca e apresentação por estoque.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "escova-colgate-macia",
+    name: "Escova Colgate",
+    detail: "Maciez média",
+    category: "Conveniência",
+    subcategory: "Escovas",
+    keywords: "higiene pessoal escova dental saude bucal",
+    price: 7.9,
+    color: "#eff8ff",
+    ink: "#0f6090",
+    round: false,
+    image: "assets/products/hygiene-care-kit.svg",
+    tag: "Saúde bucal",
+    promo: "Leve 3 pague 2",
+    description: "Escova dental de uso diário para compor combos com creme dental, fio dental e enxaguante.",
+    caution: "Confira modelo e maciez antes de finalizar.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "clareador-colgate",
+    name: "Colgate Luminous White",
+    detail: "Creme dental clareador 70g",
+    category: "Conveniência",
+    subcategory: "Clareadores",
+    keywords: "higiene pessoal creme dental pasta clareador clareamento",
+    price: 14.9,
+    oldPrice: 18.9,
+    color: "#fff6e4",
+    ink: "#8c4d0c",
+    round: false,
+    image: "assets/products/hygiene-care-kit.svg",
+    tag: "Clareador",
+    promo: "-21%",
+    description: "Creme dental clareador para destacar opções premium dentro de saúde bucal.",
+    caution: "Confira indicação de uso e sensibilidade dental.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "nivea-men-barba",
+    name: "Nivea Men",
+    detail: "Espuma de barbear 200ml",
+    category: "Conveniência",
+    subcategory: "Masculino completo",
+    keywords: "higiene pessoal masculino barba barbear homem",
+    price: 24.9,
+    color: "#eaf2ff",
+    ink: "#123f7a",
+    round: false,
+    image: "assets/products/hygiene-care-kit.svg",
+    tag: "Masculino",
+    description: "Espuma de barbear para compor a área masculina com lâminas, cargas e cuidados pós-barba.",
+    caution: "Confira fragrância e apresentação disponível.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "curativo-band-aid",
+    name: "Curativo adesivo",
+    detail: "Caixa c/ 35 unidades",
+    category: "Primeiros socorros",
+    subcategory: "Curativos",
+    keywords: "band-aid bandaid machucado ferimento primeiro socorro",
+    price: 12.9,
+    color: "#ffe7d7",
+    ink: "#8a3f15",
+    round: false,
+    image: "assets/products/first-aid-products.svg",
+    tag: "Primeiros socorros",
+    description: "Curativos adesivos para pequenos cortes e cuidados rápidos em casa, bolsa ou trabalho.",
+    caution: "Limpe a pele antes de aplicar e troque conforme necessidade.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "agua-oxigenada",
+    name: "Água oxigenada Farmax",
+    detail: "10 volumes 100ml",
+    category: "Primeiros socorros",
+    subcategory: "Curativos",
+    keywords: "agua oxigenada antisseptico primeiros socorros limpeza",
+    price: 5.9,
+    color: "#eef9ff",
+    ink: "#176886",
+    round: false,
+    image: "assets/products/first-aid-products.svg",
+    tag: "Curativos",
+    description: "Item básico para cuidados domésticos, higienização e primeiros socorros conforme orientação.",
+    caution: "Uso externo. Consulte orientação para feridas profundas ou sinais de infecção.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "micropore",
+    name: "Micropore",
+    detail: "Fita hipoalergênica 25mm",
+    category: "Primeiros socorros",
+    subcategory: "Esparadrapo",
+    keywords: "micropore esparadrapo fita curativo gaze",
+    price: 8.9,
+    color: "#f6f2ec",
+    ink: "#6d5a48",
+    round: false,
+    image: "assets/products/first-aid-products.svg",
+    tag: "Curativos",
+    description: "Fita para fixação de curativos e gaze, ideal para montar uma farmacinha completa.",
+    caution: "Evite uso em pele irritada ou sensível sem orientação.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "gaze-esteril",
+    name: "Gaze estéril",
+    detail: "Pacote c/ 10",
+    category: "Primeiros socorros",
+    subcategory: "Gaze",
+    keywords: "gaze curativo ferida primeiros socorros",
+    price: 6.9,
+    color: "#f8fbff",
+    ink: "#375a70",
+    round: false,
+    image: "assets/products/first-aid-products.svg",
+    tag: "Curativos",
+    description: "Gaze estéril para pequenos curativos e apoio em procedimentos simples.",
+    caution: "Mantenha a embalagem fechada até o uso.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "termometro-digital",
+    name: "Termômetro digital",
+    detail: "Ponta flexível",
+    category: "Primeiros socorros",
+    subcategory: "Termômetros",
+    keywords: "termometro febre temperatura primeiros socorros",
+    price: 19.9,
+    color: "#eef7ff",
+    ink: "#1c5c7d",
+    round: false,
+    image: "assets/products/first-aid-products.svg",
+    tag: "Febre",
+    description: "Termômetro digital para acompanhamento de temperatura corporal em casa.",
+    caution: "Confira instruções de medição e higienização.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "bolsa-termica",
+    name: "Bolsa térmica",
+    detail: "Gel quente/frio",
+    category: "Primeiros socorros",
+    subcategory: "Bolsas térmicas",
+    keywords: "bolsa termica gelo quente frio dor muscular",
+    price: 32.9,
+    color: "#f0fbff",
+    ink: "#235a7a",
+    round: false,
+    image: "assets/products/first-aid-products.svg",
+    tag: "Cuidados",
+    description: "Bolsa térmica reutilizável para compressa quente ou fria conforme orientação.",
+    caution: "Siga o tempo de aquecimento/resfriamento indicado na embalagem.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "soro-fisiologico",
+    name: "Soro fisiológico",
+    detail: "0,9% 500ml",
+    category: "Primeiros socorros",
+    subcategory: "Curativos",
+    keywords: "soro fisiologico limpeza nasal ferida primeiros socorros",
+    price: 8.5,
+    color: "#eaf9ff",
+    ink: "#12647d",
+    round: false,
+    image: "assets/products/first-aid-products.svg",
+    tag: "Farmacinha",
+    description: "Solução fisiológica para limpeza e cuidados básicos conforme orientação de uso.",
+    caution: "Confira tipo de embalagem, validade e modo de uso.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "aparelho-pressao-gtech",
+    name: "Aparelho de pressão G-Tech",
+    detail: "Digital de braço",
+    category: "Equipamentos e acessórios",
+    subcategory: "Aparelho de pressão",
+    keywords: "pressao arterial medidor aparelho equipamento",
+    price: 129.9,
+    oldPrice: 159.9,
+    color: "#eef8ff",
+    ink: "#245978",
+    round: false,
+    image: "assets/products/health-equipment-kit.svg",
+    tag: "Equipamentos",
+    promo: "-19%",
+    description: "Aparelho digital para acompanhamento de pressão arterial em casa.",
+    caution: "A medição não substitui avaliação médica. Leia o manual antes do uso.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "glicosimetro-gtech",
+    name: "Glicosímetro G-Tech",
+    detail: "Kit monitor de glicemia",
+    category: "Equipamentos e acessórios",
+    subcategory: "Glicemia",
+    keywords: "glicose diabetes glicosimetro medidor glicemia",
+    price: 69.9,
+    color: "#f3f8ff",
+    ink: "#275b82",
+    round: false,
+    image: "assets/products/health-equipment-kit.svg",
+    tag: "Diabetes",
+    description: "Kit demonstrativo para monitoramento de glicemia capilar com acessórios compatíveis.",
+    caution: "Verifique compatibilidade das tiras e siga orientação profissional.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "nebulizador-inalador",
+    name: "Nebulizador",
+    detail: "Inalador compacto",
+    category: "Equipamentos e acessórios",
+    subcategory: "Nebulizador",
+    keywords: "inalador nebulizador respiratorio equipamentos",
+    price: 149.9,
+    color: "#edfaff",
+    ink: "#166176",
+    round: false,
+    image: "assets/products/health-equipment-kit.svg",
+    tag: "Respiratório",
+    description: "Nebulizador compacto para cuidados respiratórios conforme prescrição/orientação.",
+    caution: "Uso de medicamentos inalatórios deve seguir orientação de profissional habilitado.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "mascaras-tripla",
+    name: "Máscara descartável",
+    detail: "Tripla camada c/ 50",
+    category: "Equipamentos e acessórios",
+    subcategory: "Máscaras",
+    keywords: "mascara descartavel protecao respiratoria",
+    price: 19.9,
+    color: "#eefbff",
+    ink: "#276477",
+    round: false,
+    image: "assets/products/health-equipment-kit.svg",
+    tag: "Proteção",
+    description: "Máscaras descartáveis para uso diário e proteção básica.",
+    caution: "Produto descartável. Troque conforme necessidade.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "muleta-aluminio",
+    name: "Muleta canadense",
+    detail: "Alumínio unidade",
+    category: "Equipamentos e acessórios",
+    subcategory: "Muletas",
+    keywords: "muleta apoio mobilidade acessorio",
+    price: 79.9,
+    color: "#f2f5f4",
+    ink: "#31554b",
+    round: false,
+    image: "assets/products/health-equipment-kit.svg",
+    tag: "Mobilidade",
+    description: "Apoio de mobilidade para venda sob consulta de tamanho e disponibilidade.",
+    caution: "Ajuste a altura e use conforme orientação de profissional.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "fralda-geriatrica-bigfral",
+    name: "Fralda geriátrica",
+    detail: "Bigfral G c/ 8",
+    category: "Cuidados especiais",
+    subcategory: "Incontinência",
+    keywords: "geriatrico idoso incontinencia fralda adulto",
+    price: 34.9,
+    oldPrice: 42.9,
+    color: "#f3f7ff",
+    ink: "#34537a",
+    round: false,
+    image: "assets/products/special-care-products.svg",
+    tag: "Cuidados especiais",
+    promo: "-19%",
+    description: "Fralda adulto para cuidado contínuo e rotina de incontinência.",
+    caution: "Confira tamanho, cintura indicada e absorção.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "glucerna-baunilha",
+    name: "Glucerna Baunilha",
+    detail: "Complemento 400g",
+    category: "Cuidados especiais",
+    subcategory: "Diabetes",
+    keywords: "diabetes nutricao suplemento adulto glicemia",
+    price: 74.9,
+    color: "#fff5df",
+    ink: "#765112",
+    round: false,
+    image: "assets/products/special-care-products.svg",
+    tag: "Nutrição",
+    description: "Complemento nutricional demonstrativo para área de diabetes e cuidados especiais.",
+    caution: "Use conforme orientação de nutricionista ou profissional de saúde.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "fitas-glicemia",
+    name: "Tiras de glicemia",
+    detail: "Caixa c/ 50",
+    category: "Cuidados especiais",
+    subcategory: "Diabetes",
+    keywords: "fitas tiras glicemia diabetes glicosimetro",
+    price: 64.9,
+    color: "#edf8ff",
+    ink: "#245a78",
+    round: false,
+    image: "assets/products/special-care-products.svg",
+    tag: "Diabetes",
+    description: "Tiras reagentes para controle de glicemia, sempre conferindo compatibilidade com o aparelho.",
+    caution: "Compatibilidade por marca e lote deve ser confirmada antes da venda.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "seringa-insulina",
+    name: "Seringa para insulina",
+    detail: "1ml c/ agulha",
+    category: "Cuidados especiais",
+    subcategory: "Diabetes",
+    keywords: "seringa insulina diabetes aplicacao",
+    price: 1.9,
+    color: "#f4fbff",
+    ink: "#1d6378",
+    round: false,
+    image: "assets/products/special-care-products.svg",
+    tag: "Diabetes",
+    description: "Seringa para aplicação conforme orientação profissional e prescrição quando aplicável.",
+    caution: "Produto perfurocortante. Descarte corretamente após o uso.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "creme-preventivo-assaduras",
+    name: "Creme preventivo",
+    detail: "Assaduras 60g",
+    category: "Cuidados especiais",
+    subcategory: "Geriátricos",
+    keywords: "geriatrico assadura pele barreira cuidado especial",
+    price: 18.9,
+    color: "#fff1e6",
+    ink: "#8a4d18",
+    round: false,
+    image: "assets/products/special-care-products.svg",
+    tag: "Pele",
+    description: "Creme de barreira para cuidados com pele sensível em rotina geriátrica ou infantil.",
+    caution: "Confira composição e área de aplicação indicada.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "coca-cola-lata",
+    name: "Coca-Cola",
+    detail: "Lata 350ml",
+    category: "Conveniência",
+    subcategory: "Refrigerante",
+    keywords: "refrigerante bebida coca cola conveniencia",
+    price: 4.9,
+    color: "#ffebeb",
+    ink: "#b31919",
+    round: false,
+    image: "assets/products/convenience-products.svg",
+    tag: "Bebidas",
+    description: "Bebida gelada para compra de conveniência junto com o pedido.",
+    caution: "Disponibilidade pode variar por loja.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "monster-energy",
+    name: "Monster Energy",
+    detail: "Lata 473ml",
+    category: "Conveniência",
+    subcategory: "Energético",
+    keywords: "energetico bebida conveniencia monster",
+    price: 9.9,
+    color: "#e9f9ea",
+    ink: "#0f5d1f",
+    round: false,
+    image: "assets/products/convenience-products.svg",
+    tag: "Bebidas",
+    description: "Energético para área de conveniência, com compra rápida no mesmo pedido.",
+    caution: "Consumo não recomendado para crianças, gestantes e pessoas sensíveis à cafeína.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "barrinha-proteina",
+    name: "Barra de proteína",
+    detail: "Sabor chocolate 40g",
+    category: "Conveniência",
+    subcategory: "Barrinhas",
+    keywords: "snack fit barrinha proteina fitness conveniencia",
+    price: 7.9,
+    color: "#f8efe8",
+    ink: "#6b3b1b",
+    round: false,
+    image: "assets/products/convenience-products.svg",
+    tag: "Snack fit",
+    description: "Barrinha para compra rápida, ideal para complementar a área de bem-estar e conveniência.",
+    caution: "Confira alergênicos e composição na embalagem.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "pilha-duracell",
+    name: "Pilha alcalina",
+    detail: "AA c/ 2 unidades",
+    category: "Conveniência",
+    subcategory: "Pilhas",
+    keywords: "pilha bateria utilidades conveniencia",
+    price: 13.9,
+    color: "#fff3df",
+    ink: "#8a4d00",
+    round: false,
+    image: "assets/products/convenience-products.svg",
+    tag: "Utilidades",
+    description: "Pilha alcalina para itens de conveniência e uso emergencial.",
+    caution: "Confira tamanho e descarte corretamente.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "snack-fit-castanhas",
+    name: "Mix de castanhas",
+    detail: "Sachê 30g",
+    category: "Conveniência",
+    subcategory: "Snacks fit",
+    keywords: "snack fit castanhas conveniencia natural",
+    price: 6.9,
+    color: "#fff8e8",
+    ink: "#75521a",
+    round: false,
+    image: "assets/products/convenience-products.svg",
+    tag: "Snack fit",
+    description: "Snack prático para completar a compra com opção de conveniência mais saudável.",
+    caution: "Pode conter alergênicos. Confira rótulo.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "tapete-higienico-pet",
+    name: "Tapete higiênico pet",
+    detail: "Pacote c/ 7",
+    category: "Pet",
+    subcategory: "Higiene pet",
+    keywords: "linha pet cachorro gato tapete higiene",
+    price: 29.9,
+    color: "#f1fbff",
+    ink: "#265d78",
+    round: false,
+    image: "assets/products/pet-products.svg",
+    tag: "Linha pet",
+    description: "Tapete higiênico para cães, item recorrente da linha pet.",
+    caution: "Confira tamanho e absorção do produto.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "antipulgas-pet",
+    name: "Antipulgas pet",
+    detail: "Cães 10 a 20kg",
+    category: "Pet",
+    subcategory: "Cuidados diários",
+    keywords: "linha pet cachorro antipulgas carrapatos",
+    price: 49.9,
+    color: "#fff4e8",
+    ink: "#7a4214",
+    round: false,
+    image: "assets/products/pet-products.svg",
+    tag: "Linha pet",
+    description: "Produto demonstrativo para prevenção de pulgas e carrapatos na linha pet.",
+    caution: "Confira peso do animal, espécie e orientação do fabricante antes do uso.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "biscoito-pet",
+    name: "Biscoito pet",
+    detail: "Sabor carne 100g",
+    category: "Pet",
+    subcategory: "Cachorros",
+    keywords: "linha pet cachorro snack biscoito",
+    price: 11.9,
+    color: "#fff1df",
+    ink: "#7a4214",
+    round: false,
+    image: "assets/products/pet-products.svg",
+    tag: "Linha pet",
+    description: "Snack para cães para ampliar a vitrine de linha pet e compra por impulso.",
+    caution: "Ofereça conforme porte e orientação da embalagem.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "dipirona-generica",
+    name: "Dipirona Sódica",
+    detail: "500mg c/ 10 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Genéricos",
+    keywords: "genericos genericos ate 95 analgesico antitermico dor febre otc mips sem receita",
+    price: 6.9,
+    oldPrice: 12.9,
+    color: "#eaf8ed",
+    ink: "#08713f",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Genérico",
+    promo: "-47%",
+    description: "Medicamento generico demonstrativo para dor e febre, com venda conforme orientacao farmaceutica.",
+    caution: "Consulte a bula e evite automedicacao.",
+    stock: "Disponivel hoje",
+  },
+  {
+    id: "losartana-generica",
+    name: "Losartana Potássica",
+    detail: "50mg c/ 30 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Genéricos",
+    keywords: "genericos genericos ate 95 anti hipertensivo pressao alta prescricao referencia similar",
+    price: 13.9,
+    oldPrice: 29.9,
+    color: "#eff8ef",
+    ink: "#0a6c42",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Genérico",
+    promo: "-54%",
+    description: "Exemplo de medicamento de uso continuo para compor a area de genericos e PBM.",
+    caution: "Venda e uso conforme prescricao e orientacao profissional.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "amoxicilina-500",
+    name: "Amoxicilina",
+    detail: "500mg c/ 21 cápsulas",
+    category: "Medicamentos",
+    subcategory: "Antibióticos",
+    keywords: "antibioticos antibiotico prescricao tarja vermelha infeccao",
+    price: 28.9,
+    color: "#fff1e8",
+    ink: "#9b3d13",
+    round: false,
+    image: "assets/products/prescription-box.svg",
+    tag: "Venda sob prescrição",
+    description: "Antibiotico demonstrativo para indicar o fluxo de venda com retencao/orientacao conforme legislacao.",
+    caution: "Venda sob prescricao medica. Valide receita, estoque e regras vigentes antes de dispensar.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "sertralina-50",
+    name: "Sertralina",
+    detail: "50mg c/ 30 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Controlados",
+    keywords: "controlados tarja vermelha prescricao saude mental receita",
+    price: 34.9,
+    color: "#f5f0ff",
+    ink: "#563887",
+    round: false,
+    image: "assets/products/prescription-box.svg",
+    tag: "Controlado",
+    description: "Produto demonstrativo para representar medicamentos com controle de venda e validacao de receita.",
+    caution: "Comercializacao conforme legislacao vigente e conferencia farmaceutica.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "complexo-b-injetavel",
+    name: "Complexo B",
+    detail: "Solução injetável 2ml",
+    category: "Medicamentos",
+    subcategory: "Injetáveis",
+    keywords: "injetaveis medicamento injetavel aplicacao prescricao vitamina complexo b",
+    price: 9.9,
+    color: "#fff7e7",
+    ink: "#87530f",
+    round: false,
+    image: "assets/products/prescription-box.svg",
+    tag: "Injetável",
+    description: "Exemplo de item injetavel para futura integracao com servico farmaceutico de aplicacao.",
+    caution: "Aplicacao somente mediante avaliacao, prescricao quando aplicavel e disponibilidade da loja.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "vick-pyrena",
+    name: "Vick Pyrena",
+    detail: "Sabor mel e limão c/ 5 envelopes",
+    category: "Medicamentos",
+    subcategory: "OTC / MIPs sem receita",
+    keywords: "gripe resfriado antigripal otc mips sem receita leve tambem benegrip",
+    price: 19.9,
+    color: "#fff4e4",
+    ink: "#805012",
+    round: false,
+    image: "assets/products/prescription-box.svg",
+    tag: "Leve também",
+    description: "Sugestao de associacao para campanhas de inverno e compra complementar.",
+    caution: "Confira composicao, restricoes e bula antes do uso.",
+    stock: "Disponivel hoje",
+  },
+  {
+    id: "lenco-umedecido-huggies",
+    name: "Lenços umedecidos",
+    detail: "Huggies c/ 48 unidades",
+    category: "Mamãe e bebê",
+    subcategory: "Lenços umedecidos",
+    keywords: "mamae bebe lencos umedecidos higiene infantil",
+    price: 12.9,
+    color: "#eef8ff",
+    ink: "#195a7c",
+    round: false,
+    image: "assets/products/huggies-supreme-care-m.jpg",
+    tag: "Bebê",
+    description: "Lencos umedecidos para rotina de troca e higiene infantil.",
+    caution: "Confira fragrancia, sensibilidade e indicacao da embalagem.",
+    stock: "Disponivel hoje",
+  },
+  {
+    id: "mamadeira-lillo",
+    name: "Mamadeira",
+    detail: "Anticólica 240ml",
+    category: "Mamãe e bebê",
+    subcategory: "Mamadeiras",
+    keywords: "mamae bebe mamadeira anticolica infantil",
+    price: 29.9,
+    color: "#f3fbff",
+    ink: "#245e7a",
+    round: false,
+    image: "assets/products/johnsons-baby-shampoo-400ml.jpg",
+    tag: "Bebê",
+    description: "Mamadeira demonstrativa para ampliar a navegacao de mamae e bebe.",
+    caution: "Esterilize antes do uso e confira fluxo do bico indicado para a idade.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "chupeta-avent",
+    name: "Chupeta",
+    detail: "0-6 meses unidade",
+    category: "Mamãe e bebê",
+    subcategory: "Chupetas",
+    keywords: "mamae bebe chupeta recem nascido infantil",
+    price: 24.9,
+    color: "#fff2f7",
+    ink: "#8a3156",
+    round: false,
+    image: "assets/products/johnsons-baby-shampoo-400ml.jpg",
+    tag: "Bebê",
+    description: "Chupeta demonstrativa para compor o sortimento de primeira infancia.",
+    caution: "Confira faixa etaria, material e recomendacao de troca.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "absorvente-pos-parto",
+    name: "Absorvente pós-parto",
+    detail: "Pacote c/ 20",
+    category: "Mamãe e bebê",
+    subcategory: "Gestante e pós-parto",
+    keywords: "mamae bebe gestante pos parto maternidade",
+    price: 19.9,
+    color: "#fff3f0",
+    ink: "#8a3d2d",
+    round: false,
+    image: "assets/products/always-noturno-8.jpg",
+    tag: "Maternidade",
+    description: "Item para cuidado no pos-parto e montagem de mala maternidade.",
+    caution: "Confira tamanho, absorcao e orientacao do fabricante.",
+    stock: "Disponivel hoje",
+  },
+  {
+    id: "bolsa-ostomia",
+    name: "Bolsa coletora",
+    detail: "Ostomia unidade",
+    category: "Cuidados especiais",
+    subcategory: "Ostomia",
+    keywords: "ostomia bolsa coletora cuidados especiais",
+    price: 22.9,
+    color: "#f5f8f2",
+    ink: "#526d2c",
+    round: false,
+    image: "assets/products/special-care-products.svg",
+    tag: "Ostomia",
+    description: "Produto demonstrativo para cuidados especiais e venda sob consulta de modelo.",
+    caution: "Confirme tamanho, tipo de sistema e orientacao profissional antes da compra.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "base-facial-maybelline",
+    name: "Base facial",
+    detail: "Efeito matte 30ml",
+    category: "Cosméticos",
+    subcategory: "Maquiagem",
+    keywords: "maquiagem beleza base facial dermocosmeticos",
+    price: 49.9,
+    color: "#fff0df",
+    ink: "#80502d",
+    round: false,
+    image: "assets/products/protetor-solar.jpg",
+    tag: "Maquiagem",
+    description: "Exemplo de maquiagem para navegacao por beleza e escolha de tons na integracao futura.",
+    caution: "Confira cor, acabamento e disponibilidade por loja.",
+    stock: "Sob consulta",
+  },
+];
+
+const additionalMedicineProducts = [
+  {
+    id: "ibuprofeno-400",
+    name: "Ibuprofeno",
+    detail: "400mg c/ 10 comprimidos",
+    category: "Medicamentos",
+    subcategory: "OTC / MIPs sem receita",
+    routeKey: "medicamentos",
+    keywords: "ibuprofeno analgesico anti-inflamatorio dor febre otc mips sem receita",
+    price: 12.9,
+    oldPrice: 18.9,
+    color: "#eaf8ed",
+    ink: "#08713f",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Dor e febre",
+    promo: "-32%",
+    description: "Medicamento demonstrativo para dor, febre e processos inflamatórios leves, conforme bula e orientação.",
+    caution: "Confirme contraindicações, idade, histórico gástrico e uso de outros medicamentos antes da venda.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "omeprazol-20",
+    name: "Omeprazol",
+    detail: "20mg c/ 28 cápsulas",
+    category: "Medicamentos",
+    subcategory: "OTC / MIPs sem receita",
+    routeKey: "medicamentos",
+    keywords: "omeprazol estomago azia gastrite refluxo otc mips sem receita",
+    price: 18.9,
+    oldPrice: 29.9,
+    color: "#eef8ef",
+    ink: "#0a6c42",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Gástrico",
+    promo: "-37%",
+    description: "Produto para vitrine de cuidados gástricos, refluxo e azia, com uso conforme bula.",
+    caution: "Uso prolongado deve ser acompanhado por profissional de saúde.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "loratadina-10",
+    name: "Loratadina",
+    detail: "10mg c/ 12 comprimidos",
+    category: "Medicamentos",
+    subcategory: "OTC / MIPs sem receita",
+    routeKey: "medicamentos",
+    keywords: "loratadina antialergico alergia rinite urticaria otc mips sem receita",
+    price: 9.9,
+    oldPrice: 16.9,
+    color: "#eaf8ed",
+    ink: "#08713f",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Alergia",
+    promo: "-41%",
+    description: "Antialérgico demonstrativo para sintomas de rinite e alergias, conforme bula.",
+    caution: "Confira idade indicada, apresentação e orientação farmacêutica.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "cetirizina-10",
+    name: "Cetirizina",
+    detail: "10mg c/ 12 comprimidos",
+    category: "Medicamentos",
+    subcategory: "OTC / MIPs sem receita",
+    routeKey: "medicamentos",
+    keywords: "cetirizina antialergico alergia rinite urticaria otc mips sem receita",
+    price: 16.9,
+    oldPrice: 22.9,
+    color: "#eaf8ed",
+    ink: "#08713f",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Alergia",
+    promo: "-26%",
+    description: "Antialérgico para complementar a navegação por alergia, rinite e urticária.",
+    caution: "Pode causar sonolência em algumas pessoas. Validar bula e orientação.",
+    stock: "Disponível hoje",
+  },
+  {
+    id: "acetilcisteina-600",
+    name: "Acetilcisteína",
+    detail: "600mg c/ 16 envelopes",
+    category: "Medicamentos",
+    subcategory: "OTC / MIPs sem receita",
+    routeKey: "medicamentos",
+    keywords: "acetilcisteina xarope envelope expectorante tosse catarro respiratorio otc",
+    price: 39.9,
+    oldPrice: 49.9,
+    color: "#eef8ef",
+    ink: "#0a6c42",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Respiratório",
+    promo: "-20%",
+    description: "Produto demonstrativo para secreção/catarro e cuidados respiratórios conforme bula.",
+    caution: "Confira apresentação, idade e histórico de saúde antes de orientar o uso.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "diclofenaco-50",
+    name: "Diclofenaco Potássico",
+    detail: "50mg c/ 20 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Genéricos",
+    routeKey: "medicamentos",
+    keywords: "diclofenaco anti-inflamatorio dor inflamacao tarja vermelha prescricao",
+    price: 14.9,
+    oldPrice: 24.9,
+    color: "#fff1e8",
+    ink: "#9b3d13",
+    round: false,
+    image: "assets/products/pbm-generic-box-orange.svg",
+    tag: "Venda sob prescrição",
+    promo: "-40%",
+    description: "Anti-inflamatório demonstrativo para venda com conferência de prescrição quando aplicável.",
+    caution: "Venda e uso conforme prescrição, bula e orientação profissional.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "nimesulida-100",
+    name: "Nimesulida",
+    detail: "100mg c/ 12 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Genéricos",
+    routeKey: "medicamentos",
+    keywords: "nimesulida anti-inflamatorio dor inflamacao tarja vermelha prescricao",
+    price: 12.9,
+    oldPrice: 19.9,
+    color: "#fff1e8",
+    ink: "#9b3d13",
+    round: false,
+    image: "assets/products/pbm-generic-box-orange.svg",
+    tag: "Venda sob prescrição",
+    promo: "-35%",
+    description: "Anti-inflamatório demonstrativo para demonstrar fluxo de medicamento sob orientação.",
+    caution: "Uso deve seguir prescrição, com atenção a contraindicações e duração do tratamento.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "metformina-850",
+    name: "Metformina",
+    detail: "850mg c/ 30 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Genéricos",
+    routeKey: "medicamentos",
+    keywords: "metformina diabetes glicemia uso continuo generico prescricao",
+    price: 11.9,
+    oldPrice: 21.9,
+    color: "#eff8ef",
+    ink: "#0a6c42",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Uso contínuo",
+    promo: "-46%",
+    description: "Medicamento de uso contínuo para diabetes, cadastrado como exemplo para integração futura.",
+    caution: "Venda e uso conforme prescrição, acompanhamento e orientação profissional.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "sinvastatina-20",
+    name: "Sinvastatina",
+    detail: "20mg c/ 30 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Genéricos",
+    routeKey: "medicamentos",
+    keywords: "sinvastatina colesterol estatina uso continuo prescricao generico",
+    price: 17.9,
+    oldPrice: 31.9,
+    color: "#eff8ef",
+    ink: "#0a6c42",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Uso contínuo",
+    promo: "-44%",
+    description: "Medicamento de uso contínuo para colesterol, útil para área de PBM e recorrência.",
+    caution: "Venda e uso conforme prescrição e acompanhamento profissional.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "enalapril-10",
+    name: "Enalapril",
+    detail: "10mg c/ 30 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Genéricos",
+    routeKey: "medicamentos",
+    keywords: "enalapril pressao alta hipertensao uso continuo generico prescricao",
+    price: 8.9,
+    oldPrice: 17.9,
+    color: "#eff8ef",
+    ink: "#0a6c42",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Uso contínuo",
+    promo: "-50%",
+    description: "Medicamento de uso contínuo para hipertensão, cadastrado para compra recorrente.",
+    caution: "Uso conforme prescrição. Não interromper tratamento sem orientação profissional.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "hidroclorotiazida-25",
+    name: "Hidroclorotiazida",
+    detail: "25mg c/ 30 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Genéricos",
+    routeKey: "medicamentos",
+    keywords: "hidroclorotiazida diuretico hipertensao pressao alta uso continuo generico prescricao",
+    price: 6.9,
+    oldPrice: 13.9,
+    color: "#eff8ef",
+    ink: "#0a6c42",
+    round: false,
+    image: "assets/products/pbm-generic-box-green.svg",
+    tag: "Uso contínuo",
+    promo: "-50%",
+    description: "Diurético demonstrativo para hipertensão e retenção de líquidos conforme prescrição.",
+    caution: "Uso conforme prescrição e acompanhamento profissional.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "azitromicina-500",
+    name: "Azitromicina",
+    detail: "500mg c/ 3 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Antibióticos",
+    routeKey: "medicamentos",
+    keywords: "azitromicina antibiotico antimicrobiano prescricao retencao receita",
+    price: 22.9,
+    oldPrice: 34.9,
+    color: "#fff1e8",
+    ink: "#9b3d13",
+    round: false,
+    image: "assets/products/prescription-box.svg",
+    tag: "Antibiótico",
+    promo: "-34%",
+    description: "Antibiótico demonstrativo para fluxo de receita, retenção e conferência farmacêutica.",
+    caution: "Venda sob prescrição médica, com regras de dispensação de antimicrobianos.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "clonazepam-2",
+    name: "Clonazepam",
+    detail: "2mg c/ 30 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Controlados",
+    routeKey: "medicamentos",
+    keywords: "clonazepam controlado tarja preta receita b1 benzodiazepinico",
+    price: 9.9,
+    color: "#f5f0ff",
+    ink: "#563887",
+    round: false,
+    image: "assets/products/prescription-box.svg",
+    tag: "Controlado",
+    description: "Medicamento controlado demonstrativo para representar venda com retenção/validação de receita.",
+    caution: "Comercialização conforme legislação de controlados e conferência farmacêutica.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "salbutamol-aerossol",
+    name: "Salbutamol",
+    detail: "Aerossol 100mcg",
+    category: "Medicamentos",
+    subcategory: "Medicamentos de referência",
+    routeKey: "medicamentos",
+    keywords: "salbutamol broncodilatador bombinha asma respiratorio prescricao",
+    price: 29.9,
+    oldPrice: 39.9,
+    color: "#eef8ff",
+    ink: "#145a8f",
+    round: false,
+    image: "assets/products/prescription-box.svg",
+    tag: "Respiratório",
+    promo: "-25%",
+    description: "Broncodilatador demonstrativo para respiratório, asma e orientação de uso por prescrição.",
+    caution: "Uso conforme prescrição e técnica correta de inalação.",
+    stock: "Sob consulta",
+  },
+  {
+    id: "prednisona-20",
+    name: "Prednisona",
+    detail: "20mg c/ 10 comprimidos",
+    category: "Medicamentos",
+    subcategory: "Genéricos",
+    routeKey: "medicamentos",
+    keywords: "prednisona corticoide anti-inflamatorio alergia prescricao tarja vermelha",
+    price: 10.9,
+    oldPrice: 18.9,
+    color: "#fff1e8",
+    ink: "#9b3d13",
+    round: false,
+    image: "assets/products/pbm-generic-box-orange.svg",
+    tag: "Venda sob prescrição",
+    promo: "-42%",
+    description: "Corticoide demonstrativo para venda com prescrição e orientação profissional.",
+    caution: "Não iniciar, alterar ou interromper sem orientação médica.",
+    stock: "Sob consulta",
+  },
+];
+
+products.push(...expandedCatalogProducts, ...additionalMedicineProducts);
+
+const productCatalogEnhancements = {
+  dorflex: {
+    routeKey: "medicamentos",
+    subcategory: "Medicamentos de referência",
+    keywords: "analgesico relaxante muscular referencia otc mips sem receita adulto dor ofertas do dia",
+  },
+  tylenol: {
+    routeKey: "medicamentos",
+    subcategory: "Medicamentos de referência",
+    keywords: "paracetamol analgesico antitermico referencia otc mips sem receita adulto febre dor",
+  },
+  benegrip: {
+    routeKey: "medicamentos",
+    subcategory: "OTC / MIPs sem receita",
+    keywords: "antigripal gripe resfriado otc mips sem receita campanha inverno oferta leve tambem vick pyrena",
+  },
+  buscopan: {
+    routeKey: "medicamentos",
+    subcategory: "Medicamentos de referência",
+    keywords: "colica dor abdominal referencia otc mips sem receita",
+  },
+  neosaldina: {
+    routeKey: "medicamentos",
+    subcategory: "Medicamentos de referência",
+    keywords: "dor de cabeca analgesico referencia otc mips sem receita",
+  },
+  "novalgina-1g": {
+    routeKey: "medicamentos",
+    subcategory: "Medicamentos de referência",
+    keywords: "dipirona analgesico antitermico referencia otc mips sem receita",
+  },
+  "allegra-120": {
+    routeKey: "medicamentos",
+    subcategory: "Medicamentos de referência",
+    keywords: "antialergico alergia rinite referencia otc mips sem receita",
+  },
+  "luftal-gel": {
+    routeKey: "medicamentos",
+    subcategory: "Medicamentos de referência",
+    keywords: "gases simeticona referencia otc mips sem receita",
+  },
+  cimegripe: {
+    routeKey: "medicamentos",
+    subcategory: "Similares",
+    keywords: "antigripal gripe similar otc mips sem receita genericos ate 95 oferta ofertas do dia",
+  },
+  "eno-laranja": {
+    routeKey: "medicamentos",
+    subcategory: "OTC / MIPs sem receita",
+    keywords: "antiacido estomago azia otc mips sem receita",
+  },
+  "vitamina-c": {
+    routeKey: "bem-estar-saude",
+    subcategory: "Imunidade",
+    keywords: "vitaminas imunidade suplemento bem estar saude oferta",
+  },
+  "ensure-baunilha": {
+    routeKey: "bem-estar-saude",
+    subcategory: "Suplementos",
+    keywords: "suplemento nutricional vitaminas minerais adulto geriatrico bem estar saude",
+  },
+  "centrum-az": {
+    routeKey: "bem-estar-saude",
+    subcategory: "Vitaminas",
+    keywords: "vitaminas polivitaminico imunidade suplemento bem estar saude",
+  },
+  "omega3-catarinense": {
+    routeKey: "bem-estar-saude",
+    subcategory: "Ômega 3",
+    keywords: "omega 3 produtos naturais suplemento bem estar saude",
+  },
+  "lavitan-az": {
+    routeKey: "bem-estar-saude",
+    subcategory: "Vitaminas",
+    keywords: "vitaminas suplemento imunidade bem estar saude",
+  },
+  "barrinha-proteina": {
+    routeKey: "bem-estar-saude",
+    keywords: "fitness proteina bem estar saude",
+  },
+  "snack-fit-castanhas": {
+    routeKey: "bem-estar-saude",
+    keywords: "produtos naturais snack fit fitness bem estar saude",
+  },
+  "ninho-fases": {
+    routeKey: "mamae-bebe",
+    subcategory: "Fórmulas infantis",
+    keywords: "formula infantil nutricao infantil mamae bebe",
+  },
+  "fralda-babysec": {
+    routeKey: "mamae-bebe",
+    subcategory: "Fraldas infantil",
+    keywords: "fralda infantil bebe mamae bebe tamanhos p m g xg xxg",
+  },
+  "huggies-supreme": {
+    routeKey: "mamae-bebe",
+    subcategory: "Fraldas infantil",
+    keywords: "fralda infantil bebe mamae bebe leve 3 pague 2",
+  },
+  "johnsons-shampoo": {
+    routeKey: "mamae-bebe",
+    subcategory: "Lenços umedecidos",
+    keywords: "bebe shampoo infantil banho mamae bebe cuidados diarios",
+  },
+  nivea: {
+    routeKey: "beleza",
+    subcategory: "Skincare",
+    keywords: "hidratante skincare dermocosmeticos beleza cuidados pele oferta",
+  },
+  protetor: {
+    routeKey: "beleza",
+    subcategory: "Protetor solar",
+    keywords: "protetor solar fps 50 skincare dermocosmeticos beleza cores",
+  },
+  colonia: {
+    routeKey: "beleza",
+    subcategory: "Perfumes",
+    keywords: "perfumes colonia beleza perfumaria",
+  },
+  pantene: {
+    routeKey: "beleza",
+    subcategory: "Shampoo",
+    keywords: "shampoo condicionador cabelo beleza pantene",
+  },
+  "seda-ceramidas": {
+    routeKey: "beleza",
+    subcategory: "Shampoo",
+    keywords: "shampoo cabelo beleza",
+  },
+  "dove-oleo-nutricao": {
+    routeKey: "beleza",
+    subcategory: "Condicionador",
+    keywords: "condicionador shampoo cabelo beleza",
+  },
+  isdin: {
+    routeKey: "beleza",
+    subcategory: "Protetor solar",
+    keywords: "protetor solar dermocosmeticos beleza fps",
+  },
+  "cerave-creme": {
+    routeKey: "beleza",
+    subcategory: "Dermocosméticos",
+    keywords: "dermocosmeticos skincare hidratante pele beleza",
+  },
+  "principia-niacinamida": {
+    routeKey: "beleza",
+    subcategory: "Skincare",
+    keywords: "skincare dermocosmeticos serum beleza",
+  },
+  "neutrogena-hydro": {
+    routeKey: "beleza",
+    subcategory: "Skincare",
+    keywords: "skincare hidratante dermocosmeticos beleza",
+  },
+  "la-roche-anthelios": {
+    routeKey: "beleza",
+    subcategory: "Dermocosméticos",
+    keywords: "dermocosmeticos protetor solar skincare beleza",
+  },
+  "avene-agua-termal": {
+    routeKey: "beleza",
+    subcategory: "Dermocosméticos",
+    keywords: "dermocosmeticos skincare pele sensivel beleza",
+  },
+  "bioderma-sensibio": {
+    routeKey: "beleza",
+    subcategory: "Dermocosméticos",
+    keywords: "dermocosmeticos skincare limpeza facial beleza",
+  },
+  "cetaphil-kit": {
+    routeKey: "beleza",
+    subcategory: "Dermocosméticos",
+    keywords: "dermocosmeticos hidratacao skincare beleza",
+  },
+  colgate: {
+    routeKey: "higiene-pessoal",
+    subcategory: "Creme dental",
+    keywords: "pasta creme dental higiene pessoal saude bucal",
+  },
+  rexona: {
+    routeKey: "higiene-pessoal",
+    subcategory: "Desodorantes",
+    keywords: "desodorante antitranspirante higiene pessoal",
+  },
+  "dove-sabonete": {
+    routeKey: "higiene-pessoal",
+    subcategory: "Sabonetes",
+    keywords: "sabonete banho higiene pessoal",
+  },
+  "always-noturno": {
+    routeKey: "higiene-pessoal",
+    subcategory: "Masculino completo",
+    keywords: "absorvente higiene pessoal cuidado intimo",
+  },
+  "oralb-power": {
+    routeKey: "higiene-pessoal",
+    subcategory: "Escovas",
+    keywords: "escova eletrica dental higiene pessoal saude bucal",
+  },
+  "gillette-fusion": {
+    routeKey: "higiene-pessoal",
+    subcategory: "Masculino completo",
+    keywords: "barba barbear masculino completo higiene pessoal",
+  },
+  agua: {
+    routeKey: "conveniencia",
+    subcategory: "Água",
+    keywords: "agua mineral crystal conveniencia bebida",
+  },
+  "shampoo-pet": {
+    routeKey: "pet",
+    subcategory: "Shampoo pet",
+    keywords: "linha pet cachorro gato gatos shampoo higiene pet",
+  },
+  "dipirona-generica": {
+    routeKey: "medicamentos",
+    subcategory: "Genéricos",
+    keywords: "genericos genericos ate 95 pbm laboratorios ofertas do dia analgesico antitermico dor febre otc mips sem receita",
+  },
+  "losartana-generica": {
+    routeKey: "medicamentos",
+    subcategory: "Genéricos",
+    keywords: "genericos genericos ate 95 pbm laboratorios medicamento continuo anti hipertensivo pressao alta prescricao",
+  },
+  "tapete-higienico-pet": {
+    routeKey: "pet",
+    keywords: "linha pet cachorro gato gatos tapete higiene pet",
+  },
+  "antipulgas-pet": {
+    routeKey: "pet",
+    keywords: "linha pet cachorro gato gatos antipulgas carrapatos cuidados diarios",
+  },
+  "biscoito-pet": {
+    routeKey: "pet",
+    keywords: "linha pet cachorro gatos snack biscoito",
+  },
+};
+
+Object.entries(productCatalogEnhancements).forEach(([id, enhancement]) => {
+  const product = products.find((item) => item.id === id);
+  if (product) Object.assign(product, enhancement);
+});
+
 const medicineCatalog = {
   dorflex: {
     active: "Dipirona sódica, citrato de orfenadrina e cafeína",
@@ -875,7 +2220,7 @@ const medicineCatalog = {
     ],
   },
   benegrip: {
-    active: "Associação medicamentosa conforme bula",
+    active: "Dipirona monoidratada 500mg + maleato de clorfeniramina 2mg + cafeína 30mg",
     manufacturer: "Hypera",
     msRegister: "Consultar Bulário Anvisa",
     dosage: "Comprimido",
@@ -1008,33 +2353,527 @@ const medicineCatalog = {
   },
 };
 
+Object.assign(medicineCatalog, {
+  "dipirona-generica": {
+    active: "Dipirona monoidratada",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido",
+    code: "DIP-500-10",
+    purpose: "Analgésico e antitérmico genérico. Conferir concentração, idade e contraindicações conforme bula.",
+    composition: "Dipirona monoidratada conforme apresentação selecionada.",
+    howToUse: "Usar conforme bula oficial e orientação farmacêutica.",
+    safety: "Atenção a histórico de alergia, queda de pressão e reações anteriores.",
+    highlights: ["Genérico com desconto", "Dor e febre", "Conferência farmacêutica"],
+    presentations: [
+      ["10 comprimidos", "500mg c/ 10 comprimidos", 6.9, "Disponível hoje", "DIP-500-10"],
+      ["20 comprimidos", "500mg c/ 20 comprimidos", 11.9, "Sob consulta", "DIP-500-20"],
+      ["Gotas 20ml", "Solução oral gotas 20ml", 9.9, "Sob consulta", "DIP-GOTAS"],
+    ],
+  },
+  "losartana-generica": {
+    active: "Losartana potássica",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido revestido",
+    code: "LOS-50-30",
+    purpose: "Medicamento de uso contínuo para hipertensão conforme prescrição e bula.",
+    composition: "Losartana potássica conforme apresentação selecionada.",
+    howToUse: "Usar todos os dias conforme prescrição médica, sem interromper por conta própria.",
+    safety: "Acompanhamento profissional é importante para pressão arterial, rins, potássio e interações.",
+    highlights: ["Uso contínuo", "PBM/Genéricos", "Compra recorrente"],
+    prescriptionRequired: true,
+    presentations: [
+      ["30 comprimidos", "50mg c/ 30 comprimidos", 13.9, "Sob consulta", "LOS-50-30"],
+      ["60 comprimidos", "50mg c/ 60 comprimidos", 24.9, "Sob consulta", "LOS-50-60"],
+      ["100mg c/ 30", "100mg c/ 30 comprimidos", 21.9, "Sob consulta", "LOS-100-30"],
+    ],
+  },
+  "amoxicilina-500": {
+    active: "Amoxicilina tri-hidratada",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Cápsula",
+    code: "AMOX-500-21",
+    purpose: "Antibiótico penicilínico para tratamento conforme prescrição médica.",
+    composition: "Amoxicilina conforme apresentação selecionada.",
+    howToUse: "Usar exatamente pelo tempo e intervalo prescritos pelo médico.",
+    safety: "Antibióticos exigem receita e conferência farmacêutica. Não usar sobras nem interromper antes do prazo prescrito.",
+    highlights: ["Antibiótico", "Receita obrigatória", "Conferência no balcão"],
+    prescriptionRequired: true,
+    presentations: [
+      ["21 cápsulas", "500mg c/ 21 cápsulas", 28.9, "Sob consulta", "AMOX-500-21"],
+      ["15 cápsulas", "500mg c/ 15 cápsulas", 22.9, "Sob consulta", "AMOX-500-15"],
+      ["Suspensão", "250mg/5ml suspensão", 34.9, "Sob consulta", "AMOX-SUSP"],
+    ],
+  },
+  "sertralina-50": {
+    active: "Cloridrato de sertralina",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido revestido",
+    code: "SERT-50-30",
+    purpose: "Medicamento de uso controlado para tratamento conforme prescrição médica.",
+    composition: "Sertralina conforme apresentação selecionada.",
+    howToUse: "Usar conforme prescrição, sem ajuste ou interrupção por conta própria.",
+    safety: "Requer acompanhamento profissional e conferência da receita antes da dispensação.",
+    highlights: ["Controlado", "Receita obrigatória", "Uso contínuo"],
+    prescriptionRequired: true,
+    presentations: [
+      ["30 comprimidos", "50mg c/ 30 comprimidos", 34.9, "Sob consulta", "SERT-50-30"],
+      ["60 comprimidos", "50mg c/ 60 comprimidos", 59.9, "Sob consulta", "SERT-50-60"],
+      ["100mg c/ 30", "100mg c/ 30 comprimidos", 54.9, "Sob consulta", "SERT-100-30"],
+    ],
+  },
+  "complexo-b-injetavel": {
+    active: "Vitaminas do complexo B conforme apresentação",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Solução injetável",
+    code: "CB-INJ-2ML",
+    purpose: "Medicamento injetável demonstrativo para venda e aplicação conforme prescrição/orientação.",
+    composition: "Vitaminas do complexo B conforme bula da apresentação escolhida.",
+    howToUse: "Aplicação somente por profissional habilitado, conforme prescrição e avaliação.",
+    safety: "Confirmar receita quando aplicável, alergias, lote e disponibilidade de aplicação na unidade.",
+    highlights: ["Injetável", "Aplicação sob avaliação", "Serviço farmacêutico"],
+    prescriptionRequired: true,
+    presentations: [
+      ["Ampola 2ml", "Solução injetável 2ml", 9.9, "Sob consulta", "CB-2ML"],
+      ["Ampola 5ml", "Solução injetável 5ml", 14.9, "Sob consulta", "CB-5ML"],
+    ],
+  },
+  "vick-pyrena": {
+    active: "Paracetamol conforme apresentação",
+    manufacturer: "Procter & Gamble",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Pó para solução oral",
+    code: "VICK-PYR-5",
+    purpose: "Produto demonstrativo para sintomas de resfriado, dor e febre conforme bula.",
+    composition: "Composição conforme envelope e apresentação selecionada.",
+    howToUse: "Preparar e usar conforme instruções da embalagem/bula.",
+    safety: "Atenção a uso conjunto com outros medicamentos que contenham paracetamol.",
+    highlights: ["Leve também", "Campanha de inverno", "Combina com antigripais conforme orientação"],
+    presentations: [
+      ["5 envelopes", "Mel e limão c/ 5 envelopes", 19.9, "Disponível hoje", "VICK-5"],
+      ["1 envelope", "Envelope unidade", 4.9, "Sob consulta", "VICK-1"],
+    ],
+  },
+  "ibuprofeno-400": {
+    active: "Ibuprofeno",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido revestido",
+    code: "IBU-400-10",
+    purpose: "Analgésico, antitérmico e anti-inflamatório conforme apresentação e bula.",
+    composition: "Ibuprofeno conforme apresentação selecionada.",
+    howToUse: "Usar pelo menor tempo necessário e conforme bula/orientação profissional.",
+    safety: "Atenção a histórico de gastrite, úlcera, doença renal, anticoagulantes, gestação e alergia a anti-inflamatórios.",
+    highlights: ["Dor e febre", "Anti-inflamatório", "Validar contraindicações"],
+    presentations: [
+      ["10 comprimidos", "400mg c/ 10 comprimidos", 12.9, "Disponível hoje", "IBU-400-10"],
+      ["20 comprimidos", "400mg c/ 20 comprimidos", 22.9, "Sob consulta", "IBU-400-20"],
+      ["Gotas 20ml", "Suspensão/gotas 20ml", 18.9, "Sob consulta", "IBU-GOTAS"],
+    ],
+  },
+  "omeprazol-20": {
+    active: "Omeprazol",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Cápsula",
+    code: "OME-20-28",
+    purpose: "Medicamento para redução da acidez gástrica conforme bula e orientação profissional.",
+    composition: "Omeprazol conforme apresentação selecionada.",
+    howToUse: "Usar conforme bula ou prescrição, preferencialmente respeitando horário e duração indicados.",
+    safety: "Uso prolongado ou sintomas persistentes exigem avaliação médica.",
+    highlights: ["Cuidado gástrico", "Azia e refluxo", "Compra recorrente"],
+    presentations: [
+      ["28 cápsulas", "20mg c/ 28 cápsulas", 18.9, "Disponível hoje", "OME-20-28"],
+      ["14 cápsulas", "20mg c/ 14 cápsulas", 11.9, "Disponível hoje", "OME-20-14"],
+      ["40mg c/ 28", "40mg c/ 28 cápsulas", 31.9, "Sob consulta", "OME-40-28"],
+    ],
+  },
+  "loratadina-10": {
+    active: "Loratadina",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido",
+    code: "LOR-10-12",
+    purpose: "Antialérgico para sintomas de rinite, alergia e urticária conforme bula.",
+    composition: "Loratadina conforme apresentação selecionada.",
+    howToUse: "Usar conforme bula e faixa etária indicada.",
+    safety: "Consultar orientação em gestação, lactação, doença hepática ou uso de outros medicamentos.",
+    highlights: ["Alergia", "Rinite", "Compra rápida"],
+    presentations: [
+      ["12 comprimidos", "10mg c/ 12 comprimidos", 9.9, "Disponível hoje", "LOR-10-12"],
+      ["30 comprimidos", "10mg c/ 30 comprimidos", 22.9, "Sob consulta", "LOR-10-30"],
+      ["Xarope 100ml", "Xarope 1mg/ml 100ml", 18.9, "Sob consulta", "LOR-XAR"],
+    ],
+  },
+  "cetirizina-10": {
+    active: "Dicloridrato de cetirizina",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido revestido",
+    code: "CET-10-12",
+    purpose: "Antialérgico para sintomas alérgicos conforme bula.",
+    composition: "Cetirizina conforme apresentação selecionada.",
+    howToUse: "Usar conforme bula, observando idade e possíveis efeitos de sonolência.",
+    safety: "Atenção ao uso com álcool, sedativos e atividades que exigem atenção.",
+    highlights: ["Alergia", "Rinite", "Pode causar sonolência"],
+    presentations: [
+      ["12 comprimidos", "10mg c/ 12 comprimidos", 16.9, "Disponível hoje", "CET-10-12"],
+      ["10ml gotas", "Solução oral gotas", 21.9, "Sob consulta", "CET-GOTAS"],
+    ],
+  },
+  "acetilcisteina-600": {
+    active: "Acetilcisteína",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Granulado/envelope",
+    code: "ACE-600-16",
+    purpose: "Mucolítico/expectorante conforme indicação da bula.",
+    composition: "Acetilcisteína conforme apresentação selecionada.",
+    howToUse: "Dissolver ou administrar conforme apresentação e instruções da bula.",
+    safety: "Pessoas com asma, úlcera, gestação ou uso de outros medicamentos devem buscar orientação.",
+    highlights: ["Respiratório", "Tosse com secreção", "Envelope ou xarope"],
+    presentations: [
+      ["16 envelopes", "600mg c/ 16 envelopes", 39.9, "Sob consulta", "ACE-600-16"],
+      ["Xarope 120ml", "Xarope 20mg/ml 120ml", 27.9, "Sob consulta", "ACE-XAR"],
+    ],
+  },
+  "diclofenaco-50": {
+    active: "Diclofenaco potássico",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido revestido",
+    code: "DIC-50-20",
+    purpose: "Anti-inflamatório não esteroidal conforme prescrição e bula.",
+    composition: "Diclofenaco conforme apresentação selecionada.",
+    howToUse: "Usar conforme prescrição e pelo período indicado pelo profissional.",
+    safety: "Atenção a risco gástrico, renal, cardiovascular, alergias e interações.",
+    highlights: ["Venda sob prescrição", "Anti-inflamatório", "Conferência de receita"],
+    prescriptionRequired: true,
+    presentations: [
+      ["20 comprimidos", "50mg c/ 20 comprimidos", 14.9, "Sob consulta", "DIC-50-20"],
+      ["10 comprimidos", "50mg c/ 10 comprimidos", 8.9, "Sob consulta", "DIC-50-10"],
+      ["Gel 60g", "Gel tópico 60g", 24.9, "Sob consulta", "DIC-GEL"],
+    ],
+  },
+  "nimesulida-100": {
+    active: "Nimesulida",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido",
+    code: "NIM-100-12",
+    purpose: "Anti-inflamatório conforme prescrição médica e bula.",
+    composition: "Nimesulida conforme apresentação selecionada.",
+    howToUse: "Usar na dose e duração prescritas. Não prolongar o tratamento sem orientação.",
+    safety: "Atenção a restrições hepáticas, gástricas, renais, gestação e interações.",
+    highlights: ["Venda sob prescrição", "Anti-inflamatório", "Sob consulta"],
+    prescriptionRequired: true,
+    presentations: [
+      ["12 comprimidos", "100mg c/ 12 comprimidos", 12.9, "Sob consulta", "NIM-100-12"],
+      ["15 comprimidos", "100mg c/ 15 comprimidos", 15.9, "Sob consulta", "NIM-100-15"],
+      ["Gotas 15ml", "Solução oral gotas", 18.9, "Sob consulta", "NIM-GOTAS"],
+    ],
+  },
+  "metformina-850": {
+    active: "Cloridrato de metformina",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido",
+    code: "MET-850-30",
+    purpose: "Antidiabético oral para uso contínuo conforme prescrição e acompanhamento.",
+    composition: "Metformina conforme apresentação selecionada.",
+    howToUse: "Usar conforme prescrição, geralmente associado a rotina alimentar e acompanhamento de glicemia.",
+    safety: "Atenção a função renal, exames, sintomas gastrointestinais e interações.",
+    highlights: ["Uso contínuo", "Diabetes", "Compra recorrente"],
+    prescriptionRequired: true,
+    presentations: [
+      ["30 comprimidos", "850mg c/ 30 comprimidos", 11.9, "Sob consulta", "MET-850-30"],
+      ["60 comprimidos", "850mg c/ 60 comprimidos", 21.9, "Sob consulta", "MET-850-60"],
+      ["XR 500mg c/ 30", "Liberação prolongada 500mg c/ 30", 29.9, "Sob consulta", "MET-XR-500"],
+    ],
+  },
+  "sinvastatina-20": {
+    active: "Sinvastatina",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido revestido",
+    code: "SIN-20-30",
+    purpose: "Medicamento para controle de colesterol conforme prescrição e acompanhamento.",
+    composition: "Sinvastatina conforme apresentação selecionada.",
+    howToUse: "Usar conforme prescrição, respeitando horário e orientações de acompanhamento.",
+    safety: "Informar dor muscular, fraqueza, doença hepática ou uso de medicamentos que possam interagir.",
+    highlights: ["Uso contínuo", "Colesterol", "PBM/Genéricos"],
+    prescriptionRequired: true,
+    presentations: [
+      ["30 comprimidos", "20mg c/ 30 comprimidos", 17.9, "Sob consulta", "SIN-20-30"],
+      ["60 comprimidos", "20mg c/ 60 comprimidos", 29.9, "Sob consulta", "SIN-20-60"],
+      ["40mg c/ 30", "40mg c/ 30 comprimidos", 24.9, "Sob consulta", "SIN-40-30"],
+    ],
+  },
+  "enalapril-10": {
+    active: "Maleato de enalapril",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido",
+    code: "ENA-10-30",
+    purpose: "Anti-hipertensivo de uso contínuo conforme prescrição.",
+    composition: "Enalapril conforme apresentação selecionada.",
+    howToUse: "Usar diariamente conforme prescrição. Não interromper por conta própria.",
+    safety: "Atenção a pressão, função renal, potássio, tosse persistente e gravidez.",
+    highlights: ["Hipertensão", "Uso contínuo", "Compra recorrente"],
+    prescriptionRequired: true,
+    presentations: [
+      ["30 comprimidos", "10mg c/ 30 comprimidos", 8.9, "Sob consulta", "ENA-10-30"],
+      ["20mg c/ 30", "20mg c/ 30 comprimidos", 12.9, "Sob consulta", "ENA-20-30"],
+      ["5mg c/ 30", "5mg c/ 30 comprimidos", 7.9, "Sob consulta", "ENA-5-30"],
+    ],
+  },
+  "hidroclorotiazida-25": {
+    active: "Hidroclorotiazida",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido",
+    code: "HCTZ-25-30",
+    purpose: "Diurético usado em hipertensão e outras condições conforme prescrição.",
+    composition: "Hidroclorotiazida conforme apresentação selecionada.",
+    howToUse: "Usar conforme prescrição, com acompanhamento de pressão, eletrólitos e hidratação.",
+    safety: "Atenção a tontura, desidratação, alterações de potássio/sódio e interações.",
+    highlights: ["Hipertensão", "Diurético", "Uso contínuo"],
+    prescriptionRequired: true,
+    presentations: [
+      ["30 comprimidos", "25mg c/ 30 comprimidos", 6.9, "Sob consulta", "HCTZ-25-30"],
+      ["60 comprimidos", "25mg c/ 60 comprimidos", 11.9, "Sob consulta", "HCTZ-25-60"],
+    ],
+  },
+  "azitromicina-500": {
+    active: "Azitromicina di-hidratada",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido revestido",
+    code: "AZI-500-3",
+    purpose: "Antibiótico macrolídeo para uso conforme prescrição médica.",
+    composition: "Azitromicina conforme apresentação selecionada.",
+    howToUse: "Usar exatamente conforme prescrição, respeitando intervalo e duração do tratamento.",
+    safety: "Antimicrobiano exige receita. Conferir alergias, interações e regras de dispensação.",
+    highlights: ["Antibiótico", "Receita obrigatória", "Retenção conforme regra"],
+    prescriptionRequired: true,
+    presentations: [
+      ["3 comprimidos", "500mg c/ 3 comprimidos", 22.9, "Sob consulta", "AZI-500-3"],
+      ["5 comprimidos", "500mg c/ 5 comprimidos", 34.9, "Sob consulta", "AZI-500-5"],
+      ["Suspensão", "Suspensão oral", 39.9, "Sob consulta", "AZI-SUSP"],
+    ],
+  },
+  "clonazepam-2": {
+    active: "Clonazepam",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido",
+    code: "CLO-2-30",
+    purpose: "Medicamento benzodiazepínico controlado, dispensado conforme prescrição e legislação.",
+    composition: "Clonazepam conforme apresentação selecionada.",
+    howToUse: "Usar somente conforme prescrição. Não alterar dose nem interromper sem orientação médica.",
+    safety: "Pode causar sonolência, dependência e interações. Venda sujeita a controle especial.",
+    highlights: ["Controlado", "Receita especial", "Tarja preta"],
+    prescriptionRequired: true,
+    presentations: [
+      ["30 comprimidos", "2mg c/ 30 comprimidos", 9.9, "Sob consulta", "CLO-2-30"],
+      ["0,5mg c/ 30", "0,5mg c/ 30 comprimidos", 8.9, "Sob consulta", "CLO-05-30"],
+      ["Gotas 20ml", "Solução oral gotas 20ml", 18.9, "Sob consulta", "CLO-GOTAS"],
+    ],
+  },
+  "salbutamol-aerossol": {
+    active: "Sulfato de salbutamol",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Aerossol dosimetrado",
+    code: "SALB-100",
+    purpose: "Broncodilatador para uso respiratório conforme prescrição e técnica correta.",
+    composition: "Salbutamol conforme apresentação selecionada.",
+    howToUse: "Usar conforme prescrição e orientação sobre técnica inalatória.",
+    safety: "Procure atendimento se houver falta de ar intensa, piora dos sintomas ou necessidade de uso frequente.",
+    highlights: ["Respiratório", "Asma/broncoespasmo", "Conferir técnica de uso"],
+    prescriptionRequired: true,
+    presentations: [
+      ["Aerossol", "100mcg spray dosimetrado", 29.9, "Sob consulta", "SALB-AERO"],
+      ["Xarope 120ml", "Xarope 2mg/5ml 120ml", 18.9, "Sob consulta", "SALB-XAR"],
+    ],
+  },
+  "prednisona-20": {
+    active: "Prednisona",
+    manufacturer: "Diversos laboratórios",
+    msRegister: "Consultar Bulário Anvisa",
+    dosage: "Comprimido",
+    code: "PRED-20-10",
+    purpose: "Corticoide sistêmico para uso conforme prescrição médica.",
+    composition: "Prednisona conforme apresentação selecionada.",
+    howToUse: "Usar conforme prescrição, respeitando dose, horário e orientação sobre redução/interrupção.",
+    safety: "Atenção a diabetes, pressão, infecções, estômago, gestação e uso prolongado.",
+    highlights: ["Corticoide", "Venda sob prescrição", "Orientação obrigatória"],
+    prescriptionRequired: true,
+    presentations: [
+      ["10 comprimidos", "20mg c/ 10 comprimidos", 10.9, "Sob consulta", "PRED-20-10"],
+      ["20 comprimidos", "20mg c/ 20 comprimidos", 18.9, "Sob consulta", "PRED-20-20"],
+      ["5mg c/ 20", "5mg c/ 20 comprimidos", 9.9, "Sob consulta", "PRED-5-20"],
+    ],
+  },
+});
+
+function medicineDoseTokenValue(value) {
+  const rounded = Math.round((value + Number.EPSILON) * 1000) / 1000;
+  return String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1");
+}
+
+function medicineDoseTokens(text = "") {
+  const matches = [];
+  const normalized = String(text || "").toLowerCase();
+  const dosePattern = /(\d+(?:[,.]\d+)?)\s*(mcg|mg|g|ui|u\.i\.|%)(?:\s*\/\s*(?:\d+(?:[,.]\d+)?)?\s*ml)?/gi;
+  let match = dosePattern.exec(normalized);
+
+  while (match) {
+    const value = Number(String(match[1]).replace(",", "."));
+    const unit = match[2].replace(/\./g, "").toLowerCase();
+    if (Number.isFinite(value)) {
+      if (unit === "g") {
+        matches.push(`${medicineDoseTokenValue(value * 1000)}mg`);
+      } else if (unit === "mcg") {
+        matches.push(`${medicineDoseTokenValue(value / 1000)}mg`);
+      } else if (unit === "ui") {
+        matches.push(`${medicineDoseTokenValue(value)}ui`);
+      } else {
+        matches.push(`${medicineDoseTokenValue(value)}${unit}`);
+      }
+    }
+    match = dosePattern.exec(normalized);
+  }
+
+  return [...new Set(matches)].sort();
+}
+
+function medicineFormToken(text = "") {
+  const normalized = normalizeText(text);
+  const formChecks = [
+    ["comprimido", /\bcomp\b|comprim/],
+    ["capsula", /caps|capsula|cápsula/],
+    ["dragea", /dragea|drágea/],
+    ["gota", /gota/],
+    ["xarope", /xarope/],
+    ["spray", /spray|aerossol|inala/],
+    ["envelope", /envelope/],
+    ["ampola", /ampola/],
+    ["seringa", /seringa/],
+    ["creme", /creme/],
+    ["gel", /\bgel\b/],
+  ];
+  const match = formChecks.find(([, pattern]) => pattern.test(normalized));
+  return match?.[0] || "";
+}
+
+function sameTokenSet(a, b) {
+  return a.length === b.length && a.every((item, index) => item === b[index]);
+}
+
+function isCompatibleMedicinePresentation(product, label = "", detail = "") {
+  const baseDetail = product.detail || "";
+  const optionText = `${label} ${detail}`;
+  const baseDoses = medicineDoseTokens(baseDetail);
+  const optionDoses = medicineDoseTokens(optionText);
+  const baseForm = medicineFormToken(baseDetail);
+  const optionForm = medicineFormToken(optionText);
+
+  if (baseDoses.length || optionDoses.length) {
+    if (!baseDoses.length || !optionDoses.length || !sameTokenSet(baseDoses, optionDoses)) {
+      return false;
+    }
+  }
+
+  if (baseForm && optionForm && baseForm !== optionForm) {
+    return false;
+  }
+
+  return true;
+}
+
+function compatibleMedicinePresentations(product, presentations) {
+  if (product.category !== "Medicamentos" || !presentations.length) {
+    return presentations;
+  }
+
+  const compatible = presentations.filter(([label, detail]) =>
+    isCompatibleMedicinePresentation(product, label, detail),
+  );
+
+  return sortMedicinePresentationsByQuantity(compatible.length ? compatible : presentations.slice(0, 1));
+}
+
+function medicinePresentationQuantity(label = "", detail = "") {
+  const normalized = String(`${label} ${detail}` || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+  const quantityMatch =
+    normalized.match(/(?:c\/|com|contem|contendo)\s*(\d+)\s*(?:cps?|cp|comps?|comprimidos?|capsulas?|caps?|drageas?)?/) ||
+    normalized.match(/(\d+)\s*(?:cps?|cp|comps?|comprimidos?|capsulas?|caps?|drageas?)\b/);
+
+  return quantityMatch ? Number(quantityMatch[1]) : Number.POSITIVE_INFINITY;
+}
+
+function sortMedicinePresentationsByQuantity(presentations) {
+  return presentations
+    .map((presentation, index) => ({
+      presentation,
+      index,
+      quantity: medicinePresentationQuantity(presentation[0], presentation[1]),
+    }))
+    .sort((a, b) => {
+      if (a.quantity !== b.quantity) return a.quantity - b.quantity;
+      return a.index - b.index;
+    })
+    .map(({ presentation }) => presentation);
+}
+
 products.forEach((product) => {
   const profile = medicineCatalog[product.id];
   if (!profile) return;
 
-  const presentations = profile.presentations || [];
+  const presentations = compatibleMedicinePresentations(product, profile.presentations || []);
   product.medicine = profile;
   product.variantKind = "Quantidade";
   product.variantHeading = "Escolha a apresentação";
   product.variantSummaryLabel = "Apresentações";
   product.variantActionLabel = "Escolher apresentação";
-  product.variantDescription = "Escolha a quantidade ou apresentação disponível. Na integração real, o sistema confirma o saldo por loja antes de finalizar.";
+  product.variantDescription = "Escolha apenas apresentações com o mesmo princípio ativo, mesma concentração e forma farmacêutica.";
   product.gallery = [product.image, ...(profile.gallery || [])].filter(Boolean);
-  product.variants = presentations.map(([label, detail, price, stock, code], index) => ({
-    id: `${product.id}-${index + 1}`,
-    label,
-    detail,
-    price,
-    stock,
-    code,
-    image: product.image,
-  }));
+  product.variants = presentations.length > 1
+    ? presentations.map(([label, detail, price, stock, code], index) => ({
+        id: `${product.id}-${index + 1}`,
+        label,
+        detail,
+        price,
+        stock,
+        code,
+        image: product.image,
+      }))
+    : [];
 });
 
 const icons = {
   grid: '<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />',
   discount: '<path d="M7 7h.01M17 17h.01" /><path d="m7 17 10-10" /><path d="M12 2 14.6 5.2l4.1.4.4 4.1L22 12l-2.9 2.3-.4 4.1-4.1.4L12 22l-2.6-3.2-4.1-.4-.4-4.1L2 12l2.9-2.3.4-4.1 4.1-.4Z" />',
   pill: '<path d="M10 21 3 14a5 5 0 0 1 7-7l7 7a5 5 0 0 1-7 7Z" /><path d="m8.5 8.5 7 7" /><path d="M14 4a7 7 0 0 1 7 7" />',
+  medicineBox: '<path d="M5 7h14v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z" /><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M12 10v7M8.5 13.5h7" />',
+  hygiene: '<path d="M4 17c3.7-2.1 7.4-2.1 11 0" /><path d="M6 7h8l4 4-3 3-4-4H6Z" /><path d="M6 7 3 4M12 10l-4 4" />',
+  beauty: '<path d="M8 4h8l-1 9H9Z" /><path d="M10 13h4v7h-4Z" /><path d="M17 8h3M18.5 6.5v3M5 18h3" />',
+  family: '<path d="M9.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" /><path d="M3.5 20a6 6 0 0 1 12 0" /><path d="M17 12a2.5 2.5 0 1 0 0-5" /><path d="M16 15.5a4.5 4.5 0 0 1 4.5 4.5" />',
+  wellness: '<path d="M20.8 4.6a5.3 5.3 0 0 0-7.5 0L12 5.9l-1.3-1.3a5.3 5.3 0 1 0-7.5 7.5L12 21l8.8-8.9a5.3 5.3 0 0 0 0-7.5Z" /><path d="M7 12h2.5l1-2 2 5 1.4-3H17" />',
+  firstAid: '<path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" /><path d="M4 7h16v12H4Z" /><path d="M12 10v6M9 13h6" />',
+  equipment: '<path d="M4 5h16v10H4Z" /><path d="M8 19h8M12 15v4" /><path d="M7 10h3l1.2-2.5 2.1 5 1.2-2.5H17" />',
+  specialCare: '<path d="M4 13c3 0 5.5 1.3 8 4 2.5-2.7 5-4 8-4" /><path d="M7 17h10" /><path d="M15.8 4.8a3 3 0 0 0-4.2 0L12 5.2l.4-.4a3 3 0 1 1 4.2 4.2L12 13.6 7.4 9a3 3 0 1 1 4.2-4.2l.4.4" />',
+  convenience: '<path d="M8 3h8l-1 5H9Z" /><path d="M9 8h6l1 13H8Z" /><path d="M10 13h4" /><path d="M18 7h2v8h-2" />',
+  paw: '<path d="M12 13c3 0 5 2 5 4.5 0 1.5-1.1 2.5-2.5 2.5-1 0-1.7-.5-2.5-.5s-1.5.5-2.5.5C8.1 20 7 19 7 17.5 7 15 9 13 12 13Z" /><path d="M6.5 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM10.5 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM13.5 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM17.5 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />',
+  pharmacyService: '<path d="M6 4v7a4 4 0 0 0 8 0V4" /><path d="M4 4h4M12 4h4" /><path d="M14 11a4 4 0 0 0 8 0v-1" /><path d="M20 7v6M17 10h6" />',
   basket: '<path d="M5 9h14l-1.2 11H6.2z" /><path d="M9 9a3 3 0 0 1 6 0" /><path d="M9 13v3M15 13v3" />',
   bottle: '<path d="M9 2h6v4l1.5 2.5V21h-9V8.5L9 6z" /><path d="M8 11h8" />',
   baby: '<path d="M9 3h6v5l2 2v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9l2-2Z" /><path d="M9 8h6M9 13h6" /><path d="M10 17h4" />',
@@ -1068,14 +2907,21 @@ const state = {
   favorites: new Set(),
   delivery: "pickup",
   selectedStore: "loja-portugal",
+  storeSelectionConfirmed: false,
+  deliveryFulfillmentStoreId: "",
+  deliveryFulfillmentNote: "",
   cep: "",
   deliveryQuote: null,
   shippingStatus: "idle",
   shippingError: "",
   coupon: "",
+  couponPanelOpen: false,
   loggedIn: false,
   usePoints: false,
   currentOrder: null,
+  selectedVariants: {},
+  productPageQuantities: {},
+  catalogQueryRoute: "",
   customer: {
     name: "Brena Sani",
     fullName: "Brena Corrêa Sani",
@@ -1085,6 +2931,10 @@ const state = {
     email: "brenasani29@gmail.com",
     phone: "(16) 98133-2167",
     address: "",
+    addressStreet: "",
+    addressDistrict: "",
+    addressCity: "",
+    addressState: "",
     addressNumber: "",
     addressComplement: "",
     receiverName: "",
@@ -1113,14 +2963,90 @@ const CORREIOS_PRICE_URL = "https://www.correios.com.br/estrutura-da-pagina/prec
 const LOCAL_DELIVERY_CITY = "ribeirao preto";
 const PIX_DISCOUNT_RATE = 0.05;
 const LOYALTY_PROGRAM_NAME = "Cliente ON";
-const LOYALTY_POINTS_PER_REAL = 1;
+const LOYALTY_POINTS_PER_REAL = 2;
 const LOYALTY_EXAMPLE_BALANCE = 320;
 const LOYALTY_POINTS_PER_REAL_DISCOUNT = 100;
+const LOYALTY_POINTS_VALIDITY_MONTHS = 6;
 const STORE_WHATSAPP_NUMBER = "5516997997878";
 const PIX_CNPJ_KEY = "58757644000109";
 const PIX_MERCHANT_NAME = "DROGARIA ONORIO";
 const PIX_MERCHANT_CITY = "RIBEIRAO PRETO";
+const PBM_PORTAL_URL = "https://www.portalpbm.com.br/";
+const PBM_PROGRAM_LINKS = [
+  { terms: ["logixpharma"], url: PBM_PORTAL_URL, label: "Portal do PBM" },
+  { terms: ["portal do pbm"], url: PBM_PORTAL_URL, label: "Portal do PBM" },
+  { terms: ["vms", "vale mais saude", "vale mais saúde"], url: "https://www.valemaissaude.com.br/", label: "Vale Mais Saude" },
+  { terms: ["cuidados pela vida", "ache", "aché"], url: "https://www.cuidadospelavida.com.br/", label: "Cuidados pela Vida" },
+  { terms: ["programa faz bem", "astrazeneca"], url: "https://www.programafazbem.com.br/", label: "Programa FazBem" },
+  { terms: ["mantecorp saude", "mantecorp saúde"], url: "https://www.mantecorpsaude.com.br/", label: "Mantecorp Saude" },
+  { terms: ["dermaclub"], url: "https://www.dermaclub.com.br/", label: "Dermaclub" },
+  { terms: ["bayer para voce", "bayer para você"], url: "https://www.bayerparavoce.com.br/", label: "Bayer Para Voce" },
+  { terms: ["ems saude", "ems saúde"], url: "https://www.emssaude.com.br/", label: "EMS Saude" },
+  { terms: ["programas comerciais abbvie", "abbvie", "allergan"], url: PBM_PORTAL_URL, label: "Portal do PBM" },
+  { terms: ["programa cuidar", "mundipharma"], url: PBM_PORTAL_URL, label: "Portal do PBM" },
+];
 const roundMoney = (value) => Math.round((value + Number.EPSILON) * 100) / 100;
+let cepLookupTimer = null;
+
+const COUPON_CPF_RULE = "1 cupom por CPF e cadastro.";
+
+const availableCoupons = [
+  {
+    code: "ONORIO10",
+    title: "10% no site todo",
+    description: "Ganhe 10% de desconto em produtos participantes do site.",
+    value: 0.1,
+    discountType: "percent",
+    scope: "all",
+    scopeLabel: "Site todo",
+    rule: COUPON_CPF_RULE,
+    validUntil: "31/12/2026",
+  },
+  {
+    code: "LEITE10",
+    title: "10% em leite e formulas",
+    description: "Ganhe 10% em leite, formulas infantis e nutricao infantil.",
+    value: 0.1,
+    discountType: "percent",
+    scope: "milk",
+    scopeLabel: "Leites e formulas",
+    rule: COUPON_CPF_RULE,
+    validUntil: "31/12/2026",
+  },
+  {
+    code: "DERMO5",
+    title: "5% em dermocosmeticos",
+    description: "Ganhe 5% em dermocosmeticos, skincare e protetor solar.",
+    value: 0.05,
+    discountType: "percent",
+    scope: "dermo",
+    scopeLabel: "Dermocosmeticos",
+    rule: COUPON_CPF_RULE,
+    validUntil: "31/12/2026",
+  },
+  {
+    code: "HIGIENE10",
+    title: "10% em higiene pessoal",
+    description: "Ganhe 10% em sabonetes, desodorantes, saude bucal e higiene.",
+    value: 0.1,
+    discountType: "percent",
+    scope: "hygiene",
+    scopeLabel: "Higiene pessoal",
+    rule: COUPON_CPF_RULE,
+    validUntil: "31/12/2026",
+  },
+  {
+    code: "HOMEM10",
+    title: "10% em linha homem",
+    description: "Ganhe 10% em barba, cuidado masculino e produtos linha homem.",
+    value: 0.1,
+    discountType: "percent",
+    scope: "men",
+    scopeLabel: "Linha homem",
+    rule: COUPON_CPF_RULE,
+    validUntil: "31/12/2026",
+  },
+];
 
 function getCustomerHeaderName() {
   return state.customer.name || state.customer.fullName || "Cliente Onório";
@@ -1164,7 +3090,7 @@ const pickupStores = [
   {
     id: "loja-arnaldo",
     name: "Loja 1 - Av. Arnaldo Victaliano",
-    address: "Iguatemi - Ribeirão Preto/SP",
+    address: "Av. Arnaldo Victaliano, 1191 - Iguatemi - Ribeirão Preto/SP",
     time: "Retirada grátis em até 60 minutos",
     fullAddress: "Av. Arnaldo Victaliano, 1191 - Iguatemi - Ribeirão Preto/SP",
     phone: "(16) 3618-0883",
@@ -1178,7 +3104,8 @@ const pickupStores = [
   {
     id: "loja-portugal",
     name: "Loja 2 - Av. Portugal",
-    address: "Jardim Botânico - Ribeirão Preto/SP",
+    address: "Av. Portugal, 2777 - Jardim Botânico - Ribeirão Preto/SP",
+    note: "Dentro do Posto Copercana",
     time: "Retirada grátis em até 60 minutos",
     fullAddress: "Av. Portugal, 2777 - Jardim Botânico - Ribeirão Preto/SP",
     phone: "(16) 3442-2440",
@@ -1191,6 +3118,15 @@ const pickupStores = [
   },
 ];
 
+const storeAvailabilityRules = {
+  "loja-arnaldo": {
+    unavailable: new Set([]),
+  },
+  "loja-portugal": {
+    unavailable: new Set([]),
+  },
+};
+
 const infoPages = {
   atendimento: {
     eyebrow: "Ajuda",
@@ -1202,6 +3138,18 @@ const infoPages = {
       ["E-mail", "onoriodrogaria@gmail.com"],
     ],
     primary: ["Falar no WhatsApp", "whatsapp"],
+  },
+  ajuda: {
+    eyebrow: "Guia de ajuda",
+    title: "Como podemos ajudar?",
+    text: "Central com respostas rapidas sobre compra online, retirada, entrega, pagamento, cupons, conta, medicamentos e atendimento da Drogaria Onorio.",
+    cards: [
+      ["Compra online", "Passo a passo para escolher produtos e finalizar pedido"],
+      ["Retirada e entrega", "Regras para retirar na loja, receber em casa ou calcular frete"],
+      ["Pagamento e cupons", "Pix, cartao, boleto, Mercado Pago, PicPay e cupons Onorio"],
+    ],
+    helpGuidePage: true,
+    primary: ["Falar com atendimento", "atendimento"],
   },
   aplicativo: {
     eyebrow: "App Onorio",
@@ -1239,11 +3187,11 @@ const infoPages = {
   clienteon: {
     eyebrow: "Programa de pontos",
     title: "Cliente ON",
-    text: "A cada R$ 1,00 em compras, o cliente acumula 1 ponto. A cada 100 pontos, abate R$ 1,00 no final da compra.",
+    text: "A cada R$ 1,00 em compras, o cliente acumula 2 pontos. Exemplo: R$ 100,00 geram 200 pontos, equivalentes a R$ 2,00 de benefício por até 6 meses.",
     cards: [
       ["Saldo exemplo", `${LOYALTY_EXAMPLE_BALANCE} pontos`],
       ["Valor para abater", formatCurrency(pointsToDiscount())],
-      ["Pergunta no checkout", "Sempre perguntar antes de usar"],
+      ["Validade", `${LOYALTY_POINTS_VALIDITY_MONTHS} meses para utilizar`],
     ],
     primary: ["Ver pagamento", "pagamento"],
   },
@@ -1306,12 +3254,13 @@ const infoPages = {
   cupons: {
     eyebrow: "Cupons",
     title: "Cupons Onorio",
-    text: "Espaco para cupons proprios da Drogaria Onorio em campanhas online, retirada na loja e ofertas por categoria.",
+    text: "Cupons proprios da Drogaria Onorio para site todo, nutricao infantil, dermocosmeticos, higiene pessoal e linha homem.",
     cards: [
       ["Cupom na cesta", "Cliente digita o codigo no resumo do pedido"],
-      ["Campanhas proprias", "Exemplos: PRIMEIRACOMPRA, RETIRADAON e BELEZAON"],
-      ["Controle futuro", "Validacao por periodo, loja, estoque e valor minimo"],
+      ["Regra por CPF", "Cada cupom pode ser usado uma vez por CPF e cadastro"],
+      ["Campanhas proprias", "ONORIO10, LEITE10, DERMO5, HIGIENE10 e HOMEM10"],
     ],
+    couponPage: true,
     primary: ["Ver ofertas", "top-ofertas"],
   },
   descontos: {
@@ -1355,24 +3304,43 @@ Object.assign(infoPages, {
   historia: {
     eyebrow: "Institucional",
     title: "Nossa história",
-    text: "A Drogaria Onório existe há mais de 25 anos cuidando de famílias em Ribeirão Preto, com atendimento próximo, humano e acessível.",
+    text: "A Drogaria Onório existe há mais de 25 anos cuidando de famílias em Ribeirão Preto, unindo proximidade, inovação e qualidade no atendimento.",
+    storyPage: true,
     cards: [
       ["Mais de 25 anos", "Uma trajetória construída com confiança, cuidado e presença no bairro."],
-      ["Conexão que cuida", "Slogan do brandbook: conexão que cuida, qualidade que inspira."],
-      ["Atendimento acolhedor", "Cuidado personalizado, rápido e acessível, colocando o cliente no centro."],
+      ["Conexão que cuida", "Qualidade que inspira em cada atendimento, compra e orientação."],
+      ["Cliente no centro", "Cuidado personalizado, rápido e acessível para a rotina de toda família."],
+    ],
+    values: [
+      ["Proximidade", "Criar vínculos genuínos e acolhedores com cada cliente, sempre atento às suas necessidades."],
+      ["Inovação", "Buscar soluções modernas e práticas para melhorar a experiência e o cuidado em cada atendimento."],
+      ["Empatia", "Entender e respeitar cada pessoa com cuidado, escuta e atenção."],
+      ["Motivação", "Inspirar clientes e equipe a cuidarem da saúde com confiança e otimismo."],
+    ],
+    attributes: ["Proximidade humanizada", "Praticidade detalhada", "Motivação inspiradora", "Acessibilidade sofisticada"],
+    voice: [
+      ["Humano e caloroso", "Estamos aqui para cuidar de você, no seu tempo, do seu jeito."],
+      ["Positivo e inspirador", "Cuidar de si é o primeiro passo para conquistar mais saúde e bem-estar."],
+      ["Direto e funcional", "A sua saúde, sempre à mão. Confira nossas soluções e fale com a gente."],
     ],
     sections: [
       {
         eyebrow: "Essência Onório",
         title: "Uma farmácia feita de proximidade",
-        text: "O brandbook posiciona a Onório como uma farmácia que se destaca pela conexão humana, modernidade e funcionalidade, equilibrando simplicidade com sofisticação.",
+        text: "A Onório se destaca pela conexão humana, modernidade e funcionalidade, equilibrando simplicidade com sofisticação.",
         items: ["Proximidade humanizada", "Praticidade detalhada", "Motivação inspiradora", "Acessibilidade sofisticada"],
       },
       {
-        eyebrow: "Propósito",
-        title: "Cuidar de forma simples, bonita e eficiente",
-        text: "A marca busca traduzir cuidado com qualidade, empatia e soluções práticas para a rotina de saúde dos clientes.",
-        items: ["Cuidado que acolhe", "Serviço que resolve", "Qualidade que inspira confiança"],
+        eyebrow: "Missão",
+        title: "Cuidar com rapidez, acesso e acolhimento",
+        text: "Oferecer cuidados de saúde personalizados, rápidos e acessíveis, com atendimento acolhedor que coloca o cliente no centro.",
+        items: ["Atendimento acolhedor", "Cuidado personalizado", "Soluções práticas"],
+      },
+      {
+        eyebrow: "Visão",
+        title: "Ser referência em proximidade e qualidade",
+        text: "Ser a farmácia referência em proximidade, inovação e qualidade, transformando a experiência de cuidado e inspirando bem-estar em cada cliente.",
+        items: ["Inovação com propósito", "Qualidade no cuidado", "Bem-estar em cada contato"],
       },
     ],
     primary: ["Conhecer nossas farmácias", "farmacias"],
@@ -1431,21 +3399,12 @@ Object.assign(infoPages, {
     primary: ["Enviar orçamento", "whatsapp"],
   },
   "servicos-saude": {
-    eyebrow: "Serviços de saúde",
-    title: "Cuidado farmacêutico Onório",
-    text: "Serviços de apoio à rotina de saúde, realizados com acolhimento e orientação da equipe da drogaria.",
-    cards: [
-      ["Aferição de pressão", "Acompanhamento rápido para controle e orientação inicial."],
-      ["Glicemia capilar", "Medição de glicemia para apoiar o cuidado diário."],
-      ["Aplicação de injetáveis", "Aplicação conforme prescrição e disponibilidade da unidade."],
-    ],
-    sections: [
-      {
-        title: "Atendimento humanizado",
-        text: "O cliente pode consultar disponibilidade, unidade e horário pelo atendimento da loja antes de ir.",
-        items: ["Orientação farmacêutica", "Registro de atendimento", "Encaminhamento para avaliação médica quando necessário"],
-      },
-    ],
+    eyebrow: "Serviços farmacêuticos",
+    title: "Serviços farmacêuticos Onório",
+    text: "Cuidados realizados na drogaria com acolhimento, orientação e disponibilidade conforme unidade.",
+    cards: [],
+    serviceGrid: true,
+    sections: [],
     primary: ["Falar no WhatsApp", "whatsapp"],
   },
   prescricao: {
@@ -1463,37 +3422,33 @@ Object.assign(infoPages, {
   clienteon: {
     eyebrow: "Programa de pontos",
     title: "Cliente ON",
-    text: "Compre na Onório, acumule pontos e use o saldo para abater no valor da próxima compra.",
+    text: "Compre na Onório, acumule pontos e use o saldo para abater no valor da compra. No protótipo, o retorno é de 2% do valor gasto: R$ 100,00 geram R$ 2,00 em benefício.",
     cards: [
-      ["R$ 1,00 = 1 ponto", "Cada real em compras gera 1 ponto Cliente ON."],
+      ["R$ 1,00 = 2 pontos", "Cada real em compras gera 2 pontos Cliente ON."],
       ["100 pontos = R$ 1,00", "A cada 100 pontos, o cliente pode abater R$ 1,00 no total."],
-      ["Uso opcional", "No final da compra o site sempre pergunta se deseja usar os pontos."],
+      [`Validade de ${LOYALTY_POINTS_VALIDITY_MONTHS} meses`, "Os pontos ficam acumulados no cadastro e expiram 6 meses após a compra."],
     ],
     sections: [
       {
         title: "Benefícios",
-        text: "O programa ajuda o cliente a economizar sem trocar produto: os pontos viram desconto direto no carrinho.",
-        items: ["Saldo visível no checkout", "Desconto aplicado só com confirmação", "Novos pontos acumulados aparecem no pedido finalizado"],
+        text: "O programa ajuda o cliente a economizar sem trocar produto: os pontos viram desconto direto no carrinho quando o cliente confirma o uso.",
+        items: ["Saldo visível no checkout", "Desconto aplicado só com confirmação", "Novos pontos acumulados aparecem no pedido finalizado", "Prazo de uso sempre informado ao cliente"],
       },
     ],
     primary: ["Ver pagamento", "pagamento"],
   },
   pbm: {
     eyebrow: "Descontos",
-    title: "Programa de descontos",
-    text: "Central para PBMs e benefícios de laboratórios em medicamentos participantes, com ativação por CPF conforme regra de cada programa.",
+    title: "PBM Onório",
+    text: "Programa de benefícios em medicamentos participantes, com consulta por CPF e desconto de laboratório conforme regra de cada campanha.",
     cards: [
-      ["PBM Laboratórios", "Programas de benefícios para medicamentos selecionados."],
-      ["Genéricos", "Campanhas com descontos de até 95% quando disponíveis."],
-      ["Leve 3 pague 2", "Ofertas promocionais em itens participantes."],
+      ["Medicamentos de referência", "Economia em tratamentos contínuos e produtos selecionados."],
+      ["Economia no tratamento", "Descontos validados pelo CPF quando o laboratório participa."],
+      ["Cuidado para sua saúde", "A equipe confere regra, disponibilidade e orientação antes da venda."],
+      ["Melhor experiência", "Consulta no site, retirada na loja e suporte pelo atendimento Onório."],
     ],
-    sections: [
-      {
-        title: "PBMs em implantação",
-        text: "Na versão integrada, esta página poderá exibir programas ativos por laboratório, CPF, EAN, estoque por loja e regra de desconto.",
-        items: ["Neo Química, Medley, EMS e similares a confirmar com a loja", "Cadastro por CPF", "Validação no fechamento da compra"],
-      },
-    ],
+    pbmPage: true,
+    sections: [],
     primary: ["Ver descontos", "descontos"],
   },
   conta: {
@@ -1583,6 +3538,595 @@ Object.assign(infoPages, {
 infoPages.servicos = infoPages["servicos-saude"];
 infoPages.vacinas = infoPages["servicos-saude"];
 
+const pharmaceuticalServices = [
+  {
+    title: "Bioimpedância",
+    price: "R$ 24,90",
+    duration: "15 minutos",
+    text: "Avaliação corporal para acompanhar composição, rotina de saúde e evolução de cuidados.",
+  },
+  {
+    title: "Aferição de Pressão",
+    price: "R$ 5,00",
+    duration: "10 minutos",
+    text: "Medição da pressão arterial com orientação inicial da equipe farmacêutica.",
+  },
+  {
+    title: "Teste de Glicemia",
+    price: "R$ 5,00",
+    duration: "10 minutos",
+    text: "Teste capilar para acompanhamento da glicemia, com orientação sobre preparo e resultado.",
+  },
+  {
+    title: "Teste de Oximetria",
+    price: "R$ 5,00",
+    duration: "5 minutos",
+    text: "Procedimento não invasivo para medir oxigenação no sangue e batimentos cardíacos.",
+  },
+  {
+    title: "Colocação de Sensor FS Libre",
+    price: "R$ 11,90",
+    duration: "15 minutos",
+    text: "Instalação do sensor conforme orientação do produto e disponibilidade da unidade.",
+  },
+  {
+    title: "Colocação de Brincos",
+    price: "Valor do brinco",
+    duration: "15 minutos",
+    text: "Perfuração do lóbulo da orelha para colocação de brincos, conforme avaliação da equipe.",
+  },
+  {
+    title: "Aplicação de Medicamentos Injetáveis",
+    price: "R$ 9,90",
+    duration: "20 minutos",
+    text: "Administração de medicamentos injetáveis mediante apresentação e análise da prescrição.",
+  },
+  {
+    title: "Aplicação de Medicamentos GLP-1",
+    price: "R$ 9,90",
+    duration: "20 minutos",
+    text: "Administração de GLP-1 conforme prescrição, apresentação do medicamento e análise da equipe.",
+  },
+  {
+    title: "Curativos",
+    price: "R$ 25,90",
+    duration: "20 minutos",
+    text: "Realização de curativos de pequeno porte em lesões de pele, conforme avaliação local.",
+  },
+  {
+    title: "Temperatura Corporal",
+    price: "R$ 2,00",
+    duration: "5 minutos",
+    text: "Serviço de aferição e controle de temperatura corporal por termômetro.",
+  },
+];
+
+const companyBundleOfferProductIds = new Set([
+  "benegrip",
+  "dorflex",
+  "tylenol",
+  "protetor",
+  "vitamina-c",
+]);
+
+const pbmSteps = [
+  {
+    title: "Consulte o medicamento",
+    text: "Busque o produto no site ou fale com a equipe para saber se ele participa de algum PBM.",
+  },
+  {
+    title: "Informe o CPF",
+    text: "O desconto costuma ser validado pelo CPF do cliente, conforme a regra de cada laboratório.",
+  },
+  {
+    title: "Cadastre-se se precisar",
+    text: "Alguns programas pedem um cadastro rápido antes de liberar o benefício.",
+  },
+  {
+    title: "Finalize com orientação",
+    text: "A Onório confere disponibilidade, prescrição quando necessária e aplica o desconto elegível.",
+  },
+];
+
+const pbmCategories = [
+  "Anti-hipertensivos",
+  "Antialérgicos",
+  "Antidiabéticos",
+  "Analgésicos",
+  "Antiasmáticos",
+  "Anti-inflamatórios",
+  "Reguladores de colesterol",
+  "Antidepressivos",
+  "Ansiolíticos",
+  "Antiulcerosos",
+  "Vitaminas",
+  "Oftálmicos",
+  "Fitoterápicos",
+  "Hormônios",
+  "Antivirais",
+  "Saúde capilar",
+];
+
+const pbmPrograms = [
+  "Abbott",
+  "AbbVie",
+  "Aché",
+  "Allergan",
+  "Apsen",
+  "AstraZeneca",
+  "Biolab",
+  "Biosintética",
+  "Boehringer",
+  "Chiesi",
+  "Diffucap",
+  "Ease Labs",
+  "EMS",
+  "Eurofarma",
+  "GSK",
+  "Hypera",
+  "Legrand Pharma",
+  "Libbs",
+  "Medley",
+  "Mantecorp Farmasa",
+  "Mantecorp Skincare",
+  "Mantecorp",
+  "MSD",
+  "Mundipharma",
+  "Neo Química",
+  "Novo Nordisk",
+  "Novartis",
+  "Pfizer",
+  "Prati-Donaduzzi",
+  "Roche",
+  "Sanofi",
+  "União Química",
+  "United Medical",
+  "Viatris",
+  "Zion",
+];
+
+function parsePbmLines(raw) {
+  return raw
+    .trim()
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [name, brand, program, price, oldPrice = ""] = line.split("|").map((part) => part.trim());
+      return { name, brand, program, price, oldPrice };
+    });
+}
+
+const pbmTreatmentGroups = [
+  {
+    id: "anti-hipertensivos",
+    label: "Anti-hipertensivos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Anti-hipertensivos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Tratamentos de pressão, coração e glaucoma que podem ter benefício validado por CPF.",
+    items: parsePbmLines(`
+Corus Losartana Potássica 25mg 30 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 57,16|R$ 57,74
+Micardis Anlo Telmisartana 80mg + Besilato de Anlodipino 5mg 30 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|R$ 155,17|R$ 167,68
+Lumigan RC Bimatoprosta 0,1mg/ml 3ml Solução Estéril|Allergan|Programas Comerciais Abbvie|R$ 170,30|R$ 172,52
+Diovan Amlo Fix Valsartana 160mg + Besilato de Anlodipino 5mg 28 Comprimidos|Novartis|VMS|R$ 178,15|R$ 179,95
+Diovan Valsartana 320mg 28 comprimidos|Novartis|VMS|R$ 156,77|R$ 158,35
+Diovan HCT Valsartana 160mg + Hidroclorotiazida 12,5mg 28 Comprimidos revestidos|Novartis|VMS|R$ 162,97|R$ 164,62
+Diovan Valsartana 80mg 28 Comprimidos|Novartis|VMS|R$ 156,77|R$ 158,35
+Atacand HCT Candesartana Cilexetila 16mg + Hidroclorotiazida 12,5mg 30 Comprimidos|Astrazeneca|LOGIXPHARMA|R$ 178,55|R$ 187,75
+Diovan Valsartana 160mg 28 Comprimidos|Novartis|VMS|R$ 156,77|R$ 158,35
+Allovita Minoxidil 50mg/ml 50ml Solução Capilar Spray 2 Unidades|Legrand Pharma|LOGIXPHARMA|R$ 89,09|R$ 94,57
+Pielus MX Minoxidil 50mg/ml 100ml|Mantecorp Skincare|LOGIXPHARMA|R$ 103,94|R$ 112,55
+Press Plus Besilato De Anlodipino 5mg/20mg 60 Cápsulas|Biolab|LOGIXPHARMA|R$ 248,55|R$ 251,06
+Press Plus Besilato De Anlodipino 5mg/10mg 60 cápsulas|Biolab|LOGIXPHARMA|R$ 230,04|R$ 232,36
+Brasart BCC Valsartana 320mg + Besilato de Anlodipino 10mg 30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 142,61|R$ 152,53
+Corus H Losartana Potássica 50mg + Hidroclorotiazida 12,5mg 30 Comprimidos Revestidos|Biosintética|LOGIXPHARMA|R$ 78,80|R$ 79,60
+Colírio Lumigan RC Bimatoprosta 0,1mg/ml 5ml|Allergan|Programas Comerciais Abbvie|R$ 283,77|R$ 287,46
+Micardis Anlo Telmisartana 40mg + Besilato de Anlodipino 5mg 30 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|R$ 120,64|R$ 130,93
+Alphagan-Z Tartarato De Brimonidina 1mg/ml 5ml Solução Oftálmica Estéril|Allergan|Programas Comerciais Abbvie|R$ 73,89|R$ 74,85
+Diovan HCT Valsartana 320mg + Hidroclorotiazida 25mg 28 Comprimidos revestidos|Novartis|VMS|R$ 187,46|R$ 189,35
+Diovan HCT Valsartana 320mg + Hidroclorotiazida 12,5mg 28 Comprimidos Revestidos|Novartis|VMS|R$ 162,97|R$ 164,62
+Diovan Amlo Fix Valsartana 320mg + Besilato de Anlodipino 5mg 28 Comprimidos|Novartis|VMS|R$ 178,15|R$ 179,95
+Press Plus Besilato de Anlodipino 5mg + Cloridrato de Benazepril 20mg 30 Cápsulas|Biolab|LOGIXPHARMA|R$ 131,57|R$ 132,90
+Xalatan Latanoprosta 50mcg/ml 2,5ml Solução Oftálmica|Viatris|LOGIXPHARMA|R$ 248,76|R$ 259,25
+Timoptol XE Maleato De Timolol 5mg/ml 5ml Solução Oftálmica Gel|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 68,99|R$ 84,91
+Diovan HCT Valsartana 160mg + Hidroclorotiazida 25mg 28 Comprimidos revestidos|Novartis|VMS|R$ 187,46|R$ 189,35
+Xalacom Latanoprosta 50mcg/ml + Maleato de Timolol 5mg/ml 2,5ml Gotas|Viatris|LOGIXPHARMA|R$ 279,50|R$ 291,28
+Atacand Candesartana Cilexetila 16mg 30 Comprimidos|Astrazeneca|LOGIXPHARMA|R$ 179,64|R$ 188,90
+Ganfort UD Bimatoprosta 0,3mg/ml + Timolol 5mg/ml 30 Flaconetes de 0,4ml Solução Oftálmica|Allergan|Programas Comerciais Abbvie|R$ 242,68|R$ 245,13
+Nebilet Cloridrato De Nebivolol 5mg 60 Comprimidos|Biolab|LOGIXPHARMA|R$ 257,96|R$ 260,57
+Colírio Simbrinza Brinzolamida 10mg/ml + Tartarato de Brimonidina 2mg/ml 8ml|Novartis|VMS|R$ 166,54|R$ 168,22
+Brasart BCC Valsartana 320mg + Besilato de Anlodipino 5mg 30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 128,37|R$ 138,05
+Brasart BCC Valsartana 160mg + Besilato de Anlodipino 5mg 30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 120,13|R$ 129,06
+Brasart BCC Valsartana 320mg + Besilato de Anlodipino 5mg 60 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 227,67|R$ 248,48
+Brasart BCC Valsartana 160mg + Besilato de Anlodipino 5mg 60 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 208,84|R$ 230,98
+Corus H Losartana Potássica 100mg + Hidroclorotiazida 25mg 30 Comprimidos revestidos|Aché|LOGIXPHARMA|R$ 158,18|R$ 159,78
+Micardis Anlo Telmisartana 80mg + Besilato de Anlodipino 10mg 30 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|R$ 155,17|R$ 167,68
+Diovan Amlo Fix Valsartana 320mg + Besilato de Anlodipino 10mg 28 Comprimidos Revestidos|Novartis|VMS|R$ 210,33|R$ 212,45
+Diovan Amlo Fix Valsartana 80mg + Besilato de Anlodipino 5mg 28 Comprimidos|Novartis|VMS|R$ 178,15|R$ 179,95
+Press Plus Besilato de Anlodipino 5mg + Cloridrato de Benazepril 10mg 30 Cápsulas|Biolab|LOGIXPHARMA|R$ 120,51|R$ 121,73
+Combigan Tartarato de Brimonidina 2mg/ml + Maleato de Timolol 5mg/ml 5ml solução|Allergan|Programas Comerciais Abbvie|R$ 162,14|R$ 164,24
+Diovan HTC Valsartana 80mg + Hidroclorotiazida 12,5mg 28 Comprimidos Revestidos|Novartis|VMS|R$ 162,97|R$ 164,62
+Atacand HCT Candesartana Cilexetila 8mg + Hidroclorotiazida 12,5mg 30 Comprimidos|Astrazeneca|LOGIXPHARMA|R$ 178,44|R$ 187,63
+Atacand Candesartana Cilexetila 8mg 30 Comprimidos|Astrazeneca|LOGIXPHARMA|R$ 160,55|R$ 189,81
+Olzicar HCT Olmesartana Medoxomila 40mg + Hidroclorotiazida 25mg 30 Comprimidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 76,59|R$ 81,31
+Olzicar HCT Olmesartana Medoxomila 20mg + Hidroclorotiazida 12,5mg 30 Comprimidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 67,59|R$ 71,43
+Olzicar Anlo Olmesartana Medoxomila 40mg + Anlodipino 5mg 30 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 63,59|R$ 68,07
+Nebilet Cloridrato De Nebivolol 5mg 30 Comprimidos|Biolab|LOGIXPHARMA|R$ 171,49|R$ 173,22
+Loncord Nifedipino 40mg 20 Cápsulas|Diffucap|DIFFUCARE SITE|R$ 73,28|
+Cosopt Dorzolamida 2% + Maleato de Timolol 0,5% 10ml Solução Oftálmica|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 393,30|R$ 397,27
+Olzicar Anlo Olmesartana Medoxomila 40mg + Besilato de Anlodipino 10mg 30 Comprimidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 63,59|R$ 68,07
+Olzicar Anlo Olmesartana Medoxomila 20mg + Besilato de Anlodipino 5mg 30 Comprimidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 56,59|R$ 60,21
+Allovita Minoxidil 50mg/ml 50ml Solução Capilar Spray 3 Unidades|Legrand Pharma|LOGIXPHARMA|R$ 124,73|R$ 135,85
+Allovita Minoxidil 50mg/mL 1 Frasco Spray com 50 Ml + Extensor|Legrand Pharma|LOGIXPHARMA|R$ 57,21|R$ 63,60
+Diovan Amlo Fix Valsartana 160mg + Besilato de Anlodipino 10mg 28 Comprimidos Revestidos|Novartis|VMS|R$ 210,33|R$ 212,45
+    `),
+  },
+  {
+    id: "antidepressivos",
+    label: "Antidepressivos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antidepressivos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Medicamentos de saúde mental com consulta de benefício e venda conforme prescrição.",
+    items: parsePbmLines(`
+Donaren Retard Cloridrato De Trazodona 150mg 30 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|R$ 169,59|R$ 211,13
+Vognus Bromidrato de Vortioxetina 10mg 60 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 244,60|R$ 264,19
+Efexor XR Cloridrato De Venlafaxina 75mg 30 Cápsulas|Viatris|LOGIXPHARMA|R$ 490,79|R$ 495,75
+Wellbutrin XL Cloridrato De Bupropiona 150mg 30 Comprimidos|GSK|LOGIXPHARMA|R$ 209,09|R$ 211,20
+Wellbutrin XL Cloridrato De Bupropiona 300mg 30 Comprimidos|GSK|LOGIXPHARMA|R$ 257,71|R$ 260,31
+Efexor XR Cloridrato De Venlafaxina 150mg 30 Cápsulas|Viatris|LOGIXPHARMA|R$ 696,17|R$ 703,20
+Efexor XR Cloridrato De Venlafaxina 37,5mg 30 Cápsulas|Viatris|LOGIXPHARMA|R$ 193,59|R$ 211,84
+Evortia Bromidrato De Vortioxetina 10mg 60 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 272,53|R$ 275,28
+Evortia Bromidrato De Vortioxetina 20mg 60 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 545,03|R$ 550,54
+Vognus Bromidrato de Vortioxetina 5mg 30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 92,63|R$ 100,21
+Vognus Vortioxetina 10mg 30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 153,01|R$ 165,16
+Luvox Maleato De Fluvoxamina 100mg 60 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 630,59|R$ 750,60
+Eudok Oxalato De Escitalopram 15mg 30 Cápsulas|União Química|LOGIXPHARMA|R$ 97,74|R$ 98,73
+Eudok Oxalato De Escitalopram 10mg 30 Cápsulas|União Química|LOGIXPHARMA|R$ 86,62|R$ 87,49
+Paxil CR Cloridrato De Paroxetina 25mg 30 Comprimidos|GSK|LOGIXPHARMA|R$ 257,93|R$ 260,54
+Paxil CR Paroxetina 12,5mg 30 Comprimidos|GSK|LOGIXPHARMA|R$ 124,85|R$ 126,11
+Evortia Bromidrato De Vortioxetina 15mg 60 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 463,22|R$ 467,90
+Evortia Bromidrato De Vortioxetina 5mg 30 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 91,87|R$ 92,80
+Evortia Bromidrato De Vortioxetina 10mg 30 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 151,40|R$ 152,93
+Eudok Oxalato De Escitalopram 20mg 30 Cápsulas|União Química|LOGIXPHARMA|R$ 133,39|R$ 134,74
+Extrato de Cannabis 200mg Zion 10ml|Zion|ENDOGEN - CANN DOC|R$ 399,90|
+    `),
+  },
+  {
+    id: "alzheimer",
+    label: "Doença de Alzheimer",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Alzheimer?PS=48&map=c,specificationFilter_143,specificationFilter_177",
+    description: "Tratamentos neurológicos de uso contínuo, sempre com prescrição e orientação farmacêutica.",
+    items: parsePbmLines(`
+Donila Duo Cloridrato de Donepezila 10mg + Cloridrato de Memantina 20mg 30 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 239,57|R$ 241,99
+Extrato de Cannabis Sativa 36,76mg/ml Ease Labs 30ml + Conta Gotas|Ease Labs|LOGIXPHARMA|R$ 430,90|R$ 432,00
+Vivencia Patch 5cm² Rivastigmina 9mg 4,6mg/24h 30 Adesivos Transdérmicos|Aché|LOGIXPHARMA|R$ 402,82|R$ 406,87
+Alois Duo Cloridrato de Memantina 20mg + Cloridrato de Donepezila 10mg 30 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|R$ 235,12|R$ 237,48
+Exelon Patch 10 Rivastigmina 18mg 9,5mg/24h 30 Adesivos|United Medical|PROGRAMA CAMINHANDO JUNTOS - KNIGHT|R$ 590,62|
+Exelon Patch 5 Rivastigmina 4,6mg/24h 30 Adesivos|United Medical|PROGRAMA CAMINHANDO JUNTOS - KNIGHT|R$ 413,23|R$ 417,40
+Vivencia Patch 10cm² Rivastigmina 18mg 9,5mg/24h 30 Adesivos Transdérmicos|Aché|LOGIXPHARMA|R$ 555,25|R$ 560,86
+Vivencia Patch 15cm² Rivastigmina 27mg 13,3mg/24h 30 Adesivos Transdérmicos|Aché|LOGIXPHARMA|R$ 555,25|R$ 560,86
+Exelon Patch Rivastigmina 27mg 30 Adesivos Transdérmicos|United Medical|PROGRAMA CAMINHANDO JUNTOS - KNIGHT|R$ 609,87|
+Donila Duo Cloridrato de Donepezila 10mg + Cloridrato de Memantina 10mg 7 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 47,26|R$ 47,74
+Donila Duo Cloridrato de Donepezila 10mg + Cloridrato de Memantina 5mg 7 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 39,32|R$ 39,72
+Alois Duo 10mg + 10mg Apsen 7 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|R$ 42,75|
+Donila Duo Cloridrato de Donepezila 10mg + Cloridrato de Memantina 15mg 7 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 53,98|R$ 54,53
+Alois Duo 10mg + 15mg Apsen 7 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|Sob consulta|
+Alois Duo 10mg + 5mg Apsen 7 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|Sob consulta|
+    `),
+  },
+  {
+    id: "antiasmaticos",
+    label: "Antiasmáticos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antiasm%C3%A1ticos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Tratamentos respiratórios com inaladores, sprays e apresentações sob análise de estoque.",
+    items: parsePbmLines(`
+Alenia Refil Formoterol 12mcg + Budesonida 400mcg 60 Cápsulas para Inalação|Biosintética|LOGIXPHARMA|R$ 161,54|R$ 163,17
+Symbicort Spray Fumarato de Formoterol di-hidratado 6mcg + Budesonida 200mcg 120 Doses|Astrazeneca|PROGRAMA FAZBEM|R$ 175,71|R$ 177,48
+Alenia Fumarato de Formoterol 6mcg + Budesonida 200mcg 60 Cápsulas Refil|Aché|LOGIXPHARMA|R$ 120,10|R$ 121,29
+Flixotide Fluticasona 50mcg/dose 1 Frasco 120 Doses Spray|GSK|LOGIXPHARMA|R$ 170,73|R$ 218,35
+Symbicort Spray Fumarato de Formoterol di-hidratado 6mcg + Budesonida 100mcg 120 Doses|Astrazeneca|PROGRAMA FAZBEM|R$ 209,75|R$ 211,87
+Fostair Dipropionato De Beclometasona 200mcg + Fumarato De Formoterol 6mcg 120 Doses pó inalatório|Chiesi|PROGRAMA ACESSAR - CHIESI|R$ 257,05|R$ 259,64
+Fostair HFA Dipropionato De Beclometasona 100mcg + Fumarato De Formoterol 6mcg 120 Doses spray|Chiesi|PROGRAMA ACESSAR - CHIESI|R$ 213,21|R$ 215,37
+Alenia Fumarato de Formoterol Di-Hidratado 12mcg + Budesonida 400mcg 60 Cápsulas + Inalador|Biosintética|LOGIXPHARMA|R$ 203,87|R$ 205,93
+Fasenra 30mg/mL Astrazeneca 1 Seringa com 1mL de Solução|Astrazeneca|PROGRAMA FAZBEM|Sob consulta|
+    `),
+  },
+];
+
+pbmTreatmentGroups.push(
+  {
+    id: "analgesicos",
+    label: "Analgésicos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Analg%C3%A9sicos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Medicamentos para dor e febre, com validação de benefício conforme apresentação participante.",
+    items: parsePbmLines(`
+Tylenol Paracetamol 500mg 20 Comprimidos|Johnson & Johnson|Programa de benefícios|R$ 19,90|R$ 24,90
+Dorflex Analgésico e Relaxante Muscular 36 Comprimidos|Sanofi|LOGIXPHARMA|R$ 24,90|R$ 32,90
+Novalgina Dipirona Monoidratada 1g 10 Comprimidos|Sanofi|LOGIXPHARMA|R$ 18,90|R$ 24,90
+Neosaldina Dipirona + Cafeína + Isometepteno 20 Drágeas|Hypera|Mantecorp Saúde|R$ 29,90|R$ 37,90
+Dipirona Sódica 500mg 10 Comprimidos|EMS|PBM Genéricos|R$ 6,90|R$ 12,90
+Buscopan Composto 20 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|R$ 39,90|R$ 49,90
+    `),
+  },
+  {
+    id: "hiperplasia-prostatica",
+    label: "Hiperplasia Prostática Benigna",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Hiperplasia%20Prost%C3%A1tica%20Benigna?PS=48&map=c,specificationFilter_143,specificationFilter_177",
+    description: "Tratamentos urológicos de uso contínuo, sempre com prescrição e consulta de benefício.",
+    items: parsePbmLines(`
+Combodart Dutasterida + Tansulosina 30 Cápsulas|GSK|LOGIXPHARMA|Sob consulta|
+Avodart Dutasterida 0,5mg 30 Cápsulas|GSK|LOGIXPHARMA|Sob consulta|
+Omnic Ocas Tansulosina 0,4mg 30 Comprimidos|Astellas|Programa de benefícios|Sob consulta|
+Secotex Tansulosina 0,4mg 30 Cápsulas|Boehringer|Abraçar a Vida - Boehringer|Sob consulta|
+Dutasterida 0,5mg 30 Cápsulas|EMS|PBM Genéricos|Sob consulta|
+Tansulosina 0,4mg 30 Cápsulas|Eurofarma|Programa parceiro|Sob consulta|
+    `),
+  },
+  {
+    id: "vitaminas",
+    label: "Vitaminas",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Com%20Vitaminas?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Vitaminas e suplementos com campanhas de recorrência, imunidade e bem-estar.",
+    items: parsePbmLines(`
+Lavitan A-Z 60 Comprimidos|Cimed|Programa parceiro|R$ 29,90|R$ 39,90
+Centrum A-Z 30 Comprimidos|Haleon|Programa de benefícios|R$ 44,90|R$ 59,90
+Vitamina C Maxinutri 60 Cápsulas|Maxinutri|PBM Vitaminas|R$ 29,90|R$ 39,90
+Ômega 3 Catarinense 60 Cápsulas|Catarinense|Programa parceiro|R$ 39,90|R$ 49,90
+Complexo B 30 Comprimidos|Neo Química|PBM Genéricos|R$ 19,90|R$ 29,90
+Ensure Baunilha 850g|Abbott|Abbott - Abrace a Vida|R$ 170,43|R$ 199,90
+    `),
+  },
+  {
+    id: "antitromboticos-circulacao",
+    label: "Antitrombóticos / Circulação",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Circula%C3%A7%C3%A3o?PS=48&map=c,specificationFilter_143,specificationFilter_177",
+    description: "Medicamentos para circulação e prevenção de eventos trombóticos, com venda sob prescrição.",
+    items: parsePbmLines(`
+Xarelto Rivaroxabana 20mg 28 Comprimidos|Bayer|Bayer Para Você|Sob consulta|
+Eliquis Apixabana 5mg 60 Comprimidos|Pfizer|Programa parceiro|Sob consulta|
+Pradaxa Etexilato de Dabigatrana 150mg 30 Cápsulas|Boehringer|Abraçar a Vida - Boehringer|Sob consulta|
+Marevan Varfarina 5mg 30 Comprimidos|Farmoquímica|Programa parceiro|Sob consulta|
+Clopidogrel 75mg 28 Comprimidos|EMS|PBM Genéricos|Sob consulta|
+AAS Protect 100mg 30 Comprimidos|Sanofi|LOGIXPHARMA|Sob consulta|
+    `),
+  },
+  {
+    id: "anticonvulsivantes",
+    label: "Anticonvulsivantes",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Anticonvulsivantes?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Tratamentos neurológicos e de controle de crises, com prescrição e acompanhamento.",
+    items: parsePbmLines(`
+Keppra Levetiracetam 500mg 30 Comprimidos|UCB|Programa parceiro|Sob consulta|
+Depakote ER Divalproato de Sódio 500mg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|Sob consulta|
+Trileptal Oxcarbazepina 600mg 20 Comprimidos|Novartis|Vale Mais Saúde|Sob consulta|
+Lamotrigina 100mg 30 Comprimidos|EMS|PBM Genéricos|Sob consulta|
+Topiramato 50mg 60 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
+Carbamazepina 200mg 30 Comprimidos|Neo Química|PBM Genéricos|Sob consulta|
+    `),
+  },
+  {
+    id: "descongestionantes",
+    label: "Descongestionantes",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Para%20Congest%C3%A3o%20Nasal?PS=48&map=c,specificationFilter_177",
+    description: "Itens para congestão nasal e sintomas respiratórios, com orientação de uso responsável.",
+    items: parsePbmLines(`
+Sorine Solução Nasal 30ml|Hypermarcas|Mantecorp Saúde|R$ 21,90|R$ 29,90
+Neosoro Adulto 30ml|Neo Química|PBM Genéricos|R$ 8,90|R$ 12,90
+Rinosoro Jet 100ml|Farmoquímica|Programa parceiro|R$ 34,90|R$ 44,90
+Maresis Jato Contínuo 100ml|Libbs|Programa parceiro|R$ 42,90|R$ 54,90
+Salsep 360 Spray Nasal 50ml|Ache|Cuidados pela Vida|R$ 31,90|R$ 39,90
+Afrin Solução Nasal 20ml|Bayer|Bayer Para Você|Sob consulta|
+    `),
+  },
+  {
+    id: "antialergicos",
+    label: "Antialérgicos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antial%C3%A9rgicos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Medicamentos para alergias, rinite e urticária, com campanhas e regras por CPF.",
+    items: parsePbmLines(`
+Allegra Fexofenadina 120mg 10 Comprimidos|Sanofi|LOGIXPHARMA|R$ 58,59|R$ 59,90
+Loratadina 10mg 12 Comprimidos|EMS|PBM Genéricos|R$ 9,90|R$ 16,90
+Cetirizina 10mg 12 Comprimidos|Neo Química|PBM Genéricos|R$ 16,90|R$ 22,90
+Desloratadina 5mg 10 Comprimidos|Eurofarma|Programa parceiro|R$ 24,90|R$ 34,90
+Rupafin Rupatadina 10mg 10 Comprimidos|Libbs|Programa parceiro|Sob consulta|
+Avamys Spray Nasal 120 Doses|GSK|LOGIXPHARMA|Sob consulta|
+    `),
+  },
+  {
+    id: "antivirais",
+    label: "Antivirais",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antivirais?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Tratamentos antivirais sob prescrição, com consulta de benefício e disponibilidade.",
+    items: parsePbmLines(`
+Zovirax Aciclovir Creme 10g|GSK|LOGIXPHARMA|Sob consulta|
+Aciclovir 200mg 25 Comprimidos|EMS|PBM Genéricos|Sob consulta|
+Valtrex Valaciclovir 500mg 10 Comprimidos|GSK|LOGIXPHARMA|Sob consulta|
+Oseltamivir 75mg 10 Cápsulas|Roche|Programa parceiro|Sob consulta|
+Tenofovir 300mg 30 Comprimidos|GSK|Programa parceiro|Sob consulta|
+Famciclovir 500mg 3 Comprimidos|Novartis|Vale Mais Saúde|Sob consulta|
+    `),
+  },
+  {
+    id: "antipsicoticos",
+    label: "Antipsicóticos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antipsic%C3%B3tico?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Medicamentos de saúde mental, com prescrição, controle e validação de programa parceiro.",
+    items: parsePbmLines(`
+Risperdal Risperidona 2mg 30 Comprimidos|Janssen|Programa parceiro|Sob consulta|
+Zyprexa Olanzapina 5mg 28 Comprimidos|Lilly|Melhor Para Você|Sob consulta|
+Seroquel Quetiapina 25mg 28 Comprimidos|Astrazeneca|Programa FazBem|Sob consulta|
+Aristab Aripiprazol 10mg 30 Comprimidos|Aché|Cuidados pela Vida|Sob consulta|
+Risperidona 2mg 30 Comprimidos|EMS|PBM Genéricos|Sob consulta|
+Quetiapina 100mg 30 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
+    `),
+  },
+  {
+    id: "colesterol-triglicerideos",
+    label: "Reguladores de Colesterol e Triglicerídeos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Colesterol?PS=48&map=c,specificationFilter_143,specificationFilter_177",
+    description: "Medicamentos para colesterol e triglicerídeos, geralmente de uso contínuo e recorrente.",
+    items: parsePbmLines(`
+Crestor Rosuvastatina 10mg 30 Comprimidos|Astrazeneca|Programa FazBem|Sob consulta|
+Lípitor Atorvastatina 20mg 30 Comprimidos|Viatris|LOGIXPHARMA|Sob consulta|
+Sinvastatina 20mg 30 Comprimidos|EMS|PBM Genéricos|R$ 17,90|R$ 31,90
+Rosuvastatina 20mg 30 Comprimidos|Neo Química|PBM Genéricos|Sob consulta|
+Ezetrol Ezetimiba 10mg 30 Comprimidos|Organon|Programa parceiro|Sob consulta|
+Fenofibrato 160mg 30 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
+    `),
+  },
+  {
+    id: "ansioliticos",
+    label: "Ansiolíticos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Ansiol%C3%ADticos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Medicamentos para ansiedade e sono, com controle de prescrição e dispensação responsável.",
+    items: parsePbmLines(`
+Rivotril Clonazepam 2mg 30 Comprimidos|Roche|Programa parceiro|Sob consulta|
+Frontal Alprazolam 0,5mg 30 Comprimidos|Viatris|LOGIXPHARMA|Sob consulta|
+Lexotan Bromazepam 3mg 30 Comprimidos|Roche|Programa parceiro|Sob consulta|
+Clonazepam 2mg 30 Comprimidos|EMS|PBM Genéricos|R$ 9,90|
+Diazepam 10mg 30 Comprimidos|Neo Química|PBM Genéricos|Sob consulta|
+Zolpidem 10mg 30 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
+    `),
+  },
+  {
+    id: "anti-inflamatorios",
+    label: "Anti-inflamatórios",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Anti-inflamat%C3%B3rios?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Anti-inflamatórios e corticoides, com atenção a prescrição, contraindicações e tempo de uso.",
+    items: parsePbmLines(`
+Ibuprofeno 400mg 10 Comprimidos|EMS|PBM Genéricos|R$ 12,90|R$ 18,90
+Diclofenaco Potássico 50mg 20 Comprimidos|Neo Química|PBM Genéricos|R$ 14,90|R$ 24,90
+Nimesulida 100mg 12 Comprimidos|Eurofarma|Programa parceiro|R$ 12,90|R$ 19,90
+Prednisona 20mg 10 Comprimidos|EMS|PBM Genéricos|R$ 10,90|R$ 18,90
+Alivium Ibuprofeno 400mg 10 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|Sob consulta|
+Arcoxia Etoricoxibe 90mg 7 Comprimidos|Organon|Programa parceiro|Sob consulta|
+    `),
+  },
+  {
+    id: "antiulcerosos",
+    label: "Antiulcerosos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antiulcerosos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Tratamentos para refluxo, gastrite e proteção gástrica, com orientação sobre tempo de uso.",
+    items: parsePbmLines(`
+Omeprazol 20mg 28 Cápsulas|EMS|PBM Genéricos|R$ 18,90|R$ 29,90
+Pantoprazol 40mg 28 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
+Nexium Esomeprazol 40mg 28 Comprimidos|Astrazeneca|Programa FazBem|Sob consulta|
+Dexilant Dexlansoprazol 60mg 30 Cápsulas|Takeda|Programa parceiro|Sob consulta|
+Luftal Simeticona 125mg 10 Cápsulas|Reckitt|Programa parceiro|R$ 12,90|R$ 18,90
+Esomeprazol 20mg 28 Comprimidos|Neo Química|PBM Genéricos|Sob consulta|
+    `),
+  },
+  {
+    id: "fitoterapicos",
+    label: "Fitoterápicos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Fitoter%C3%A1picos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Produtos fitoterápicos e naturais, com consulta de indicação, composição e disponibilidade.",
+    items: parsePbmLines(`
+Pasalix 20 Comprimidos|Marjan|Programa parceiro|Sob consulta|
+Abrilar Hedera Helix Xarope 100ml|Farmoquímica|Programa parceiro|Sob consulta|
+Calman 20 Comprimidos|Marjan|Programa parceiro|Sob consulta|
+Valeriana 45mg 30 Cápsulas|Catarinense|Programa parceiro|Sob consulta|
+Tamarine Geleia 150g|Hypermarcas|Mantecorp Saúde|Sob consulta|
+Ginkgo Biloba 80mg 30 Cápsulas|Neo Química|PBM Fitoterápicos|Sob consulta|
+    `),
+  },
+  {
+    id: "calcio-osseo",
+    label: "Reguladores de Cálcio Ósseo",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Os%20Ossos?PS=48&map=c,specificationFilter_143,specificationFilter_179",
+    description: "Tratamentos para saúde óssea, cálcio, vitamina D e osteoporose, conforme prescrição.",
+    items: parsePbmLines(`
+Addera D3 7000UI 8 Cápsulas|Hypermarcas|Mantecorp Saúde|Sob consulta|
+Fosamax Alendronato 70mg 4 Comprimidos|Organon|Programa parceiro|Sob consulta|
+Prolia Denosumabe 60mg 1 Seringa|Amgen|Programa parceiro|Sob consulta|
+Caltrate 600 + D 60 Comprimidos|Haleon|Programa de benefícios|Sob consulta|
+Osteonutri 30 Comprimidos|Aché|Cuidados pela Vida|Sob consulta|
+Alendronato 70mg 4 Comprimidos|EMS|PBM Genéricos|Sob consulta|
+    `),
+  },
+  {
+    id: "psicoestimulantes",
+    label: "Psicoestimulantes",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Psicoestimulantes?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Medicamentos controlados para atenção e cognição, com prescrição e regras específicas.",
+    items: parsePbmLines(`
+Venvanse Lisdexanfetamina 30mg 28 Cápsulas|Takeda|Programa parceiro|Sob consulta|
+Concerta Metilfenidato 18mg 30 Comprimidos|Janssen|Programa parceiro|Sob consulta|
+Ritalina LA 10mg 30 Cápsulas|Novartis|Vale Mais Saúde|Sob consulta|
+Stavigile Modafinila 100mg 30 Comprimidos|Libbs|Programa parceiro|Sob consulta|
+Atentah Atomoxetina 40mg 30 Cápsulas|Apsen|Programa Sou Mais Vida|Sob consulta|
+Metilfenidato 10mg 30 Comprimidos|EMS|PBM Controlados|Sob consulta|
+    `),
+  },
+  {
+    id: "hormonais",
+    label: "Hormonais",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Hormonais?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Tratamentos hormonais, tireoide, anticoncepcionais e terapias específicas com prescrição.",
+    items: parsePbmLines(`
+Puran T4 Levotiroxina 50mcg 30 Comprimidos|Sanofi|LOGIXPHARMA|Sob consulta|
+Synthroid Levotiroxina 75mcg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|Sob consulta|
+Euthyrox Levotiroxina 88mcg 30 Comprimidos|Merck|Programa parceiro|Sob consulta|
+Climene Estradiol + Acetato de Ciproterona 21 Drágeas|Bayer|Bayer Para Você|Sob consulta|
+Selene Etinilestradiol + Ciproterona 21 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
+Depo-Provera Medroxiprogesterona 150mg 1 Ampola|Pfizer|Programa parceiro|Sob consulta|
+    `),
+  },
+  {
+    id: "oftalmicos",
+    label: "Oftálmicos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Os%20Olhos?PS=48&map=c,specificationFilter_143,specificationFilter_179",
+    description: "Colírios e tratamentos oftálmicos, incluindo glaucoma e lubrificação, conforme prescrição.",
+    items: parsePbmLines(`
+Lumigan RC Bimatoprosta 0,1mg/ml 3ml|Allergan|Programas Comerciais Abbvie|R$ 170,30|R$ 172,52
+Xalatan Latanoprosta 50mcg/ml 2,5ml|Viatris|LOGIXPHARMA|R$ 248,76|R$ 259,25
+Combigan Brimonidina + Timolol 5ml|Allergan|Programas Comerciais Abbvie|R$ 162,14|R$ 164,24
+Hyabak Solução Oftálmica 10ml|Thea|Programa parceiro|Sob consulta|
+Systane UL Solução Oftálmica 10ml|Alcon|Programa parceiro|Sob consulta|
+Lacrifilm Solução Oftálmica 15ml|Latinofarma|Programa parceiro|Sob consulta|
+    `),
+  },
+);
+
+function pbmPartnerNames() {
+  const partnerNames = [
+    ...pbmPrograms,
+    ...pbmTreatmentGroups.flatMap((group) =>
+      group.items.flatMap((item) => [item.brand, item.program]).filter(Boolean),
+    ),
+  ];
+  const uniquePartners = new Map();
+  partnerNames.forEach((name) => {
+    const key = normalizeText(name);
+    if (!uniquePartners.has(key)) uniquePartners.set(key, name);
+  });
+  return [...uniquePartners.values()].sort((a, b) => a.localeCompare(b, "pt-BR"));
+}
+
+const pbmPartnerPrograms = [
+  { lab: "Allergan", program: "Viver +", logo: "Viver+", color: "#164b9b" },
+  { lab: "Novo Nordisk", program: "Novo Dia", logo: "NovoDia", color: "#1f5a9a" },
+  { lab: "Hypera", program: "Mantecorp Saúde", logo: "Mantecorp saúde", color: "#f27b22" },
+  { lab: "L'Oréal", program: "Dermaclub", logo: "DERMACLUB", color: "#f3a4c8" },
+  { lab: "Novartis", program: "Vale Mais Saúde", logo: "Vale mais saúde", color: "#f5821f" },
+  { lab: "Aché", program: "Cuidados pela Vida", logo: "Cuidados pela vida", color: "#1a7ed0" },
+  { lab: "AstraZeneca", program: "Programa Faz Bem", logo: "FazBem", color: "#8f2ca2" },
+  { lab: "Biolab", program: "Saúde em Evolução", logo: "Saúde em evolução", color: "#80bd2c" },
+  { lab: "GSK", program: "Viver Mais", logo: "Viver Mais", color: "#f27c21" },
+  { lab: "Bioderma", program: "My Naos Club", logo: "MyNAOS Club", color: "#432b7d" },
+  { lab: "Viatris", program: "Secuda", logo: "SECUIDA", color: "#7f4ba5" },
+  { lab: "Boehringer", program: "Abraçar a Vida", logo: "Abraçar a Vida", color: "#00a4a6" },
+  { lab: "Knight", program: "Caminhando Juntos", logo: "Caminhando Juntos", color: "#f08422" },
+  { lab: "Lilly", program: "Melhor para Você", logo: "Lilly", color: "#e53935" },
+  { lab: "EMS", program: "EMS Saúde", logo: "EMS Saúde", color: "#0072bc" },
+  { lab: "Chiesi", program: "Programa Acessar", logo: "Acessar", color: "#4b246c" },
+  { lab: "MSD", program: "Receita de Vida", logo: "Receita de Vida", color: "#7fbe31" },
+  { lab: "União Química", program: "União com Você", logo: "União com Você", color: "#2368a7" },
+  { lab: "Abbott", program: "Abrace a Vida", logo: "Abbott", color: "#009cde" },
+  { lab: "Mundipharma", program: "Programa Cuidar", logo: "Cuidar", color: "#0f6f4b" },
+  { lab: "Diffucap", program: "Diffucare", logo: "Diffucare", color: "#0f6fbd" },
+  { lab: "Zion", program: "Endogen - Cann Doc", logo: "Zion", color: "#26362f" },
+  { lab: "Sanofi", program: "Programa de Benefícios", logo: "Sanofi", color: "#5a4db2" },
+];
+
 function hasProductVariants(product) {
   return Boolean(product?.variants?.length);
 }
@@ -1594,6 +4138,33 @@ function productVariantOptions(product) {
 function productBasePrice(product) {
   const variants = productVariantOptions(product);
   return variants.length ? Math.min(...variants.map((variant) => variant.price)) : product.price;
+}
+
+function selectedVariantForProduct(product) {
+  const variants = productVariantOptions(product);
+  if (!variants.length) return null;
+
+  const savedId = state.selectedVariants[product.id];
+  return (
+    variants.find((variant) => variant.id === savedId) ||
+    variants.find((variant) => normalizeText(variant.detail) === normalizeText(product.detail)) ||
+    variants[0]
+  );
+}
+
+function productPageQuantityKey(productId, itemId) {
+  return `${productId}:${itemId}`;
+}
+
+function productPageQuantity(productId, itemId) {
+  const key = productPageQuantityKey(productId, itemId);
+  return Math.max(1, Math.min(99, Number(state.productPageQuantities[key] || 1)));
+}
+
+function variantSelectorLabel(variant) {
+  const label = variant.label || variant.detail || "Opcao";
+  const comprimidos = String(label).match(/(\d+)\s*comprim/i);
+  return comprimidos ? `${comprimidos[1]} Comps` : label;
 }
 
 function getVariantProduct(id) {
@@ -1621,6 +4192,21 @@ function getVariantProduct(id) {
 
 const getProduct = (id) => products.find((product) => product.id === id) || getVariantProduct(id);
 const ANVISA_BULARIO_URL = "https://www.gov.br/anvisa/pt-br/sistemas/bulario-eletronico";
+const DEFAULT_MEDICINE_IMAGE = "assets/products/medicine-placeholder.svg";
+const LEGACY_PRODUCT_PLACEHOLDERS = new Set([
+  "assets/products/prescription-box.svg",
+  "assets/products/pbm-generic-box-green.svg",
+  "assets/products/pbm-generic-box-orange.svg",
+]);
+
+function productImageSrc(image) {
+  const source = image || DEFAULT_MEDICINE_IMAGE;
+  return LEGACY_PRODUCT_PLACEHOLDERS.has(source) ? DEFAULT_MEDICINE_IMAGE : source;
+}
+
+function productImageFallbackAttribute() {
+  return `onerror="this.onerror=null;this.src='${DEFAULT_MEDICINE_IMAGE}'"`;
+}
 
 const svg = (name) => `<svg aria-hidden="true" viewBox="0 0 24 24">${icons[name]}</svg>`;
 
@@ -1738,59 +4324,617 @@ const escapeHtml = (value) =>
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 
+const PRESCRIPTION_MEDICINE_WARNING =
+  "Venda sob prescrição médica. Seu uso pode trazer riscos. Procure um médico ou um farmacêutico. Leia a bula. Medicamentos podem causar efeitos indesejados. Evite a automedicação: informe-se com o farmacêutico.";
+
+const medicineDetailOverrides = {
+  dorflex: {
+    leafletUrl: "https://www.dorflex.com.br/dam/jcr%3A2bef930c-3ee0-4876-9a42-ac3a13c71699/bula_comprimidos-1.pdf",
+    mechanism: "A associação atua no alívio da dor e da tensão muscular conforme ação dos princípios ativos descritos em bula.",
+    indication: "Indicado para alívio de dores associadas a contraturas musculares, incluindo dor de cabeça tensional, conforme bula.",
+    contraindication: "Não utilizar em caso de alergia aos componentes ou contraindicações descritas na bula. Pessoas com condições de saúde específicas devem consultar médico ou farmacêutico.",
+    howToTake: "Uso oral. Tomar o comprimido com água, sem partir ou mastigar, seguindo a posologia da bula da apresentação escolhida ou a orientação do médico/farmacêutico.",
+    instructions: "Não associe com outros analgésicos, relaxantes musculares ou bebidas alcoólicas sem orientação. Se a dor persistir, piorar ou vier com outros sintomas, procure atendimento antes de continuar usando.",
+    adverseReactions: "Podem ocorrer reações alérgicas, sonolência, tontura, desconfortos gastrointestinais e outros efeitos indesejados descritos em bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Analgésico e relaxante muscular",
+    lifeStage: "Adultos; uso pediátrico somente conforme bula e orientação profissional",
+    bodyPart: "Sistema musculoesquelético / dor",
+    conditions: "Dores musculares, contraturas e cefaleia tensional",
+    administration: "Uso oral",
+    medicineType: "Referência",
+    prescriptionRequired: false,
+  },
+  tylenol: {
+    leafletUrl: "https://assets.ctfassets.net/yyofp6qm4inx/7Fli1sanJsElZO0AnxZu6N/fb734517541ff4d2d186f02e387947a8/Bula_Tylenol-500mg-e-750mg.pdf",
+    mechanism: "O paracetamol atua principalmente no sistema nervoso central, auxiliando no controle da dor e da febre conforme bula.",
+    indication: "Indicado para alívio temporário de dores leves a moderadas e redução da febre, conforme apresentação e bula.",
+    contraindication: "Contraindicado para pessoas com alergia ao paracetamol. Em doença hepática, uso de álcool ou uso de outros medicamentos, consultar orientação profissional.",
+    howToTake: "Uso oral. Tomar com água, respeitando a concentração escolhida e o intervalo indicado na bula. Crianças devem usar somente apresentação e dose compatíveis com idade/peso.",
+    instructions: "Não use junto com outro medicamento que contenha paracetamol sem conferir a composição. Evite álcool durante o uso e procure orientação se febre ou dor persistirem.",
+    adverseReactions: "Podem ocorrer reações alérgicas, alterações de pele, desconfortos gastrointestinais e riscos hepáticos em uso inadequado.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Analgésico e antitérmico",
+    lifeStage: "Adultos e crianças conforme idade, peso e apresentação",
+    bodyPart: "Dor e febre / sistema nervoso central",
+    conditions: "Dor e febre",
+    administration: "Uso oral",
+    medicineType: "Referência",
+    prescriptionRequired: false,
+  },
+  benegrip: {
+    leafletUrl: "https://www.benegrip.com.br/bula-benegrip/",
+    mechanism: "Combina ativos para auxiliar no controle de sintomas gripais conforme a composição da apresentação escolhida.",
+    indication: "Indicado para sintomas de gripes e resfriados conforme bula e avaliação do perfil do cliente.",
+    contraindication: "Não utilizar em caso de alergia aos componentes ou contraindicações da bula. Atenção especial para gestantes, lactantes, crianças, hipertensos e pessoas com doenças crônicas.",
+    howToTake: "Uso oral. Tomar com água conforme a apresentação selecionada, respeitando o intervalo e a duração de uso orientados na bula ou pelo farmacêutico.",
+    instructions: "Não combine com outros antigripais, analgésicos ou medicamentos para gripe sem conferir os princípios ativos. Pode causar sonolência em algumas pessoas; tenha cuidado ao dirigir ou operar máquinas.",
+    adverseReactions: "Podem ocorrer sonolência, desconfortos gastrointestinais, reações alérgicas e outros efeitos descritos na bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Antigripal",
+    lifeStage: "Adultos; outras idades conforme bula da apresentação",
+    bodyPart: "Sistema respiratório",
+    conditions: "Sintomas de gripes e resfriados",
+    administration: "Uso oral",
+    medicineType: "Similar / medicamento de marca",
+    prescriptionRequired: false,
+  },
+  buscopan: {
+    mechanism: "Atua no alívio de espasmos e dores abdominais conforme ação dos princípios ativos descritos na bula.",
+    indication: "Indicado para cólicas e dores abdominais conforme bula e avaliação do cliente.",
+    contraindication: "Contraindicado em alergia aos componentes e nas condições descritas em bula. Em dor persistente, procurar atendimento.",
+    howToTake: "Uso oral. Tomar com água, conforme a apresentação e posologia indicadas em bula ou orientação profissional.",
+    instructions: "Não use para dor abdominal intensa, dor persistente, febre, vômitos ou suspeita de condição aguda sem avaliação. Informe ao farmacêutico outros medicamentos em uso.",
+    adverseReactions: "Podem ocorrer reações alérgicas, boca seca, tontura, desconfortos e outros efeitos descritos em bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Antiespasmódico e analgésico",
+    lifeStage: "Adultos e adolescentes conforme bula",
+    bodyPart: "Trato gastrointestinal",
+    conditions: "Cólicas e dores abdominais",
+    administration: "Uso oral",
+    medicineType: "Referência",
+    prescriptionRequired: false,
+  },
+  neosaldina: {
+    mechanism: "Associação analgésica que auxilia no alívio da dor conforme ação dos ativos descritos em bula.",
+    indication: "Indicada para dores de cabeça e dores leves a moderadas conforme bula.",
+    contraindication: "Não usar em alergia aos componentes ou contraindicações descritas em bula. Atenção a uso concomitante com outros analgésicos.",
+    howToTake: "Uso oral. Tomar com água, respeitando a posologia da bula e evitando uso contínuo sem orientação.",
+    instructions: "Evite associar com outros analgésicos sem conferir composição. Se a dor de cabeça for frequente, muito forte ou diferente do habitual, procure atendimento.",
+    adverseReactions: "Podem ocorrer reações alérgicas, tontura, desconfortos gastrointestinais e outros efeitos indesejados.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Analgésico",
+    lifeStage: "Adultos; outras idades conforme bula",
+    bodyPart: "Dor / sistema nervoso central",
+    conditions: "Dor de cabeça e dores em geral",
+    administration: "Uso oral",
+    medicineType: "Referência",
+    prescriptionRequired: false,
+  },
+  "novalgina-1g": {
+    mechanism: "A dipirona atua como analgésico e antitérmico, auxiliando no controle da dor e da febre conforme bula.",
+    indication: "Indicada para dor e febre conforme apresentação e orientação de uso.",
+    contraindication: "Não usar em alergia à dipirona/pirazolonas ou contraindicações descritas em bula. Atenção a histórico de reações alérgicas.",
+    howToTake: "Uso oral. Tomar com água, conforme a apresentação escolhida e a posologia da bula. Em crianças, confirmar dose por peso e idade.",
+    instructions: "Não ultrapasse o limite diário da bula. Procure orientação se febre persistir, se houver dor intensa ou se já usa outros analgésicos/antitérmicos.",
+    adverseReactions: "Podem ocorrer reações alérgicas, queda de pressão, alterações sanguíneas raras e outros efeitos descritos em bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Analgésico e antitérmico",
+    lifeStage: "Adultos e crianças conforme apresentação e peso",
+    bodyPart: "Dor e febre",
+    conditions: "Dor e febre",
+    administration: "Uso oral",
+    medicineType: "Referência",
+    prescriptionRequired: false,
+  },
+  "allegra-120": {
+    mechanism: "A fexofenadina é um antialérgico que auxilia no controle de sintomas alérgicos conforme bula.",
+    indication: "Indicada para sintomas de rinite alérgica e manifestações alérgicas conforme apresentação.",
+    contraindication: "Não utilizar em caso de alergia à fexofenadina ou a componentes da fórmula.",
+    howToTake: "Uso oral. Tomar com água, respeitando a apresentação e o intervalo indicados em bula. Evite tomar junto com sucos de fruta se a bula orientar separação.",
+    instructions: "Confira a idade mínima da apresentação. Se os sintomas não melhorarem, piorarem ou vierem com falta de ar/inchaço, procure atendimento.",
+    adverseReactions: "Podem ocorrer dor de cabeça, sonolência, náusea, tontura e outros efeitos descritos em bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Antialérgico / anti-histamínico",
+    lifeStage: "Adultos e crianças conforme apresentação",
+    bodyPart: "Sistema respiratório e pele",
+    conditions: "Rinite alérgica, urticária e sintomas alérgicos",
+    administration: "Uso oral",
+    medicineType: "Referência",
+    prescriptionRequired: false,
+  },
+  "luftal-gel": {
+    mechanism: "A simeticona auxilia na redução da tensão superficial de bolhas de gases no trato gastrointestinal, conforme bula.",
+    indication: "Indicada para gases e desconforto abdominal associado ao acúmulo de gases.",
+    contraindication: "Não usar em alergia à simeticona ou componentes. Dor intensa/persistente exige avaliação profissional.",
+    howToTake: "Uso oral. Tomar conforme apresentação escolhida, geralmente após orientação da bula para horário e quantidade.",
+    instructions: "Se houver dor abdominal intensa, vômitos, febre, prisão de ventre importante ou sintomas persistentes, não continue apenas com automedicação.",
+    adverseReactions: "Efeitos indesejados são incomuns, mas podem ocorrer reações de sensibilidade e outros eventos descritos em bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Antiflatulento",
+    lifeStage: "Adultos e crianças conforme apresentação",
+    bodyPart: "Trato gastrointestinal",
+    conditions: "Gases e desconforto abdominal",
+    administration: "Uso oral",
+    medicineType: "Referência",
+    prescriptionRequired: false,
+  },
+  cimegripe: {
+    mechanism: "Associação antigripal que auxilia no alívio de sintomas conforme composição da apresentação escolhida.",
+    indication: "Indicado para sintomas de gripes e resfriados conforme bula.",
+    contraindication: "Não usar em alergia aos componentes ou contraindicações de bula. Atenção a doenças crônicas, gestação e uso de outros medicamentos.",
+    howToTake: "Uso oral. Tomar com água, seguindo a posologia da apresentação escolhida e respeitando o tempo máximo de uso da bula.",
+    instructions: "Evite associar com outros antigripais, paracetamol, dipirona ou descongestionantes sem conferência da composição. Hipertensos, gestantes e pessoas com doenças crônicas devem consultar a equipe.",
+    adverseReactions: "Podem ocorrer sonolência, tontura, desconfortos, reações alérgicas e outros efeitos descritos em bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Antigripal",
+    lifeStage: "Adultos; demais idades conforme bula",
+    bodyPart: "Sistema respiratório",
+    conditions: "Sintomas gripais e resfriado",
+    administration: "Uso oral",
+    medicineType: "Similar / medicamento de marca",
+    prescriptionRequired: false,
+  },
+  "eno-laranja": {
+    mechanism: "Os sais antiácidos ajudam a neutralizar a acidez gástrica conforme informações da embalagem/bula.",
+    indication: "Indicado para azia, má digestão e desconforto associado à acidez, conforme embalagem.",
+    contraindication: "Não usar em alergia aos componentes. Pessoas com restrição de sódio, hipertensão, doença renal ou dieta controlada devem buscar orientação.",
+    howToTake: "Uso oral após preparo. Dissolver a quantidade indicada em água, aguardar a efervescência e ingerir conforme instruções da embalagem.",
+    instructions: "Não use repetidamente por vários dias sem orientação. Pessoas com restrição de sódio, pressão alta, doença renal ou uso de medicamentos contínuos devem consultar a equipe antes.",
+    adverseReactions: "Podem ocorrer desconfortos gastrointestinais, reações de sensibilidade e eventos descritos na embalagem/bula.",
+    classification: "Produto isento de prescrição - validar regularização",
+    drugClass: "Antiácido",
+    lifeStage: "Adultos; outras idades conforme embalagem",
+    bodyPart: "Estômago / trato gastrointestinal",
+    conditions: "Azia e má digestão",
+    administration: "Uso oral após diluição em água",
+    medicineType: "OTC / MIP",
+    prescriptionRequired: false,
+  },
+};
+
+Object.assign(medicineDetailOverrides, {
+  "dipirona-generica": {
+    mechanism: "Atua como analgésico e antitérmico, auxiliando no controle de dor e febre conforme bula.",
+    indication: "Indicada para dor e febre conforme apresentação, idade e orientação profissional.",
+    contraindication: "Não usar em caso de alergia à dipirona/pirazolonas ou contraindicações descritas na bula.",
+    howToTake: "Uso oral. Seguir a posologia da apresentação escolhida e evitar associações sem conferência de composição.",
+    instructions: "Procure orientação se febre persistir, se houver reação alérgica, queda de pressão ou uso de outros analgésicos.",
+    adverseReactions: "Podem ocorrer reações alérgicas, queda de pressão, alterações sanguíneas raras e outros efeitos descritos em bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Analgésico e antitérmico",
+    lifeStage: "Adultos e crianças conforme apresentação, idade e peso",
+    bodyPart: "Dor e febre",
+    conditions: "Dor, febre e mal-estar",
+    administration: "Uso oral",
+    medicineType: "Genérico",
+    prescriptionRequired: false,
+  },
+  "losartana-generica": {
+    mechanism: "Age no sistema renina-angiotensina, auxiliando no controle da pressão arterial conforme prescrição.",
+    indication: "Indicada para hipertensão e outras condições cardiovasculares conforme avaliação médica.",
+    contraindication: "Não usar em alergia aos componentes, gestação ou contraindicações descritas em bula.",
+    howToTake: "Uso oral contínuo. Tomar conforme prescrição, no horário orientado, sem interromper por conta própria.",
+    instructions: "Acompanhar pressão, exames e uso de outros anti-hipertensivos. Informe tontura, mal-estar ou suspeita de gravidez.",
+    adverseReactions: "Podem ocorrer tontura, queda de pressão, alterações laboratoriais e outros efeitos descritos em bula.",
+    classification: "Tarja vermelha - venda sob prescrição",
+    drugClass: "Anti-hipertensivo / bloqueador do receptor de angiotensina",
+    lifeStage: "Adultos; outras idades somente conforme prescrição",
+    bodyPart: "Sistema cardiovascular",
+    conditions: "Hipertensão arterial e proteção cardiovascular conforme prescrição",
+    administration: "Uso oral",
+    medicineType: "Genérico",
+    prescriptionRequired: true,
+  },
+  "amoxicilina-500": {
+    mechanism: "Antibiótico penicilínico que atua contra bactérias sensíveis conforme avaliação médica.",
+    indication: "Indicada para infecções bacterianas específicas, sempre conforme prescrição.",
+    contraindication: "Não usar em alergia a penicilinas, cefalosporinas ou contraindicações da bula.",
+    howToTake: "Uso oral. Tomar exatamente nos horários e pelo tempo prescritos, mesmo que os sintomas melhorem.",
+    instructions: "Não usar sobras, não compartilhar e não interromper o tratamento antes do prazo prescrito.",
+    adverseReactions: "Podem ocorrer náuseas, diarreia, candidíase, reações alérgicas e outros efeitos descritos em bula.",
+    classification: "Tarja vermelha - antibiótico com retenção de receita",
+    drugClass: "Antibiótico penicilínico",
+    lifeStage: "Adultos e crianças conforme apresentação e prescrição",
+    bodyPart: "Infecções bacterianas em diferentes sistemas",
+    conditions: "Infecções bacterianas sensíveis",
+    administration: "Uso oral",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: true,
+  },
+  "sertralina-50": {
+    mechanism: "Inibidor seletivo da recaptação de serotonina, usado conforme avaliação médica.",
+    indication: "Indicada para condições de saúde mental conforme diagnóstico e prescrição.",
+    contraindication: "Não usar sem prescrição, em alergia aos componentes ou associações contraindicadas em bula.",
+    howToTake: "Uso oral contínuo. Tomar conforme prescrição e não interromper abruptamente sem orientação.",
+    instructions: "Acompanhar início do tratamento, efeitos de humor, sono e interações. Procure orientação em piora clínica.",
+    adverseReactions: "Podem ocorrer náuseas, alterações de sono, tontura, boca seca, alterações sexuais e outros efeitos.",
+    classification: "Tarja vermelha - venda sob prescrição com controle conforme regra aplicável",
+    drugClass: "Antidepressivo ISRS",
+    lifeStage: "Adultos; outras idades somente conforme prescrição",
+    bodyPart: "Sistema nervoso central",
+    conditions: "Condições de saúde mental conforme prescrição",
+    administration: "Uso oral",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: true,
+  },
+  "complexo-b-injetavel": {
+    mechanism: "Fornece vitaminas do complexo B conforme composição da ampola e indicação profissional.",
+    indication: "Indicado quando houver necessidade clínica ou prescrição/orientação para reposição injetável.",
+    contraindication: "Não aplicar em alergia aos componentes ou sem avaliação de indicação e segurança.",
+    howToTake: "Uso injetável. Aplicação apenas por profissional habilitado e conforme prescrição/orientação.",
+    instructions: "Conferir receita quando aplicável, via de administração, lote, validade e condições do cliente antes da aplicação.",
+    adverseReactions: "Podem ocorrer dor local, vermelhidão, reação alérgica e outros efeitos descritos em bula.",
+    classification: "Injetável - validar tarja e prescrição da apresentação",
+    drugClass: "Vitaminas / reposição injetável",
+    lifeStage: "Adultos; outras idades conforme prescrição",
+    bodyPart: "Metabolismo e sistema nervoso conforme indicação",
+    conditions: "Reposição vitamínica conforme avaliação",
+    administration: "Uso intramuscular ou conforme bula/prescrição",
+    medicineType: "Similar / genérico conforme laboratório",
+    prescriptionRequired: true,
+  },
+  "vick-pyrena": {
+    mechanism: "Auxilia no controle de dor e febre conforme princípio ativo e apresentação escolhida.",
+    indication: "Indicado para sintomas leves de resfriado, dor e febre conforme bula.",
+    contraindication: "Não usar em alergia aos componentes, doença hepática relevante ou associação indevida com paracetamol.",
+    howToTake: "Preparar conforme envelope/embalagem e respeitar intervalo e limite diário da bula.",
+    instructions: "Não associar com outros produtos contendo paracetamol sem conferir a composição.",
+    adverseReactions: "Podem ocorrer reações alérgicas, desconfortos gastrointestinais e outros efeitos descritos em bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Analgésico e antitérmico para sintomas de resfriado",
+    lifeStage: "Adultos; outras idades conforme bula",
+    bodyPart: "Dor, febre e sintomas respiratórios leves",
+    conditions: "Sintomas de resfriado conforme bula",
+    administration: "Uso oral após preparo",
+    medicineType: "Medicamento de marca",
+    prescriptionRequired: false,
+  },
+  "ibuprofeno-400": {
+    mechanism: "Anti-inflamatório não esteroidal que auxilia no controle de dor, febre e inflamação conforme bula.",
+    indication: "Indicado para dor, febre e processos inflamatórios leves conforme apresentação e orientação.",
+    contraindication: "Não usar em alergia a anti-inflamatórios, úlcera ativa, insuficiência renal/hepática grave ou contraindicações de bula.",
+    howToTake: "Uso oral. Tomar conforme bula/orientação, preferencialmente com alimento quando indicado.",
+    instructions: "Evite associar com outros anti-inflamatórios. Gestantes, idosos e pessoas com doença gástrica, renal ou cardíaca devem consultar a equipe.",
+    adverseReactions: "Podem ocorrer desconforto gástrico, náuseas, tontura, reações alérgicas e outros efeitos.",
+    classification: "Sem tarja / MIP - validar apresentação e concentração",
+    drugClass: "Anti-inflamatório não esteroidal, analgésico e antitérmico",
+    lifeStage: "Adultos e adolescentes conforme apresentação; pediátrico por peso/idade conforme bula",
+    bodyPart: "Dor, febre e inflamação",
+    conditions: "Dores leves a moderadas, febre e inflamações leves",
+    administration: "Uso oral",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: false,
+  },
+  "omeprazol-20": {
+    mechanism: "Reduz a produção de ácido no estômago, auxiliando no controle de sintomas gástricos conforme indicação.",
+    indication: "Indicado para refluxo, azia e outras condições gástricas conforme bula/prescrição.",
+    contraindication: "Não usar em alergia ao omeprazol ou componentes; sintomas persistentes exigem avaliação.",
+    howToTake: "Uso oral. Tomar conforme bula ou prescrição, respeitando horário e duração recomendados.",
+    instructions: "Procure orientação se houver perda de peso, vômitos persistentes, sangue, dor intensa ou uso prolongado.",
+    adverseReactions: "Podem ocorrer dor de cabeça, náuseas, gases, diarreia/constipação e outros efeitos descritos em bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Inibidor da bomba de prótons",
+    lifeStage: "Adultos; outras idades conforme prescrição",
+    bodyPart: "Estômago / trato gastrointestinal",
+    conditions: "Azia, refluxo e gastrite conforme orientação",
+    administration: "Uso oral",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: false,
+  },
+  "loratadina-10": {
+    mechanism: "Anti-histamínico que auxilia no controle de sintomas alérgicos conforme bula.",
+    indication: "Indicada para rinite alérgica, urticária e sintomas de alergia conforme apresentação.",
+    contraindication: "Não usar em alergia à loratadina ou componentes da fórmula.",
+    howToTake: "Uso oral. Tomar conforme bula e respeitar a idade mínima da apresentação.",
+    instructions: "Consultar orientação em gestação, lactação, doença hepática ou sintomas persistentes.",
+    adverseReactions: "Podem ocorrer sonolência, dor de cabeça, boca seca, náusea e outros efeitos descritos em bula.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Antialérgico / anti-histamínico",
+    lifeStage: "Adultos e crianças conforme apresentação",
+    bodyPart: "Sistema respiratório e pele",
+    conditions: "Rinite alérgica, urticária e sintomas alérgicos",
+    administration: "Uso oral",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: false,
+  },
+  "cetirizina-10": {
+    mechanism: "Anti-histamínico que bloqueia efeitos da histamina associados a sintomas alérgicos.",
+    indication: "Indicada para rinite, urticária e sintomas alérgicos conforme bula.",
+    contraindication: "Não usar em alergia aos componentes ou contraindicações descritas na bula.",
+    howToTake: "Uso oral. Tomar conforme bula e observar possíveis efeitos de sonolência.",
+    instructions: "Evite álcool e cautela ao dirigir se houver sonolência. Consulte orientação em doença renal ou uso de sedativos.",
+    adverseReactions: "Podem ocorrer sonolência, fadiga, boca seca, dor de cabeça e outros efeitos.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Antialérgico / anti-histamínico",
+    lifeStage: "Adultos e crianças conforme apresentação",
+    bodyPart: "Sistema respiratório e pele",
+    conditions: "Rinite alérgica, urticária e alergias",
+    administration: "Uso oral",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: false,
+  },
+  "acetilcisteina-600": {
+    mechanism: "Mucolítico que ajuda a fluidificar secreções respiratórias conforme bula.",
+    indication: "Indicada para secreção/catarro em condições respiratórias conforme avaliação e bula.",
+    contraindication: "Não usar em alergia ao componente. Pessoas com asma ou úlcera devem buscar orientação.",
+    howToTake: "Uso oral. Preparar envelope ou tomar xarope conforme bula da apresentação escolhida.",
+    instructions: "Procure orientação se houver falta de ar, febre persistente, sangue no escarro ou sintomas prolongados.",
+    adverseReactions: "Podem ocorrer náuseas, vômitos, desconforto gástrico, reações alérgicas e outros efeitos.",
+    classification: "Sem tarja / MIP - validar apresentação",
+    drugClass: "Mucolítico / expectorante",
+    lifeStage: "Adultos e crianças conforme apresentação",
+    bodyPart: "Sistema respiratório",
+    conditions: "Tosse com secreção e fluidificação de muco conforme bula",
+    administration: "Uso oral",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: false,
+  },
+  "diclofenaco-50": {
+    mechanism: "Anti-inflamatório não esteroidal que atua no controle de dor e inflamação conforme prescrição.",
+    indication: "Indicado para dores e processos inflamatórios conforme avaliação médica.",
+    contraindication: "Não usar em alergia a AINEs, úlcera ativa, sangramento, insuficiências graves ou contraindicações de bula.",
+    howToTake: "Uso oral ou tópico conforme apresentação. Seguir dose e duração prescritas.",
+    instructions: "Evite uso junto com outros anti-inflamatórios. Informe gastrite, pressão alta, doença renal/cardiovascular ou anticoagulantes.",
+    adverseReactions: "Podem ocorrer dor gástrica, náusea, tontura, retenção de líquidos, reações alérgicas e outros efeitos.",
+    classification: "Tarja vermelha - venda sob prescrição",
+    drugClass: "Anti-inflamatório não esteroidal",
+    lifeStage: "Adultos; outras idades conforme prescrição",
+    bodyPart: "Dor e inflamação",
+    conditions: "Dores inflamatórias conforme prescrição",
+    administration: "Uso oral ou tópico conforme apresentação",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: true,
+  },
+  "nimesulida-100": {
+    mechanism: "Anti-inflamatório não esteroidal que auxilia no controle de dor e inflamação conforme prescrição.",
+    indication: "Indicada para processos dolorosos e inflamatórios conforme avaliação médica.",
+    contraindication: "Não usar em doença hepática, alergia a AINEs, úlcera ativa ou contraindicações descritas em bula.",
+    howToTake: "Uso oral. Usar pelo tempo prescrito e não prolongar sem reavaliação.",
+    instructions: "Atenção a sintomas hepáticos, dor gástrica e interações. Gestantes e idosos precisam de avaliação específica.",
+    adverseReactions: "Podem ocorrer náuseas, desconfortos gástricos, alterações hepáticas, tontura e outros efeitos.",
+    classification: "Tarja vermelha - venda sob prescrição",
+    drugClass: "Anti-inflamatório não esteroidal",
+    lifeStage: "Adultos; outras idades conforme prescrição",
+    bodyPart: "Dor e inflamação",
+    conditions: "Dores e inflamações conforme prescrição",
+    administration: "Uso oral",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: true,
+  },
+  "metformina-850": {
+    mechanism: "Auxilia no controle da glicose, principalmente reduzindo produção hepática de glicose e melhorando sensibilidade à insulina.",
+    indication: "Indicada para diabetes tipo 2 e outras situações conforme prescrição e acompanhamento.",
+    contraindication: "Não usar sem avaliação em insuficiência renal importante, acidose ou contraindicações da bula.",
+    howToTake: "Uso oral contínuo. Tomar conforme prescrição, geralmente junto às refeições quando orientado.",
+    instructions: "Acompanhar glicemia, função renal e sintomas gastrointestinais. Não interromper sem orientação.",
+    adverseReactions: "Podem ocorrer náuseas, diarreia, desconforto abdominal, alteração de paladar e eventos raros descritos em bula.",
+    classification: "Tarja vermelha - venda sob prescrição",
+    drugClass: "Antidiabético oral",
+    lifeStage: "Adultos; outras idades conforme prescrição",
+    bodyPart: "Metabolismo / glicemia",
+    conditions: "Diabetes tipo 2 conforme prescrição",
+    administration: "Uso oral",
+    medicineType: "Genérico",
+    prescriptionRequired: true,
+  },
+  "sinvastatina-20": {
+    mechanism: "Estatina que reduz a síntese de colesterol no fígado conforme acompanhamento médico.",
+    indication: "Indicada para controle de colesterol e redução de risco cardiovascular conforme prescrição.",
+    contraindication: "Não usar em doença hepática ativa, gestação, lactação ou contraindicações descritas em bula.",
+    howToTake: "Uso oral contínuo. Tomar conforme prescrição, respeitando horário recomendado.",
+    instructions: "Informe dor muscular, fraqueza, urina escura ou uso de medicamentos que possam interagir.",
+    adverseReactions: "Podem ocorrer dor muscular, alterações hepáticas, desconfortos gastrointestinais e outros efeitos.",
+    classification: "Tarja vermelha - venda sob prescrição",
+    drugClass: "Estatina / hipolipemiante",
+    lifeStage: "Adultos; outras idades conforme prescrição",
+    bodyPart: "Sistema cardiovascular / metabolismo lipídico",
+    conditions: "Colesterol alto e prevenção cardiovascular conforme prescrição",
+    administration: "Uso oral",
+    medicineType: "Genérico",
+    prescriptionRequired: true,
+  },
+  "enalapril-10": {
+    mechanism: "Inibidor da ECA que auxilia no controle da pressão arterial e função cardíaca conforme prescrição.",
+    indication: "Indicado para hipertensão e condições cardiovasculares conforme avaliação médica.",
+    contraindication: "Não usar em histórico de angioedema, gestação ou contraindicações de bula.",
+    howToTake: "Uso oral contínuo. Tomar conforme prescrição e monitorar pressão.",
+    instructions: "Informar tosse persistente, tontura, inchaço, alterações renais ou uso de diuréticos/potássio.",
+    adverseReactions: "Podem ocorrer tosse seca, tontura, queda de pressão, alterações de potássio e outros efeitos.",
+    classification: "Tarja vermelha - venda sob prescrição",
+    drugClass: "Anti-hipertensivo / inibidor da ECA",
+    lifeStage: "Adultos; outras idades conforme prescrição",
+    bodyPart: "Sistema cardiovascular",
+    conditions: "Hipertensão e condições cardíacas conforme prescrição",
+    administration: "Uso oral",
+    medicineType: "Genérico",
+    prescriptionRequired: true,
+  },
+  "hidroclorotiazida-25": {
+    mechanism: "Diurético tiazídico que aumenta a eliminação de sódio e água, auxiliando no controle da pressão.",
+    indication: "Indicada para hipertensão e retenção de líquidos conforme prescrição.",
+    contraindication: "Não usar em alergia a sulfonamidas/tiazídicos ou contraindicações descritas em bula.",
+    howToTake: "Uso oral contínuo. Tomar conforme prescrição e orientação de horário.",
+    instructions: "Acompanhar pressão, hidratação, potássio/sódio e sintomas de tontura ou cãibras.",
+    adverseReactions: "Podem ocorrer tontura, aumento da urina, alterações de eletrólitos, sensibilidade à luz e outros efeitos.",
+    classification: "Tarja vermelha - venda sob prescrição",
+    drugClass: "Diurético tiazídico / anti-hipertensivo",
+    lifeStage: "Adultos; outras idades conforme prescrição",
+    bodyPart: "Sistema cardiovascular / renal",
+    conditions: "Hipertensão e edema conforme prescrição",
+    administration: "Uso oral",
+    medicineType: "Genérico",
+    prescriptionRequired: true,
+  },
+  "azitromicina-500": {
+    mechanism: "Antibiótico macrolídeo que atua contra bactérias sensíveis conforme prescrição médica.",
+    indication: "Indicada para infecções bacterianas específicas conforme avaliação médica.",
+    contraindication: "Não usar em alergia a macrolídeos ou contraindicações de bula.",
+    howToTake: "Uso oral. Tomar nos dias e horários prescritos, respeitando duração completa.",
+    instructions: "Não usar sem receita, não compartilhar e informar alergias, arritmias, doença hepática ou uso de outros medicamentos.",
+    adverseReactions: "Podem ocorrer diarreia, náuseas, dor abdominal, alterações hepáticas, reações alérgicas e outros efeitos.",
+    classification: "Tarja vermelha - antibiótico com retenção de receita",
+    drugClass: "Antibiótico macrolídeo",
+    lifeStage: "Adultos e crianças conforme apresentação/prescrição",
+    bodyPart: "Infecções bacterianas em diferentes sistemas",
+    conditions: "Infecções bacterianas sensíveis",
+    administration: "Uso oral",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: true,
+  },
+  "clonazepam-2": {
+    mechanism: "Benzodiazepínico que atua no sistema nervoso central conforme prescrição especializada.",
+    indication: "Indicado para condições neurológicas/psiquiátricas específicas conforme prescrição.",
+    contraindication: "Não usar sem receita, em alergia, insuficiência respiratória grave ou contraindicações da bula.",
+    howToTake: "Uso oral. Tomar somente conforme prescrição; não interromper abruptamente.",
+    instructions: "Evitar álcool, dirigir ou operar máquinas se houver sedação. Pode causar dependência e exige acompanhamento.",
+    adverseReactions: "Podem ocorrer sonolência, tontura, alteração de coordenação, memória, dependência e outros efeitos.",
+    classification: "Tarja preta - medicamento sujeito a controle especial",
+    drugClass: "Benzodiazepínico / anticonvulsivante-ansiolítico",
+    lifeStage: "Adultos; outras idades conforme prescrição especializada",
+    bodyPart: "Sistema nervoso central",
+    conditions: "Condições neurológicas/psiquiátricas conforme prescrição",
+    administration: "Uso oral",
+    medicineType: "Genérico / referência conforme laboratório",
+    prescriptionRequired: true,
+  },
+  "salbutamol-aerossol": {
+    mechanism: "Broncodilatador beta-2 agonista que ajuda a relaxar a musculatura das vias aéreas.",
+    indication: "Indicado para alívio/controle de broncoespasmo conforme prescrição e orientação.",
+    contraindication: "Não usar em alergia ao salbutamol ou componentes. Crises intensas exigem atendimento imediato.",
+    howToTake: "Uso inalatório. Utilizar conforme prescrição e técnica correta do dispositivo.",
+    instructions: "Se precisar usar com muita frequência, se não houver melhora ou se houver falta de ar importante, procurar atendimento.",
+    adverseReactions: "Podem ocorrer tremor, taquicardia, palpitações, dor de cabeça, irritação na garganta e outros efeitos.",
+    classification: "Tarja vermelha - venda sob prescrição",
+    drugClass: "Broncodilatador",
+    lifeStage: "Adultos e crianças conforme apresentação e prescrição",
+    bodyPart: "Sistema respiratório",
+    conditions: "Asma/broncoespasmo conforme prescrição",
+    administration: "Uso inalatório ou oral conforme apresentação",
+    medicineType: "Referência / similar conforme laboratório",
+    prescriptionRequired: true,
+  },
+  "prednisona-20": {
+    mechanism: "Corticoide com ação anti-inflamatória e imunomoduladora conforme prescrição.",
+    indication: "Indicada para condições inflamatórias, alérgicas e outras situações conforme avaliação médica.",
+    contraindication: "Não usar em alergia, infecções não controladas ou contraindicações descritas em bula sem avaliação.",
+    howToTake: "Uso oral. Tomar conforme prescrição; tratamentos prolongados podem exigir retirada gradual.",
+    instructions: "Informe diabetes, pressão alta, infecções, uso de anticoagulantes, vacinas recentes ou gestação.",
+    adverseReactions: "Podem ocorrer aumento de apetite, alteração de glicemia/pressão, insônia, irritação gástrica e outros efeitos.",
+    classification: "Tarja vermelha - venda sob prescrição",
+    drugClass: "Corticoide sistêmico",
+    lifeStage: "Adultos e crianças conforme prescrição",
+    bodyPart: "Inflamação / sistema imunológico",
+    conditions: "Inflamações, alergias e outras condições conforme prescrição",
+    administration: "Uso oral",
+    medicineType: "Genérico / similar conforme laboratório",
+    prescriptionRequired: true,
+  },
+});
+
 function productMedia(product, variant = "card") {
   const isDetail = variant === "detail";
   const mediaClass = isDetail ? "product-photo-frame detail-photo-frame" : "product-photo-frame";
-  const image = product.image || "assets/products/prescription-box.svg";
+  const image = productImageSrc(product.image);
 
   return `
     <div class="${mediaClass}">
-      <img class="product-photo" src="${escapeHtml(image)}" alt="${escapeHtml(product.name)}" loading="lazy" />
+      <img class="product-photo" src="${escapeHtml(image)}" alt="${escapeHtml(product.name)}" loading="lazy" ${productImageFallbackAttribute()} />
     </div>
   `;
 }
 
+function isTarjaOrPrescriptionMedicine(product) {
+  if (!product?.medicine) return false;
+
+  const override = medicineDetailOverrides[product.id] || {};
+  const profile = product.medicine || {};
+  const classificationText = normalizeText(
+    [
+      override.classification,
+      profile.classification,
+      product.keywords,
+      product.tag,
+      product.description,
+    ].filter(Boolean).join(" "),
+  );
+  const markedAsNoTarja =
+    classificationText.includes("sem tarja") ||
+    classificationText.includes("mip") ||
+    classificationText.includes("sem receita");
+  const markedAsTarja =
+    classificationText.includes("tarja vermelha") ||
+    classificationText.includes("tarja preta") ||
+    classificationText.includes("controlado") ||
+    classificationText.includes("prescricao");
+  const usesTarjaPlaceholder = [product.image, ...(product.gallery || [])]
+    .filter(Boolean)
+    .some((image) => image.includes("pbm-generic-box") || image.includes("prescription-box"));
+
+  return Boolean(override.prescriptionRequired ?? profile.prescriptionRequired) ||
+    usesTarjaPlaceholder ||
+    (!markedAsNoTarja && markedAsTarja);
+}
+
 function productGalleryMarkup(product) {
-  const images = [...new Set(product.gallery?.length ? product.gallery : [product.image])].filter(Boolean);
-  const visibleImages = images.length ? images : ["assets/products/prescription-box.svg"];
+  const imageCandidates = product.gallery?.length ? product.gallery : [product.image];
+  const visibleImages = [...new Set(imageCandidates.map(productImageSrc))].filter(Boolean);
   const profile = product.medicine;
-  const thumbImages = visibleImages.slice(0, 4);
+  const mainImage = visibleImages[0];
+  const showGalleryInfo = profile && !isTarjaOrPrescriptionMedicine(product);
+  const showThumbs = visibleImages.length > 1 || showGalleryInfo;
+  const leafletUrl = profile ? medicineLeafletUrl(product, profile) : "";
 
   return `
     <div class="product-gallery">
       <div class="product-gallery-main">
-        ${productMedia(product, "detail")}
+        <div class="product-photo-frame detail-photo-frame">
+          <img
+            class="product-photo"
+            data-gallery-main
+            src="${escapeHtml(mainImage)}"
+            alt="${escapeHtml(product.name)}"
+            loading="lazy"
+            ${productImageFallbackAttribute()}
+          />
+        </div>
       </div>
-      ${profile ? `
-        <div class="product-gallery-banner">
-          <span>Compra segura</span>
-          <strong>Confira apresentação, bula e estoque antes de finalizar.</strong>
+      ${showThumbs ? `
+        <div class="product-gallery-thumbs" aria-label="Galeria do produto">
+          ${visibleImages
+            .map(
+              (image, index) => `
+                <button
+                  type="button"
+                  class="gallery-thumb ${index === 0 ? "is-active" : ""}"
+                  data-gallery-image="${escapeHtml(image)}"
+                  data-gallery-alt="${escapeHtml(`${product.name} ${index + 1}`)}"
+                  aria-label="Ver foto ${index + 1} de ${escapeHtml(product.name)}"
+                >
+                  <img src="${escapeHtml(image)}" alt="${escapeHtml(product.name)} ${index + 1}" loading="lazy" ${productImageFallbackAttribute()} />
+                </button>
+              `,
+            )
+            .join("")}
+          ${showGalleryInfo ? `
+            <a class="gallery-thumb gallery-thumb-info" href="${escapeHtml(leafletUrl)}" target="_blank" rel="noopener">Bula</a>
+            <span class="gallery-thumb gallery-thumb-info">Estoque</span>
+          ` : ""}
         </div>
       ` : ""}
-      <div class="product-gallery-thumbs" aria-label="Galeria do produto">
-        ${thumbImages
-          .map(
-            (image, index) => `
-              <span class="gallery-thumb ${index === 0 ? "is-active" : ""}">
-                <img src="${escapeHtml(image)}" alt="${escapeHtml(product.name)} ${index + 1}" loading="lazy" />
-              </span>
-            `,
-          )
-          .join("")}
-        ${profile ? `
-          <span class="gallery-thumb gallery-thumb-info">Bula</span>
-          <span class="gallery-thumb gallery-thumb-info">Estoque</span>
-        ` : ""}
-      </div>
     </div>
   `;
 }
 
 function productHighlightsMarkup(product) {
-  const highlights = product.medicine?.highlights || [
-    product.stock || "Consultar estoque",
+  const availabilityLabel = productAvailabilityLabel(product, product.stock || "Consultar estoque");
+  const baseHighlights = product.medicine?.highlights || [
     "Retirada na loja ou entrega",
     "Cliente ON acumula pontos",
+  ];
+  const highlights = [
+    ...(availabilityLabel ? [availabilityLabel] : []),
+    ...baseHighlights.filter((item) => !isAvailabilityText(item)),
   ];
 
   return `
@@ -1800,48 +4944,112 @@ function productHighlightsMarkup(product) {
   `;
 }
 
-function medicineDetailsMarkup(product) {
+function medicineInfoValue(product, profile, key, fallback = "Consultar bula oficial e cadastro da loja.") {
+  const override = medicineDetailOverrides[product.id] || {};
+  return override[key] || profile[key] || fallback;
+}
+
+function medicineLeafletSearchTerm(product, profile = {}) {
+  const override = medicineDetailOverrides[product.id] || {};
+  return override.leafletSearchTerm || profile.leafletSearchTerm || product.name || profile.active || "";
+}
+
+function medicineLeafletUrl(product, profile) {
+  const override = medicineDetailOverrides[product.id] || {};
+  const directLeafletUrl = profile.leafletUrl || override.leafletUrl;
+  if (directLeafletUrl) return directLeafletUrl;
+
+  const searchTerm = medicineLeafletSearchTerm(product, profile);
+  return searchTerm
+    ? `https://consultas.anvisa.gov.br/#/bulario/q/?nomeProduto=${encodeURIComponent(searchTerm)}`
+    : ANVISA_BULARIO_URL;
+}
+
+function medicineDetailRows(product, profile, selectedVariant = null) {
+  const override = medicineDetailOverrides[product.id] || {};
+  const prescriptionRequired = Boolean(profile.prescriptionRequired ?? override.prescriptionRequired);
+
+  return [
+    ["Marca", product.name],
+    ["Classificação", override.classification || profile.classification || "Validar tarja no cadastro regulatório"],
+    ["Classe do medicamento", override.drugClass || profile.drugClass || product.tag || "Medicamento"],
+    ["Fases da vida", override.lifeStage || profile.lifeStage || "Validar idade minima conforme bula"],
+    ["Parte do corpo", override.bodyPart || profile.bodyPart || "Consultar indicacao da bula"],
+    ["Doenças e complicações", override.conditions || profile.conditions || "Consultar indicação da bula"],
+    ["Forma de administração", override.administration || profile.administration || "Uso conforme bula"],
+    ["Prescrição médica", prescriptionRequired ? "Sim" : "Não"],
+    ["Tipo de medicamento", override.medicineType || profile.medicineType || "A confirmar no cadastro real"],
+    ["Princípio ativo", profile.active || "Consultar bula oficial"],
+    ["Fabricante", profile.manufacturer || "A confirmar"],
+    ["Registro MS", profile.msRegister || "Consultar Bulario Anvisa"],
+    ["Apresentação escolhida", selectedVariant?.detail || product.detail],
+  ];
+}
+
+function medicineAccordionItem(title, text) {
+  return `
+    <details class="medicine-topic-item">
+      <summary>
+        <span>${escapeHtml(title)}</span>
+        <strong aria-hidden="true">⌄</strong>
+      </summary>
+      <p>${escapeHtml(text)}</p>
+    </details>
+  `;
+}
+
+function medicineDetailsMarkup(product, selectedVariant = null) {
   const profile = product.medicine;
   if (!profile) return "";
 
-  const rows = [
-    ["Marca", product.name],
-    ["Quantidade", product.detail],
-    ["Princípio ativo", profile.active],
-    ["Código do produto", profile.code],
-    ["Fabricante", profile.manufacturer],
-    ["Registro MS", profile.msRegister],
-    ["Dosagem", profile.dosage],
+  const override = medicineDetailOverrides[product.id] || {};
+  const prescriptionRequired = Boolean(profile.prescriptionRequired ?? override.prescriptionRequired);
+  const details = [
+    ["Para que serve", profile.purpose || product.description],
+    ["Qual é o princípio ativo dele", profile.active || "Consultar bula oficial."],
+    ["Como age no corpo", medicineInfoValue(product, profile, "mechanism")],
+    ["Como tomar o medicamento", medicineInfoValue(product, profile, "howToTake", profile.howToUse || "Tomar conforme a posologia da bula e orientação profissional.")],
+    ["Instruções de uso", medicineInfoValue(product, profile, "instructions", profile.howToUse || "Utilizar conforme bula e orientação profissional.")],
+    ["Indicação", medicineInfoValue(product, profile, "indication", profile.purpose || product.description)],
+    ["Contraindicação", medicineInfoValue(product, profile, "contraindication")],
+    ["Reações adversas", medicineInfoValue(product, profile, "adverseReactions")],
+    ["Composição", profile.composition || "Consultar composição na bula oficial da apresentação selecionada."],
   ];
-  const presentations = productVariantOptions(product);
+  const rows = medicineDetailRows(product, profile, selectedVariant);
+  const leafletUrl = medicineLeafletUrl(product, profile);
 
   return `
-    <section class="medicine-detail-section" aria-label="Dados completos do medicamento">
-      <article class="medicine-description-card">
-        <span>Descrição completa</span>
-        <h2>Descrição do produto</h2>
+    <section class="medicine-detail-section medicine-complete-section" aria-label="Dados completos do medicamento">
+      <article class="medicine-description-card medicine-complete-card">
+        <div class="medicine-section-head">
+          <div>
+            <span>Descrição do produto</span>
+            <h2>Informações do medicamento</h2>
+            <p>Abra os tópicos para consultar uso, cuidados e orientações essenciais antes da compra. As informações devem ser validadas com a bula oficial e a equipe farmacêutica.</p>
+          </div>
+          <a class="leaflet-download-button" href="${escapeHtml(leafletUrl)}" target="_blank" rel="noopener">
+            ${svg("payment")}
+            Baixar Bula
+          </a>
+        </div>
 
-        <h3>Para que serve?</h3>
-        <p>${escapeHtml(profile.purpose)}</p>
+        ${prescriptionRequired ? `<div class="medicine-prescription-warning">${escapeHtml(PRESCRIPTION_MEDICINE_WARNING)}</div>` : ""}
 
-        <h3>Composição</h3>
-        <p>${escapeHtml(profile.composition)}</p>
-
-        <h3>Como usar</h3>
-        <p>${escapeHtml(profile.howToUse)}</p>
-
-        <h3>Orientação de segurança</h3>
-        <p>${escapeHtml(profile.safety)}</p>
+        <div class="medicine-topic-grid medicine-topic-accordion">
+          ${details
+            .map(([title, text], index) => medicineAccordionItem(title, text, index))
+            .join("")}
+        </div>
 
         <div class="medicine-warning-box">
           <strong>Uso responsável</strong>
-          <span>As informações deste protótipo não substituem orientação médica ou farmacêutica. Antes de publicar, valide bula, registro, estoque e restrições de venda no cadastro oficial da loja.</span>
+          <span>As informações deste protótipo não substituem orientação médica ou farmacêutica. Consulte a bula oficial e fale com a equipe da Drogaria Onório quando necessário.</span>
         </div>
       </article>
 
       <aside class="medicine-data-panel">
-        <article class="medicine-data-card">
-          <h3>Dados do medicamento</h3>
+        <article class="medicine-data-card medicine-spec-card">
+          <h3>Especificações</h3>
           ${rows
             .map(
               ([label, value]) => `
@@ -1853,22 +5061,6 @@ function medicineDetailsMarkup(product) {
             )
             .join("")}
         </article>
-
-        <article class="medicine-data-card">
-          <h3>Apresentações na loja</h3>
-          ${presentations
-            .map(
-              (item) => `
-                <div>
-                  <span>${escapeHtml(item.detail)}</span>
-                  <strong>${formatCurrency(item.price)} · ${escapeHtml(item.stock || "Consultar estoque")}</strong>
-                </div>
-              `,
-            )
-            .join("")}
-        </article>
-
-        <a class="checkout-outline product-external-link" href="${ANVISA_BULARIO_URL}" target="_blank" rel="noopener">Consultar Bulário Anvisa</a>
       </aside>
     </section>
   `;
@@ -1876,19 +5068,19 @@ function medicineDetailsMarkup(product) {
 
 function miniProductImage(productId, label) {
   const product = getProduct(productId);
-  const image = product?.image || "assets/products/prescription-box.svg";
+  const image = productImageSrc(product?.image);
   const alt = label || product?.name || "Produto";
 
-  return `<img class="mini-photo" src="${escapeHtml(image)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
+  return `<img class="mini-photo" src="${escapeHtml(image)}" alt="${escapeHtml(alt)}" loading="lazy" ${productImageFallbackAttribute()} />`;
 }
 
 function categoryScene(category) {
-  const productImages = category.products || [];
+  const productImages = (category.products || []).map(productImageSrc);
   const productsMarkup = productImages
     .slice(0, 2)
     .map(
       (image, index) =>
-        `<img class="scene-pack scene-pack-${index + 1}" src="${escapeHtml(image)}" alt="" loading="lazy" aria-hidden="true" />`,
+        `<img class="scene-pack scene-pack-${index + 1}" src="${escapeHtml(image)}" alt="" loading="lazy" aria-hidden="true" ${productImageFallbackAttribute()} />`,
     )
     .join("");
   const iconMarkup = category.sceneIcon ? `<span class="scene-icon">${svg(category.sceneIcon)}</span>` : "";
@@ -1908,7 +5100,11 @@ function getCartItemCount(items = calculateCart().items) {
 }
 
 function getSelectedStore() {
-  return pickupStores.find((store) => store.id === state.selectedStore) || pickupStores[0];
+  const storeId =
+    state.delivery === "home" && state.deliveryFulfillmentStoreId
+      ? state.deliveryFulfillmentStoreId
+      : state.selectedStore;
+  return pickupStores.find((store) => store.id === storeId) || pickupStores[0];
 }
 
 function normalizeCep(value = "") {
@@ -1918,6 +5114,17 @@ function normalizeCep(value = "") {
 function formatCep(value = "") {
   const cep = normalizeCep(value);
   return cep.length === 8 ? `${cep.slice(0, 5)}-${cep.slice(5)}` : value;
+}
+
+function maskCpfForDisplay(value = "") {
+  const text = String(value || "").trim();
+  const digits = text.replace(/\D/g, "");
+
+  if (digits.length >= 5) {
+    return `${digits.slice(0, 3)}.***.***-${digits.slice(-2)}`;
+  }
+
+  return text && text !== "CPF cadastrado" ? text : "***.***.***-**";
 }
 
 function formatDistance(km = 0) {
@@ -2098,6 +5305,95 @@ async function quoteDeliveryByCep(rawCep) {
   };
 }
 
+function buildManualCustomerAddress() {
+  const cityState = state.customer.addressCity && state.customer.addressState
+    ? `${state.customer.addressCity}/${state.customer.addressState}`
+    : state.customer.addressCity || state.customer.addressState || "";
+
+  state.customer.address = [
+    state.customer.addressStreet,
+    state.customer.addressDistrict,
+    cityState,
+  ]
+    .filter(Boolean)
+    .join(" - ");
+
+  state.customer.cep = formatCep(state.cep || state.customer.cep || "");
+}
+
+function applyDeliveryQuoteToCustomer(quote, options = {}) {
+  if (!quote) return;
+
+  const shouldSetDelivery = options.setDelivery !== false;
+  state.deliveryQuote = quote;
+  state.customer.cep = quote.formattedCep;
+  state.cep = quote.formattedCep;
+  state.customer.addressStreet = quote.street || state.customer.addressStreet || "";
+  state.customer.addressDistrict = quote.district || state.customer.addressDistrict || "";
+  state.customer.addressCity = quote.city || state.customer.addressCity || "";
+  state.customer.addressState = quote.state || state.customer.addressState || "";
+  buildManualCustomerAddress();
+  state.customer.address ||= quote.address;
+  state.customer.receiverName ||= state.customer.fullName || state.customer.name || "";
+  state.selectedStore = quote.nearestStoreId || state.selectedStore;
+
+  if (shouldSetDelivery) {
+    state.delivery = "home";
+    assignDeliveryFulfillmentStore(quote);
+  }
+}
+
+function updateCustomerDisplayName() {
+  if (state.customer.fullName.trim()) {
+    state.customer.name = state.customer.fullName.trim().split(/\s+/).slice(0, 2).join(" ");
+  }
+}
+
+function saveCustomerProfile() {
+  updateCustomerDisplayName();
+  buildManualCustomerAddress();
+  updateAccountHeader();
+}
+
+async function autofillAddressFromCep() {
+  const cep = normalizeCep(
+    state.cep ||
+      state.customer.cep ||
+      document.querySelector("[data-address-cep]")?.value ||
+      "",
+  );
+
+  if (cep.length !== 8) {
+    showToast("Digite um CEP com 8 números.");
+    return false;
+  }
+
+  state.cep = formatCep(cep);
+  state.customer.cep = formatCep(cep);
+  state.shippingStatus = "loading";
+  state.shippingError = "";
+  renderCart();
+
+  try {
+    const quote = await quoteDeliveryByCep(cep);
+    applyDeliveryQuoteToCustomer(quote);
+    state.shippingStatus = "done";
+    state.shippingError = "";
+    showToast(`${quote.address || quote.formattedCep} carregado pelo CEP.`);
+    renderCart();
+    return true;
+  } catch (error) {
+    state.deliveryQuote = null;
+    state.deliveryFulfillmentStoreId = "";
+    state.deliveryFulfillmentNote = "";
+    state.shippingStatus = "error";
+    state.shippingError = error.message || "Não foi possível buscar o CEP.";
+    showToast("Não foi possível completar pelo CEP. Você pode preencher o endereço manualmente.");
+    renderCart();
+    return false;
+  }
+}
+
 async function ensurePickupDistanceQuote() {
   const cep = normalizeCep(state.cep || state.customer.cep || "");
   const quoteCep = normalizeCep(state.deliveryQuote?.cep || state.deliveryQuote?.formattedCep || "");
@@ -2120,16 +5416,17 @@ async function ensurePickupDistanceQuote() {
 
   try {
     const quote = await quoteDeliveryByCep(cep);
-    state.deliveryQuote = quote;
-    state.customer.cep = quote.formattedCep;
-    state.customer.address ||= quote.address;
-    state.cep = quote.formattedCep;
+    applyDeliveryQuoteToCustomer(quote, { setDelivery: false });
     state.shippingStatus = "done";
     state.shippingError = "";
     return true;
   } catch (error) {
     state.shippingStatus = "error";
     state.shippingError = error.message || "Não foi possível calcular a distância pelo CEP.";
+    if (state.delivery === "home") {
+      state.deliveryFulfillmentStoreId = "";
+      state.deliveryFulfillmentNote = "";
+    }
     showToast(state.shippingError);
     return false;
   }
@@ -2177,17 +5474,21 @@ function validateHomeDeliveryDetails() {
 
 function customerAddressSummary() {
   const quote = state.deliveryQuote;
-  const cityState = quote?.city && quote?.state ? `${quote.city}/${quote.state}` : "";
+  const city = quote?.city || state.customer.addressCity || "";
+  const uf = quote?.state || state.customer.addressState || "";
+  const cityState = city && uf ? `${city}/${uf}` : city || uf;
   const quoteAddress = quote
     ? [quote.street, quote.district].filter(Boolean).join(" - ") || quote.address
     : "";
-  const baseAddress = quoteAddress || state.customer.address || "";
+  const manualAddress = [state.customer.addressStreet, state.customer.addressDistrict].filter(Boolean).join(" - ");
+  const baseAddress = quoteAddress || manualAddress || state.customer.address || "";
   const number = state.customer.addressNumber ? `nº ${state.customer.addressNumber}` : "";
   const complement = state.customer.addressComplement || "";
   const fullAddress = [baseAddress, number, complement, cityState].filter(Boolean).join(" - ");
 
   return {
     fullAddress,
+    baseAddress,
     cityState,
     serviceLabel: quote?.serviceLabel || "",
     fee: quote?.fee,
@@ -2223,12 +5524,14 @@ function shippingQuoteMarkup() {
 
   const quote = state.deliveryQuote;
   const isSedex = quote.deliveryMode === "sedex";
+  const fulfillmentStore = getDeliveryFulfillmentStore();
   return `
     <div class="shipping-result ${isSedex ? "is-sedex" : ""}">
       <div>
         <strong>${escapeHtml(quote.address || `CEP ${quote.formattedCep}`)}</strong>
         ${isSedex ? `<span>Fora de Ribeirão Preto: envio por ${escapeHtml(quote.serviceLabel)} · prazo estimado ${escapeHtml(quote.deliveryDays)}</span>` : ""}
         <span>Loja mais próxima: ${escapeHtml(quote.nearestStoreName)} · ${formatDistance(quote.distanceKm)}</span>
+        ${fulfillmentStore ? `<span class="shipping-fulfillment-store">Pedido enviado para: ${escapeHtml(fulfillmentStore.name)}. Filial com todos os produtos da cesta.</span>` : ""}
         ${isSedex ? `<small>${escapeHtml(quote.sedex?.note || "Valor sujeito à confirmação dos Correios.")}</small>` : ""}
       </div>
       <div>
@@ -2245,14 +5548,346 @@ function pointsToDiscount(points = LOYALTY_EXAMPLE_BALANCE) {
   return roundMoney(points / LOYALTY_POINTS_PER_REAL_DISCOUNT);
 }
 
+function loyaltyPointsFromSubtotal(subtotal = 0) {
+  return Math.floor(subtotal * LOYALTY_POINTS_PER_REAL);
+}
+
+function loyaltyPointsExpiryDate(baseDate = new Date()) {
+  const expiryDate = new Date(baseDate);
+  expiryDate.setMonth(expiryDate.getMonth() + LOYALTY_POINTS_VALIDITY_MONTHS);
+  return expiryDate;
+}
+
+function formatLoyaltyExpiryDate(baseDate = new Date()) {
+  return loyaltyPointsExpiryDate(baseDate).toLocaleDateString("pt-BR");
+}
+
 function getCustomerPointsBalance() {
   return state.customer.points ?? LOYALTY_EXAMPLE_BALANCE;
 }
 
-function availablePointsDiscountForCart(subtotal = 0, pixDiscount = 0) {
+function cartItemsFromState() {
+  return [...state.cart.entries()]
+    .map(([id, quantity]) => {
+      const product = getProduct(id);
+      return product ? { ...product, quantity } : null;
+    })
+    .filter(Boolean);
+}
+
+function productAvailabilityKey(productOrId) {
+  if (!productOrId) return "";
+  if (typeof productOrId === "string") {
+    const product = getProduct(productOrId);
+    return product?.parentId || product?.id || productOrId;
+  }
+
+  return productOrId.parentId || productOrId.id || "";
+}
+
+function storeHasProduct(storeId, productOrId) {
+  const productKey = productAvailabilityKey(productOrId);
+  if (!storeId || !productKey) return false;
+  const rule = storeAvailabilityRules[storeId];
+  return !rule?.unavailable?.has(productKey);
+}
+
+function storeHasCartItems(storeId, items = cartItemsFromState()) {
+  return items.every((item) => storeHasProduct(storeId, item));
+}
+
+function orderedStoresForFulfillment(preferredStoreId = "") {
+  const preferred = pickupStores.find((store) => store.id === preferredStoreId);
+  return [
+    ...(preferred ? [preferred] : []),
+    ...pickupStores.filter((store) => store.id !== preferredStoreId),
+  ];
+}
+
+function findFulfillmentStoreForCart(items = cartItemsFromState(), preferredStoreId = "") {
+  const orderedStores = orderedStoresForFulfillment(preferredStoreId);
+  return orderedStores.find((store) => storeHasCartItems(store.id, items)) || orderedStores[0] || null;
+}
+
+function assignDeliveryFulfillmentStore(quote = state.deliveryQuote) {
+  if (state.delivery !== "home" || !quote) {
+    state.deliveryFulfillmentStoreId = "";
+    state.deliveryFulfillmentNote = "";
+    return null;
+  }
+
+  const items = cartItemsFromState();
+  const store = findFulfillmentStoreForCart(items, quote.nearestStoreId || state.selectedStore);
+  state.deliveryFulfillmentStoreId = store?.id || "";
+  state.deliveryFulfillmentNote = store
+    ? `Pedido direcionado para ${store.name}, filial com todos os itens da cesta neste prototipo.`
+    : "";
+  return store;
+}
+
+function getDeliveryFulfillmentStore() {
+  return pickupStores.find((store) => store.id === state.deliveryFulfillmentStoreId) || null;
+}
+
+function syncDeliveryFulfillmentStore() {
+  if (state.delivery === "home" && state.deliveryQuote) {
+    assignDeliveryFulfillmentStore(state.deliveryQuote);
+    return;
+  }
+
+  if (state.delivery !== "home") {
+    state.deliveryFulfillmentStoreId = "";
+    state.deliveryFulfillmentNote = "";
+  }
+}
+
+function activeAvailabilityStoreId() {
+  if (state.delivery === "home") {
+    return state.deliveryFulfillmentStoreId || "";
+  }
+
+  return state.storeSelectionConfirmed ? state.selectedStore || "" : "";
+}
+
+function isAvailabilityText(value = "") {
+  const text = normalizeText(value);
+  return text.includes("dispon") || text.includes("estoque") || text.includes("sob consulta");
+}
+
+function productAvailabilityLabel(product, fallbackStock = "") {
+  const storeId = activeAvailabilityStoreId();
+  if (!storeId || !product) return "";
+
+  const stockText = fallbackStock || product.stock || "";
+  const normalizedStock = normalizeText(stockText);
+  if (!storeHasProduct(storeId, product)) return "Consulte disponibilidade";
+  if (normalizedStock.includes("consulta") || normalizedStock.includes("sob consulta")) {
+    return "Consulte disponibilidade";
+  }
+
+  return stockText || "Disponivel na loja";
+}
+
+function productStockChipMarkup(product, fallbackStock = "") {
+  const label = productAvailabilityLabel(product, fallbackStock);
+  return label ? `<small class="stock-chip">${escapeHtml(label)}</small>` : "";
+}
+
+function availablePointsDiscountForCart(subtotal = 0, previousDiscounts = 0) {
   const availableDiscount = pointsToDiscount(getCustomerPointsBalance());
-  const maxDiscount = Math.max(0, subtotal - pixDiscount);
+  const maxDiscount = Math.max(0, subtotal - previousDiscounts);
   return roundMoney(Math.min(availableDiscount, maxDiscount));
+}
+
+function normalizeCouponCode(code = "") {
+  return normalizeText(code).replace(/[^a-z0-9]/g, "").toUpperCase();
+}
+
+function findCoupon(code = "") {
+  const normalized = normalizeCouponCode(code);
+  return availableCoupons.find((coupon) => normalizeCouponCode(coupon.code) === normalized) || null;
+}
+
+function couponValueLabel(coupon) {
+  if (!coupon) return "";
+
+  if (coupon.discountType === "percent") {
+    return `${(coupon.value * 100).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%`;
+  }
+
+  return formatCurrency(coupon.value);
+}
+
+function productTextForCoupon(product = {}) {
+  return normalizeText([
+    product.id,
+    product.parentId,
+    product.name,
+    product.detail,
+    product.category,
+    product.subcategory,
+    product.routeKey,
+    product.keywords,
+    product.tag,
+    product.promo,
+    product.description,
+  ].filter(Boolean).join(" "));
+}
+
+function categoryConfigByRoute(routeKey) {
+  return categories.find((category) => category.routeKey === routeKey) || null;
+}
+
+function productInCategoryConfig(product, routeKey) {
+  const config = categoryConfigByRoute(routeKey);
+  if (!config) return false;
+
+  const productIds = new Set(config.productIds || []);
+  const productCategories = new Set(config.productCategories || []);
+  return (
+    productIds.has(product.id) ||
+    productIds.has(product.parentId) ||
+    productCategories.has(product.category)
+  );
+}
+
+function couponItemMatches(coupon, product) {
+  if (!coupon || !product) return false;
+  if (coupon.scope === "all") return true;
+
+  const text = productTextForCoupon(product);
+
+  if (coupon.scope === "milk") {
+    return (
+      text.includes("leite") ||
+      text.includes("formula") ||
+      text.includes("formulas") ||
+      text.includes("nutricao infantil") ||
+      text.includes("ninho")
+    );
+  }
+
+  if (coupon.scope === "dermo") {
+    const isExcludedBeautyLine =
+      text.includes("perfume") ||
+      text.includes("perfumaria") ||
+      text.includes("maquiagem") ||
+      text.includes("shampoo") ||
+      text.includes("condicionador") ||
+      text.includes("cabelo");
+
+    return (
+      text.includes("dermocosmetico") ||
+      text.includes("dermocosmeticos") ||
+      text.includes("skincare") ||
+      text.includes("protetor solar") ||
+      text.includes("hidratante") ||
+      text.includes("serum") ||
+      text.includes("pele") ||
+      (normalizeText(product.category) === "cosmeticos" && !isExcludedBeautyLine)
+    );
+  }
+
+  if (coupon.scope === "hygiene") {
+    return (
+      productInCategoryConfig(product, "higiene-pessoal") ||
+      text.includes("higiene pessoal") ||
+      text.includes("saude bucal") ||
+      text.includes("creme dental") ||
+      text.includes("sabonete") ||
+      text.includes("desodorante") ||
+      text.includes("fio dental") ||
+      text.includes("escova")
+    );
+  }
+
+  if (coupon.scope === "men") {
+    return (
+      text.includes("masculino") ||
+      text.includes("linha homem") ||
+      text.includes("homem") ||
+      text.includes("barba") ||
+      text.includes("barbear") ||
+      text.includes("gillette") ||
+      text.includes("men")
+    );
+  }
+
+  return false;
+}
+
+function couponEligibleSubtotal(coupon, items = cartItemsFromState()) {
+  if (!coupon) return 0;
+
+  return roundMoney(
+    items
+      .filter((item) => couponItemMatches(coupon, item))
+      .reduce((sum, item) => sum + item.price * item.quantity, 0),
+  );
+}
+
+function couponEligibility(coupon, subtotal = 0, items = cartItemsFromState()) {
+  if (!coupon) {
+    return { eligible: false, reason: "Cupom nao encontrado." };
+  }
+
+  if (subtotal < (coupon.minSubtotal || 0)) {
+    return {
+      eligible: false,
+      reason: `Disponivel em compras acima de ${formatCurrency(coupon.minSubtotal)}.`,
+    };
+  }
+
+  const eligibleSubtotal = couponEligibleSubtotal(coupon, items);
+
+  if (subtotal > 0 && eligibleSubtotal <= 0) {
+    return {
+      eligible: false,
+      eligibleSubtotal,
+      reason: `Valido para ${coupon.scopeLabel.toLowerCase()}.`,
+    };
+  }
+
+  return { eligible: true, eligibleSubtotal, reason: "Cupom disponivel para esta cesta." };
+}
+
+function couponDiscountForCart(subtotal = 0, items = cartItemsFromState()) {
+  const coupon = findCoupon(state.coupon);
+  const eligibility = couponEligibility(coupon, subtotal, items);
+
+  if (!eligibility.eligible) {
+    return {
+      coupon,
+      eligibility,
+      discount: 0,
+    };
+  }
+
+  const discountBase = coupon.scope === "all"
+    ? subtotal
+    : Math.min(eligibility.eligibleSubtotal ?? 0, subtotal);
+  const discount = coupon.discountType === "percent"
+    ? discountBase * coupon.value
+    : Math.min(coupon.value, discountBase);
+
+  return {
+    coupon,
+    eligibility,
+    discount: roundMoney(Math.min(discount, subtotal)),
+  };
+}
+
+function couponSuggestionsMarkup(subtotal = 0, items = cartItemsFromState()) {
+  if (!state.couponPanelOpen) return "";
+
+  return `
+    <div class="coupon-suggestions" role="listbox" aria-label="Cupons disponiveis">
+      ${availableCoupons
+        .map((coupon) => {
+          const eligibility = couponEligibility(coupon, subtotal, items);
+          return `
+            <article class="coupon-option-card ${eligibility.eligible ? "" : "is-disabled"}">
+              <div class="coupon-option-icon">${escapeHtml(couponValueLabel(coupon))}</div>
+              <div class="coupon-option-copy">
+                <strong>${escapeHtml(coupon.title)}</strong>
+                <small>${escapeHtml(coupon.description)}</small>
+                <span>${escapeHtml(coupon.rule)}</span>
+              </div>
+              <div class="coupon-option-actions">
+                <button type="button" class="coupon-copy-button" data-copy-coupon="${escapeHtml(coupon.code)}" aria-label="Copiar cupom ${escapeHtml(coupon.code)}">
+                  ${escapeHtml(coupon.code)}
+                  <span>Copiar</span>
+                </button>
+                <button type="button" class="coupon-apply-button" data-coupon-code="${escapeHtml(coupon.code)}" ${eligibility.eligible ? "" : "disabled"}>
+                  ${eligibility.eligible ? "Aplicar" : escapeHtml(eligibility.reason)}
+                </button>
+              </div>
+            </article>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
 }
 
 function maxCardInstallments(total) {
@@ -2269,6 +5904,11 @@ function cardInstallmentText(total) {
   return `${installments}x s/ juros de ${formatCurrency(roundMoney(total / installments))}`;
 }
 
+function productPageInstallmentText(total) {
+  const installments = maxCardInstallments(total);
+  return `${installments}x de ${formatCurrency(roundMoney(total / installments))} s/ juros no cartão`;
+}
+
 function cardInstallmentOptions(total) {
   const installments = maxCardInstallments(total);
   return Array.from({ length: installments }, (_, index) => {
@@ -2282,6 +5922,12 @@ function cardInstallmentOptions(total) {
 }
 
 function getCatalogConfig(routeKey = "todos") {
+  const routeAliases = {
+    "vida-saudavel": "bem-estar-saude",
+    cabelo: "beleza",
+  };
+  routeKey = routeAliases[routeKey] || routeKey;
+
   if (routeKey === "todos") {
     return {
       routeKey,
@@ -2310,9 +5956,12 @@ function getCatalogConfig(routeKey = "todos") {
     title: category.label,
     categoryId: category.id,
     query: category.query || "",
-    description: category.query
+    productIds: category.productIds || [],
+    productCategories: category.productCategories || [],
+    subcategories: category.subcategories || [],
+    description: category.description || (category.query
       ? "Produtos em destaque para ofertas e campanhas do dia."
-      : "Produtos demonstrativos desta categoria. A integracao futura deve substituir esta lista pelo saldo real da loja.",
+      : "Produtos demonstrativos desta categoria. A integracao futura deve substituir esta lista pelo saldo real da loja."),
   };
 }
 
@@ -2320,59 +5969,73 @@ function normalizeText(value) {
   return String(value || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]+/g, " ")
     .toLowerCase()
     .trim();
 }
 
-function filterProductsBy(categoryId = "all", queryValue = "") {
+function filterProductsBy(categoryId = "all", queryValue = "", config = {}) {
   const query = normalizeText(queryValue);
+  const productIds = new Set(config.productIds || []);
+  const productCategories = new Set(config.productCategories || []);
 
   return products.filter((product) => {
-    const inCategory = categoryId === "all" || product.category === categoryId;
+    const matchesConfiguredId = productIds.has(product.id) || productIds.has(product.parentId);
+    const matchesConfiguredCategory = productCategories.has(product.category);
+    const inCategory = categoryId === "all" || product.category === categoryId || matchesConfiguredId || matchesConfiguredCategory;
     const variantText = productVariantOptions(product)
       .map((variant) => `${variant.label} ${variant.detail}`)
       .join(" ");
-    const haystack = normalizeText(`${product.name} ${product.detail} ${product.category} ${product.tag} ${product.promo || ""} ${product.description || ""} ${variantText}`);
+    const haystack = normalizeText(
+      `${product.name} ${product.detail} ${product.category} ${product.subcategory || ""} ${product.keywords || ""} ${product.tag} ${product.promo || ""} ${product.description || ""} ${variantText}`,
+    );
     return inCategory && (!query || haystack.includes(query));
   });
 }
 
 function productCatalogRoute(product) {
+  if (product?.routeKey) return product.routeKey;
+
   const routeMap = {
     Medicamentos: "medicamentos",
-    Suplementos: "vida-saudavel",
+    Suplementos: "bem-estar-saude",
     "Mamãe e bebê": "mamae-bebe",
     Cosméticos: "beleza",
-    Perfumaria: "cabelo",
-    Conveniência: "higiene-pessoal",
+    Perfumaria: "beleza",
+    Conveniência: "conveniencia",
     Pet: "pet",
   };
 
   return routeMap[product?.category] || "todos";
 }
 
-function productSummaryFacts(product) {
+function productSummaryFacts(product, selectedVariant = null) {
   const isMedicine = product.category === "Medicamentos";
   const profile = product.medicine;
+  const selectedProduct = selectedVariant ? { ...product, ...selectedVariant, parentId: product.id } : product;
+  const availabilityLabel = productAvailabilityLabel(
+    selectedProduct,
+    selectedVariant?.stock || product.stock || "Consultar estoque",
+  );
   const facts = profile
     ? [
         ["Laboratório", profile.manufacturer],
         ["Princípio ativo", profile.active],
         ["Registro", profile.msRegister],
-        ["Apresentações", productVariantOptions(product).map((variant) => variant.label).join(", ")],
+        ["Apresentação escolhida", selectedVariant?.detail || product.detail],
       ]
     : [
     ["Marca / linha", product.name],
     ["Apresentação", product.detail],
     ["Categoria", product.category],
-    ["Disponibilidade", product.stock || "Consultar estoque"],
+    ...(availabilityLabel ? [["Disponibilidade", availabilityLabel]] : []),
       ];
 
   if (hasProductVariants(product) && !profile) {
     facts[1] = [product.variantSummaryLabel || "Opções", productVariantOptions(product).map((variant) => variant.label).join(", ")];
     facts.push(["Preço inicial", formatCurrency(productBasePrice(product))]);
   } else if (hasProductVariants(product)) {
-    facts.push(["Preço inicial", formatCurrency(productBasePrice(product))]);
+    facts.push(["Preço escolhido", formatCurrency(selectedVariant?.price || productBasePrice(product))]);
   }
 
   if (isMedicine) {
@@ -2384,8 +6047,320 @@ function productSummaryFacts(product) {
   return facts;
 }
 
+function productPageTitle(product, selectedVariant = null) {
+  const detail = selectedVariant?.detail || product.detail || "";
+  const active = product.medicine?.active || "";
+  const normalizedActive = normalizeText(active);
+  const shouldShowActive =
+    product.medicine &&
+    active &&
+    !normalizedActive.includes("conforme bula") &&
+    !normalizedActive.includes("associacao medicamentosa");
+
+  return [product.name, shouldShowActive ? active : "", detail].filter(Boolean).join(" ");
+}
+
+function productPageMeta(product, selectedVariant = null) {
+  const detail = selectedVariant?.detail || product.detail || "";
+  const active = product.medicine?.active || product.tag || "";
+  return [product.name, detail, active].filter(Boolean).join(" • ");
+}
+
+function productDiscountPercent(product, price = productBasePrice(product)) {
+  if (!product.oldPrice || product.oldPrice <= price) return 0;
+  return Math.max(1, Math.round((1 - price / product.oldPrice) * 100));
+}
+
+function offerDiscountText(product, displayPrice) {
+  if (product.oldPrice && product.oldPrice > displayPrice) {
+    const discount = Math.round((1 - displayPrice / product.oldPrice) * 100);
+    return `↓ ${discount}%`;
+  }
+
+  return product.promo || "";
+}
+
+function quantityOptionsMarkup(selectedQuantity) {
+  return Array.from({ length: 10 }, (_, index) => {
+    const quantity = index + 1;
+    return `<option value="${quantity}" ${quantity === selectedQuantity ? "selected" : ""}>${quantity}</option>`;
+  }).join("");
+}
+
+function hasCompanyBundleOffer(product) {
+  const productId = product?.parentId || product?.id || "";
+  const promoText = normalizeText(`${product?.promo || ""} ${product?.tag || ""}`);
+  return (
+    product?.companyBundleOffer === true ||
+    companyBundleOfferProductIds.has(productId) ||
+    promoText.includes("leve")
+  );
+}
+
+function productBundleOfferMarkup(product, displayPrice) {
+  if (!hasCompanyBundleOffer(product)) return "";
+
+  const bundlePrice = roundMoney(displayPrice * 0.94);
+  return `
+    <article class="product-bundle-card">
+      <div>
+        <span class="offer-radio-empty"></span>
+        <strong>Leve + Pague -</strong>
+      </div>
+      <p>A partir de 2 unidades, pague</p>
+      <b>${formatCurrency(bundlePrice)} cada</b>
+      <small>Promoção demonstrativa sujeita ao estoque e regras da loja.</small>
+    </article>
+  `;
+}
+
+function productPaymentPopoverMarkup() {
+  return `
+    <details class="product-payment-popover">
+      <summary>Formas de pagamento</summary>
+      <div class="product-payment-balloon" role="group" aria-label="Formas de pagamento aceitas">
+        <strong>Formas de pagamento</strong>
+        <p>Cartão de crédito, Pix, Mercado Pago, PicPay e boleto.</p>
+        <div class="product-payment-flag-row">
+          ${cardFlags()}
+          ${digitalPaymentFlags()}
+        </div>
+        <small>Crédito em até 3x sem juros acima de R$ 100,00; até 6x acima de R$ 1.000,00. Pix com desconto aplicado na etapa de pagamento.</small>
+      </div>
+    </details>
+  `;
+}
+
+function parseCurrencyValue(value = "") {
+  const normalized = String(value)
+    .replace(/[^\d,.-]/g, "")
+    .replace(/\./g, "")
+    .replace(",", ".");
+  const parsed = Number.parseFloat(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function pbmComparableText(value = "") {
+  const stopwords = new Set([
+    "mg",
+    "mcg",
+    "ml",
+    "com",
+    "capsulas",
+    "capsula",
+    "comprimidos",
+    "comprimido",
+    "revestidos",
+    "revestido",
+    "solucao",
+    "oral",
+    "gotas",
+    "refil",
+    "generico",
+    "potassica",
+    "sodica",
+  ]);
+
+  return normalizeText(value)
+    .split(" ")
+    .filter((token) => token.length > 2 && !stopwords.has(token))
+    .join(" ");
+}
+
+function pbmMatchScore(product, item, selectedVariant = null) {
+  const productName = pbmComparableText(product.name);
+  const itemName = pbmComparableText(item.name);
+  const productActive = pbmComparableText(product.medicine?.active || "");
+  const itemBrand = pbmComparableText(item.brand || "");
+  const productMaker = pbmComparableText(product.medicine?.manufacturer || "");
+  const variantText = pbmComparableText(selectedVariant?.detail || product.detail || "");
+
+  let score = 0;
+  if (itemName.includes(productName) || productName.includes(itemName)) score += 70;
+  productName.split(" ").forEach((token) => {
+    if (token && itemName.includes(token)) score += 18;
+  });
+  productActive.split(" ").forEach((token) => {
+    if (token && itemName.includes(token)) score += 7;
+  });
+  variantText.split(" ").forEach((token) => {
+    if (token && itemName.includes(token)) score += 3;
+  });
+  if (productMaker && itemBrand && (itemBrand.includes(productMaker) || productMaker.includes(itemBrand))) score += 10;
+
+  return score;
+}
+
+function productPbmInfo(product, selectedVariant = null) {
+  if (!product || product.category !== "Medicamentos") return null;
+
+  let bestMatch = null;
+  pbmTreatmentGroups.forEach((group) => {
+    group.items.forEach((item) => {
+      const score = pbmMatchScore(product, item, selectedVariant);
+      if (score >= 22 && (!bestMatch || score > bestMatch.score)) {
+        bestMatch = { group, item, score };
+      }
+    });
+  });
+
+  return bestMatch;
+}
+
+function pbmProgramRegistrationUrl(pbmInfo) {
+  const source = normalizeText(`${pbmInfo?.item?.program || ""} ${pbmInfo?.item?.brand || ""}`);
+  const link = PBM_PROGRAM_LINKS.find((candidate) =>
+    candidate.terms.some((term) => source.includes(normalizeText(term))),
+  );
+
+  return link?.url || PBM_PORTAL_URL;
+}
+
+function pbmInitialCpfValue() {
+  const cpf = state.customer.cpf || "";
+  return cpf.includes("*") ? "" : cpf;
+}
+
+function renderProductLabDiscountMarkup(product, pbmInfo, displayPrice) {
+  if (!pbmInfo) return "";
+
+  const pbmPrice = parseCurrencyValue(pbmInfo.item.price);
+  const priceLabel = pbmPrice ? formatCurrency(pbmPrice) : pbmInfo.item.price;
+  const oldPriceLabel = pbmInfo.item.oldPrice || (product.oldPrice ? formatCurrency(product.oldPrice) : "");
+  const referencePrice = parseCurrencyValue(oldPriceLabel) || product.oldPrice || displayPrice;
+  const savingValue = pbmPrice ? Math.max(0, referencePrice - pbmPrice) : 0;
+  const savingLabel = pbmPrice && savingValue > 0
+    ? `Economia estimada de ${formatCurrency(savingValue)}`
+    : "Preço médio vinculado ao laboratório";
+
+  return `
+    <section class="product-lab-discount" aria-label="Desconto de laboratório">
+      <div class="product-lab-discount-icon">
+        ${svg("ticket")}
+      </div>
+      <div class="product-lab-discount-copy">
+        <span>Desconto laboratório Onório</span>
+        <strong>${escapeHtml(pbmInfo.item.program || "Programa parceiro")}</strong>
+        <p>Benefício consultado pelo CPF, conforme regra do laboratório e estoque da loja.</p>
+        <button type="button" data-info-page="pbm">Saiba mais</button>
+      </div>
+      <div class="product-lab-discount-price">
+        <small>Preço PBM médio</small>
+        ${oldPriceLabel ? `<del>${escapeHtml(oldPriceLabel)}</del>` : ""}
+        <strong>${escapeHtml(priceLabel)}</strong>
+        <em>${escapeHtml(savingLabel)}</em>
+      </div>
+      <button type="button" class="product-lab-discount-action" data-pbm-activate>
+        Ativar desconto
+      </button>
+    </section>
+  `;
+}
+
+function renderPbmAuthorizationModal(product, pbmInfo) {
+  if (!pbmInfo) return "";
+
+  const registrationUrl = pbmProgramRegistrationUrl(pbmInfo);
+  const productName = `${product.name} ${pbmInfo.item.name}`.trim();
+
+  return `
+    <div class="pbm-auth-backdrop" data-pbm-auth-overlay hidden>
+      <section class="pbm-auth-modal" role="dialog" aria-modal="true" aria-labelledby="pbm-auth-title">
+        <button type="button" class="pbm-auth-close" data-pbm-auth-close aria-label="Fechar">${svg("close")}</button>
+        <div class="pbm-auth-step" data-pbm-cpf-step>
+          <span>Consulta de benefício</span>
+          <h2 id="pbm-auth-title">Ativar desconto de laboratório</h2>
+          <p>Informe o CPF do cliente para validar o benefício ${escapeHtml(pbmInfo.item.program || "PBM")} em ${escapeHtml(product.name)}.</p>
+          <label>
+            CPF
+            <input type="text" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" value="${escapeHtml(pbmInitialCpfValue())}" data-pbm-cpf-input />
+          </label>
+          <button type="button" class="checkout-primary" data-pbm-cpf-submit>Consultar desconto</button>
+          <button type="button" class="checkout-outline" data-pbm-auth-close>Comprar sem desconto</button>
+        </div>
+        <div class="pbm-auth-step" data-pbm-authorize-step hidden>
+          <span>Autorização requerida</span>
+          <h2>Cadastro no programa</h2>
+          <p>Autorize o uso do CPF para consultar descontos e habilite o cadastro no programa parceiro.</p>
+          <div class="pbm-auth-summary">
+            <strong>${escapeHtml(pbmInfo.item.program || "Programa parceiro")}</strong>
+            <small>${escapeHtml(productName)}</small>
+          </div>
+          <a class="checkout-primary" href="${escapeHtml(registrationUrl)}" target="_blank" rel="noopener" data-pbm-authorize-link>
+            Autorizar / cadastrar
+          </a>
+          <button type="button" class="checkout-outline" data-pbm-auth-close>Continuar na Onório</button>
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+function productDeliveryConsultationMarkup() {
+  return `
+    <section class="product-delivery-consult">
+      <h3>Consultar formas de entrega</h3>
+      <label for="product-delivery-cep">Insira seu CEP</label>
+      <input id="product-delivery-cep" data-checkout-state="cep" type="text" inputmode="numeric" maxlength="9" placeholder="00000-000" value="${escapeHtml(formatCep(state.cep || state.customer.cep || ""))}" />
+      <small>Ex.: 00000-000</small>
+      <div class="product-store-list" aria-label="Lojas disponíveis para retirada">
+        ${pickupStores
+          .map(
+            (store) => `
+              <article>
+                <strong>${escapeHtml(store.name.replace("Loja 1 - ", "Loja 1 - ").replace("Loja 2 - ", "Loja 2 - "))}</strong>
+                <span>${escapeHtml(store.address)}</span>
+                ${store.note ? `<em>${escapeHtml(store.note)}</em>` : ""}
+                <small>${escapeHtml(store.time)}</small>
+                ${pickupStoreDistanceMarkup(store)}
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
+    </section>
+  `;
+}
+
+function productPurchasePanel(product, selectedItemId, displayPrice, selectedQuantity, selectedVariant = null) {
+  const discountText = offerDiscountText(product, displayPrice);
+  const pbmInfo = productPbmInfo(product, selectedVariant);
+
+  return `
+    <aside class="product-purchase-panel" aria-label="Compra do produto">
+      <article class="product-offer-card">
+        <div class="product-offer-title">
+          <span class="offer-radio-selected"></span>
+          <strong>Oferta Onório</strong>
+        </div>
+        <div class="product-offer-discount">
+          ${product.oldPrice && product.oldPrice > displayPrice ? `<del>${formatCurrency(product.oldPrice)}</del>` : ""}
+          ${discountText ? `<span>${escapeHtml(discountText)}</span>` : ""}
+        </div>
+        <strong class="product-offer-price">${formatCurrency(displayPrice)}</strong>
+        <small>${productPageInstallmentText(displayPrice)}</small>
+        ${productPaymentPopoverMarkup()}
+        <div class="product-offer-quantity">
+          <label for="product-quantity-select">Quantidade</label>
+          <select id="product-quantity-select" data-product-quantity-select data-product-id="${escapeHtml(product.parentId || product.id)}" data-item-id="${escapeHtml(selectedItemId)}">
+            ${quantityOptionsMarkup(selectedQuantity)}
+          </select>
+        </div>
+        <button type="button" class="checkout-primary" data-buy-now="${escapeHtml(selectedItemId)}" data-buy-quantity="${selectedQuantity}">
+          Comprar
+          ${svg("cart")}
+        </button>
+        ${renderProductLabDiscountMarkup(product, pbmInfo, displayPrice)}
+      </article>
+      ${productBundleOfferMarkup(product, displayPrice)}
+      ${productDeliveryConsultationMarkup()}
+    </aside>
+    ${renderPbmAuthorizationModal(product, pbmInfo)}
+  `;
+}
+
 function itemImage(item, className = "checkout-product-img") {
-  return `<img class="${className}" src="${escapeHtml(item.image || "assets/products/prescription-box.svg")}" alt="${escapeHtml(item.name)}" loading="lazy" />`;
+  return `<img class="${className}" src="${escapeHtml(productImageSrc(item.image))}" alt="${escapeHtml(item.name)}" loading="lazy" ${productImageFallbackAttribute()} />`;
 }
 
 const paymentLogos = {
@@ -2484,8 +6459,11 @@ function checkoutHeader() {
             </span>
           </button>
           <button type="button" class="cart-pill" data-open-cart aria-label="${escapeHtml(`${cartItemLabel} na cesta. Total ${formatCurrency(total)}.`)}">
-            <span data-cart-count>${escapeHtml(cartItemLabel)}</span>
-            <strong data-cart-total>${formatCurrency(total)}</strong>
+            ${svg("basket")}
+            <span>
+              <span data-cart-count>${escapeHtml(cartItemLabel)}</span>
+              <strong data-cart-total>${formatCurrency(total)}</strong>
+            </span>
           </button>
         </nav>
       </div>
@@ -2555,7 +6533,7 @@ function checkoutItemsList(items, variant = "wide") {
 }
 
 function orderSummaryCard(buttonLabel = "Prosseguir", route = "#login", options = {}) {
-  const { subtotal, pixDiscount, pointsDiscount, availablePointsDiscount, shipping, total, items, pointsEarned } = calculateCart();
+  const { subtotal, couponDiscount, coupon, pixDiscount, pointsDiscount, availablePointsDiscount, shipping, total, items, pointsEarned } = calculateCart();
   const count = getCartItemCount(items);
   const showButton = options.showButton !== false;
   const showPixDiscountLine = options.showPixDiscountLine === true && state.customer.payment === "Pix";
@@ -2583,6 +6561,10 @@ function orderSummaryCard(buttonLabel = "Prosseguir", route = "#login", options 
       ${showPixDiscountLine ? `<div class="summary-line discount-line">
         <span>${showPix ? "Desconto Pix 5%" : "Desconto Pix disponível"}</span>
         <strong>${showPix ? `- ${formatCurrency(pixDiscount)}` : "aplique no pagamento"}</strong>
+      </div>` : ""}
+      ${couponDiscount ? `<div class="summary-line discount-line">
+        <span>Cupom ${escapeHtml(coupon?.code || "")}</span>
+        <strong>- ${formatCurrency(couponDiscount)}</strong>
       </div>` : ""}
       ${showDeliveryLine ? `<div class="summary-line">
         <span>${deliverySummaryLabel}</span>
@@ -2667,8 +6649,8 @@ function customerReviewCard(pointsEarned = 0) {
           <p>Confira e edite seus dados antes de seguir com a compra na Drogaria Onório.</p>
         </div>
         <div class="customer-card-actions">
-          <button type="button" class="checkout-outline compact-action" data-save-customer-data>Atualizar dados</button>
-          <button type="button" class="checkout-outline compact-action" data-add-address>Adicionar novo endereço</button>
+          <button type="button" class="checkout-outline compact-action" data-route="#dados-cliente">Atualizar dados</button>
+          <button type="button" class="checkout-outline compact-action" data-route="#novo-endereco">Adicionar novo endereço</button>
         </div>
       </div>
       <div class="customer-data-grid">
@@ -2687,7 +6669,7 @@ function customerReviewCard(pointsEarned = 0) {
         <div class="customer-points-box">
           <span>Pontos disponíveis</span>
           <strong>${availablePoints} pontos</strong>
-          <small>Valem ${formatCurrency(pointsToDiscount(availablePoints))} de desconto. Nesta compra: +${pointsEarned} pontos.</small>
+          <small>Valem ${formatCurrency(pointsToDiscount(availablePoints))} de desconto. Nesta compra: +${pointsEarned} pontos. Validade: ${LOYALTY_POINTS_VALIDITY_MONTHS} meses.</small>
         </div>
         <div class="customer-address-box">
           <span>Endereço cadastrado</span>
@@ -2717,7 +6699,7 @@ function customerReviewCard(pointsEarned = 0) {
 }
 
 function renderReviewPage() {
-  const { items, subtotal, shipping, total, pointsEarned } = calculateCart();
+  const { items, subtotal, couponDiscount, coupon, shipping, total, pointsEarned } = calculateCart();
   const body = `
     <button type="button" class="checkout-back" data-route="#home">‹ Voltar para a loja</button>
     <div class="review-grid">
@@ -2741,11 +6723,13 @@ function renderReviewPage() {
       <aside class="checkout-summary-card review-summary">
         <h2>${svg("ticket")} Cupom de desconto</h2>
         <span>Digite seu cupom de desconto:</span>
-        <div class="inline-form">
-          <input id="coupon-input" type="text" placeholder="Insira seu cupom" value="${escapeHtml(state.coupon)}" />
+        <div class="inline-form coupon-form">
+          <input id="coupon-input" data-coupon-input type="text" placeholder="Insira seu cupom" value="${escapeHtml(state.coupon)}" autocomplete="off" />
           <button type="button" data-apply-coupon>Adicionar</button>
         </div>
+        ${couponSuggestionsMarkup(subtotal, items)}
         <div class="summary-line"><span>Subtotal</span><strong>${formatCurrency(subtotal)}</strong></div>
+        ${couponDiscount ? `<div class="summary-line discount-line"><span>Cupom ${escapeHtml(coupon?.code || "")}</span><strong>- ${formatCurrency(couponDiscount)}</strong></div>` : ""}
         <div class="summary-line"><span>Frete</span><strong>${state.delivery === "home" ? (state.deliveryQuote ? formatCurrency(shipping) : "Calcule o CEP") : "Retirada grátis"}</strong></div>
         <div class="summary-line total"><span>Total</span><strong>${formatCurrency(total)}</strong></div>
         <button type="button" class="checkout-primary" data-route="#entrega">Avançar</button>
@@ -2754,6 +6738,150 @@ function renderReviewPage() {
   `;
 
   return `${checkoutHeader()}<main class="checkout-page review-page">${body}</main>`;
+}
+
+function renderCustomerDataPage() {
+  const points = state.customer.points ?? LOYALTY_EXAMPLE_BALANCE;
+  const addressSummary = customerAddressSummary();
+
+  return `
+    ${checkoutHeader()}
+    <main class="checkout-page customer-edit-page">
+      <button type="button" class="checkout-back" data-route="#revisao">‹ Voltar para revisão</button>
+      <section class="checkout-card customer-form-card">
+        <div class="customer-form-heading">
+          <span>Cadastro do cliente</span>
+          <h1>Atualizar meus dados</h1>
+          <p>Revise as informações do cadastro. Os dados ficam salvos neste protótipo para seguir com a compra.</p>
+        </div>
+        <div class="customer-form-grid">
+          <label>
+            <span>Nome completo</span>
+            <input data-checkout-customer="fullName" type="text" autocomplete="name" value="${escapeHtml(state.customer.fullName || "")}" />
+          </label>
+          <label>
+            <span>Nome para exibição</span>
+            <input data-checkout-customer="name" type="text" autocomplete="given-name" value="${escapeHtml(state.customer.name || "")}" />
+          </label>
+          <label>
+            <span>CPF</span>
+            <input data-checkout-customer="cpf" type="text" inputmode="numeric" autocomplete="off" value="${escapeHtml(state.customer.cpf || "")}" />
+          </label>
+          <label>
+            <span>Telefone</span>
+            <input data-checkout-customer="phone" type="tel" autocomplete="tel" value="${escapeHtml(state.customer.phone || "")}" />
+          </label>
+          <label>
+            <span>E-mail</span>
+            <input data-checkout-customer="email" type="email" autocomplete="email" value="${escapeHtml(state.customer.email || "")}" />
+          </label>
+          <label>
+            <span>CEP principal</span>
+            <input data-checkout-state="cep" data-address-cep type="text" inputmode="numeric" autocomplete="postal-code" maxlength="9" value="${escapeHtml(formatCep(state.cep || state.customer.cep || ""))}" />
+          </label>
+          <label class="wide">
+            <span>Endereço cadastrado</span>
+            <input data-checkout-customer="addressStreet" type="text" autocomplete="address-line1" value="${escapeHtml(state.customer.addressStreet || addressSummary.baseAddress || state.customer.address || "")}" placeholder="Rua, avenida, travessa..." />
+          </label>
+          <label>
+            <span>Número</span>
+            <input data-checkout-customer="addressNumber" type="text" inputmode="numeric" autocomplete="address-line2" value="${escapeHtml(state.customer.addressNumber || "")}" />
+          </label>
+          <label>
+            <span>Complemento</span>
+            <input data-checkout-customer="addressComplement" type="text" autocomplete="address-line3" value="${escapeHtml(state.customer.addressComplement || "")}" />
+          </label>
+          <label>
+            <span>Bairro</span>
+            <input data-checkout-customer="addressDistrict" type="text" value="${escapeHtml(state.customer.addressDistrict || state.deliveryQuote?.district || "")}" />
+          </label>
+          <label>
+            <span>Cidade</span>
+            <input data-checkout-customer="addressCity" type="text" autocomplete="address-level2" value="${escapeHtml(state.customer.addressCity || state.deliveryQuote?.city || "")}" />
+          </label>
+          <label>
+            <span>Estado</span>
+            <input data-checkout-customer="addressState" type="text" autocomplete="address-level1" maxlength="2" value="${escapeHtml(state.customer.addressState || state.deliveryQuote?.state || "")}" />
+          </label>
+          <label>
+            <span>Quem vai receber</span>
+            <input data-checkout-customer="receiverName" type="text" autocomplete="name" value="${escapeHtml(state.customer.receiverName || state.customer.fullName || state.customer.name || "")}" />
+          </label>
+          <div class="customer-form-note">
+            <span>Pontos Cliente ON</span>
+            <strong>${points} pontos</strong>
+            <small>Valem ${formatCurrency(pointsToDiscount(points))} de desconto e vencem em até ${LOYALTY_POINTS_VALIDITY_MONTHS} meses após a compra.</small>
+          </div>
+        </div>
+        <div class="customer-form-actions">
+          <button type="button" class="checkout-primary" data-save-customer-profile>Salvar dados</button>
+          <button type="button" class="checkout-outline" data-route="#novo-endereco">Adicionar novo endereço</button>
+          <button type="button" class="checkout-outline" data-autofill-address>Buscar CEP</button>
+        </div>
+      </section>
+    </main>
+  `;
+}
+
+function renderAddressEditPage() {
+  const addressSummary = customerAddressSummary();
+
+  return `
+    ${checkoutHeader()}
+    <main class="checkout-page customer-edit-page">
+      <button type="button" class="checkout-back" data-route="#revisao">‹ Voltar para revisão</button>
+      <section class="checkout-card customer-form-card">
+        <div class="customer-form-heading">
+          <span>Endereço de entrega</span>
+          <h1>Adicionar novo endereço</h1>
+          <p>Digite o CEP para preencher automaticamente. Se algum dado vier incompleto, você pode ajustar manualmente.</p>
+        </div>
+        <div class="address-lookup-row" data-shipping-form>
+          <input data-checkout-state="cep" data-address-cep type="text" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="Digite o CEP" value="${escapeHtml(formatCep(state.cep || state.customer.cep || ""))}" />
+          <button type="button" data-autofill-address ${state.shippingStatus === "loading" ? "disabled" : ""}>${state.shippingStatus === "loading" ? "Buscando..." : "Buscar CEP"}</button>
+        </div>
+        ${
+          state.shippingStatus === "error"
+            ? `<p class="address-helper is-error">${escapeHtml(state.shippingError || "Complete o endereço manualmente.")}</p>`
+            : `<p class="address-helper">Endereço atual: ${escapeHtml(addressSummary.fullAddress || "nenhum endereço carregado ainda.")}</p>`
+        }
+        <div class="customer-form-grid address-form-grid">
+          <label class="wide">
+            <span>Endereço</span>
+            <input data-checkout-customer="addressStreet" type="text" autocomplete="address-line1" placeholder="Rua, avenida, travessa..." value="${escapeHtml(state.customer.addressStreet || state.deliveryQuote?.street || "")}" />
+          </label>
+          <label>
+            <span>Número*</span>
+            <input data-checkout-customer="addressNumber" type="text" inputmode="numeric" autocomplete="address-line2" placeholder="Ex.: 431" value="${escapeHtml(state.customer.addressNumber || "")}" />
+          </label>
+          <label>
+            <span>Complemento</span>
+            <input data-checkout-customer="addressComplement" type="text" autocomplete="address-line3" placeholder="Apto, bloco, casa..." value="${escapeHtml(state.customer.addressComplement || "")}" />
+          </label>
+          <label>
+            <span>Bairro</span>
+            <input data-checkout-customer="addressDistrict" type="text" placeholder="Bairro" value="${escapeHtml(state.customer.addressDistrict || state.deliveryQuote?.district || "")}" />
+          </label>
+          <label>
+            <span>Cidade</span>
+            <input data-checkout-customer="addressCity" type="text" autocomplete="address-level2" placeholder="Cidade" value="${escapeHtml(state.customer.addressCity || state.deliveryQuote?.city || "")}" />
+          </label>
+          <label>
+            <span>Estado</span>
+            <input data-checkout-customer="addressState" type="text" autocomplete="address-level1" maxlength="2" placeholder="UF" value="${escapeHtml(state.customer.addressState || state.deliveryQuote?.state || "")}" />
+          </label>
+          <label>
+            <span>Nome de quem vai receber*</span>
+            <input data-checkout-customer="receiverName" type="text" autocomplete="name" placeholder="Nome completo" value="${escapeHtml(state.customer.receiverName || state.customer.fullName || state.customer.name || "")}" />
+          </label>
+        </div>
+        <div class="customer-form-actions">
+          <button type="button" class="checkout-primary" data-save-address-profile>Salvar endereço</button>
+          <button type="button" class="checkout-outline" data-route="#revisao">Cancelar</button>
+        </div>
+      </section>
+    </main>
+  `;
 }
 
 function renderDeliveryPage() {
@@ -2779,6 +6907,7 @@ function renderDeliveryPage() {
                   <span>
                     <strong>${escapeHtml(store.name)}</strong>
                     <small>${escapeHtml(store.address)}</small>
+                    ${store.note ? `<small class="store-note">${escapeHtml(store.note)}</small>` : ""}
                     ${pickupStoreDistanceMarkup(store)}
                     <em>${escapeHtml(store.time)}</em>
                   </span>
@@ -2925,7 +7054,7 @@ function renderPaymentPage() {
             <div>
               <span>Cliente ON</span>
               <strong>Deseja utilizar seus pontos para abater no valor da compra?</strong>
-              <small>Saldo disponível: ${pointsBalance} pontos = ${formatCurrency(availablePointsDiscount)} para abater neste pedido. A cada 100 pontos, abate R$ 1,00.</small>
+              <small>Saldo disponível: ${pointsBalance} pontos = ${formatCurrency(availablePointsDiscount)} para abater neste pedido. A cada 100 pontos, abate R$ 1,00. Pontos acumulados valem por ${LOYALTY_POINTS_VALIDITY_MONTHS} meses.</small>
             </div>
             <div class="points-choice-row">
               <button type="button" class="${state.usePoints ? "is-active" : ""}" data-use-points="true">Sim, usar pontos</button>
@@ -3063,27 +7192,44 @@ function generateOrderNumber() {
     String(now.getMonth() + 1).padStart(2, "0"),
     String(now.getDate()).padStart(2, "0"),
   ].join("");
-  const time = [
-    String(now.getHours()).padStart(2, "0"),
-    String(now.getMinutes()).padStart(2, "0"),
-    String(now.getSeconds()).padStart(2, "0"),
-  ].join("");
-  const random = Math.floor(1000 + Math.random() * 9000);
-  return `ON-${date}-${time}-${random}`;
+  const random = Math.random().toString(36).slice(2, 8).toUpperCase();
+  return `ON${date}-${random}`;
+}
+
+function currentOrderSignature() {
+  const cartSignature = [...state.cart.entries()]
+    .sort(([firstId], [secondId]) => firstId.localeCompare(secondId))
+    .map(([id, quantity]) => `${id}:${quantity}`)
+    .join("|");
+
+  return [
+    cartSignature,
+    state.delivery,
+    state.selectedStore,
+    state.customer.payment,
+    state.usePoints ? "points" : "no-points",
+    state.coupon,
+    state.deliveryQuote?.formattedCep || "",
+    state.deliveryQuote?.fee || "",
+  ].join("::");
 }
 
 function buildOrderSnapshot() {
   const cart = calculateCart();
   const store = getSelectedStore();
   const now = new Date();
-  const savings = roundMoney(cart.pixDiscount + cart.pointsDiscount);
+  const pointsExpireAt = formatLoyaltyExpiryDate(now);
+  const savings = roundMoney(cart.couponDiscount + cart.pixDiscount + cart.pointsDiscount);
+  const cardLastDigits = String(state.customer.cardNumber || "").replace(/\D/g, "").slice(-4);
 
   return {
+    signature: currentOrderSignature(),
     number: generateOrderNumber(),
     pickupCode: `RET-${String(Math.floor(100000 + Math.random() * 900000))}`,
     createdAt: now.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }),
     customerName: state.customer.fullName || state.customer.name || "Cliente Onório",
     customerCpf: state.customer.cpf || "CPF cadastrado",
+    customerCpfDisplay: maskCpfForDisplay(state.customer.cpf),
     customerCep: state.deliveryQuote?.formattedCep || formatCep(state.cep || state.customer.cep || ""),
     receiverName: state.customer.receiverName || state.customer.fullName || state.customer.name || "Cliente Onório",
     deliveryAddress: state.deliveryQuote
@@ -3097,6 +7243,8 @@ function buildOrderSnapshot() {
     customerPhone: state.customer.phone || "telefone cadastrado",
     delivery: state.delivery,
     payment: state.customer.payment || "A combinar",
+    paymentInstallment: state.customer.payment === "Cartão" ? cardInstallmentText(cart.total) : "",
+    cardLastDigits,
     store: { ...store },
     items: cart.items.map((item) => ({
       id: item.id,
@@ -3109,17 +7257,41 @@ function buildOrderSnapshot() {
       lineTotal: roundMoney(item.price * item.quantity),
     })),
     subtotal: cart.subtotal,
+    couponCode: cart.coupon?.code || "",
+    couponDiscount: cart.couponDiscount,
     pixDiscount: cart.pixDiscount,
     pointsDiscount: cart.pointsDiscount,
     shipping: cart.shipping,
     total: cart.total,
     savings,
     pointsEarned: cart.pointsEarned,
+    pointsExpireAt,
   };
 }
 
+function applyLoyaltyBalanceToOrder(order) {
+  const balanceBefore = getCustomerPointsBalance();
+  const pointsUsed = order.pointsDiscount
+    ? Math.min(balanceBefore, Math.round(order.pointsDiscount * LOYALTY_POINTS_PER_REAL_DISCOUNT))
+    : 0;
+  const balanceAfter = Math.max(0, balanceBefore - pointsUsed) + order.pointsEarned;
+
+  state.customer.points = balanceAfter;
+  state.customer.pointsExpireAt = order.pointsExpireAt;
+  order.pointsUsed = pointsUsed;
+  order.pointsBalanceBefore = balanceBefore;
+  order.pointsBalanceAfter = balanceAfter;
+
+  return order;
+}
+
 function finalizeCurrentOrder() {
-  state.currentOrder = buildOrderSnapshot();
+  const signature = currentOrderSignature();
+  if (state.currentOrder?.signature === signature) {
+    return state.currentOrder;
+  }
+
+  state.currentOrder = applyLoyaltyBalanceToOrder(buildOrderSnapshot());
   return state.currentOrder;
 }
 
@@ -3127,13 +7299,38 @@ function getCurrentOrder() {
   return state.currentOrder || finalizeCurrentOrder();
 }
 
+function orderPaymentDescription(order) {
+  if (order.payment === "Cartão") {
+    return [
+      "Cartão de crédito",
+      order.cardLastDigits ? `com final ${order.cardLastDigits}` : "",
+      order.paymentInstallment || "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }
+
+  if (order.payment === "Pix") {
+    return `Pix${order.pixDiscount ? ` com 5% de desconto` : ""}`;
+  }
+
+  return order.payment || "A combinar";
+}
+
 function renderFinishedPage() {
   const order = getCurrentOrder();
   const isPickup = order.delivery === "pickup";
   const itemCount = getCartItemCount(order.items);
   const storePhoneHref = order.store.phoneHref || STORE_WHATSAPP_NUMBER;
+  const storeOrderWhatsappUrl = storeWhatsappUrl(order.store, `Olá, Drogaria Onório! Preciso falar sobre o pedido ${order.number}.`);
+  const customerCpfDisplay = order.customerCpfDisplay || maskCpfForDisplay(order.customerCpf);
   const movementTarget = `${escapeHtml(order.customerPhone)} e ${escapeHtml(order.customerEmail)}`;
   const pickupText = isPickup ? "acompanhar a retirada" : "acompanhar a entrega";
+  const receiptTitle = isPickup ? "Retirar" : "Receber";
+  const receiptAddress = isPickup
+    ? order.store.fullAddress || order.store.address
+    : order.deliveryAddress || order.customerCep || "Endereço cadastrado";
+  const paymentDescription = orderPaymentDescription(order);
 
   return `
     ${checkoutHeader()}
@@ -3143,19 +7340,100 @@ function renderFinishedPage() {
         <span>Pedido finalizado</span>
         <h1>Obrigado pela confiança, ${escapeHtml(order.customerName.split(" ")[0] || "cliente")}.</h1>
         <p>Seu pedido foi recebido pela Drogaria Onório e seguirá para separação. Guarde os dados abaixo para ${pickupText}.</p>
-        <div class="order-number-card">
-          <div>
-            <small>Número do pedido</small>
-            <strong>${escapeHtml(order.number)}</strong>
-          </div>
-          <div>
-            <small>${isPickup ? "Código de retirada" : "Código do pedido"}</small>
-            <em>${escapeHtml(order.pickupCode)}</em>
-          </div>
-        </div>
       </section>
 
-      <section class="order-complete-grid">
+      <section class="order-receipt-panel" aria-label="Comprovante do pedido">
+        <div class="order-receipt-title">Pedido <strong>#${escapeHtml(order.number)}</strong></div>
+
+        <div class="order-receipt-grid">
+          <article class="order-receipt-block">
+            <h2>Informações Pessoais</h2>
+            <div class="receipt-lines">
+              <strong>${escapeHtml(order.customerName)}</strong>
+              <span>CPF: ${escapeHtml(customerCpfDisplay)}</span>
+              <span>${escapeHtml(order.customerPhone)}</span>
+              <span>${escapeHtml(order.customerEmail)}</span>
+              ${order.customerCep ? `<span>CEP ${escapeHtml(order.customerCep)}</span>` : ""}
+            </div>
+          </article>
+
+          <article class="order-receipt-block">
+            <h2>Informações De Pagamento</h2>
+            <div class="receipt-lines">
+              <strong>${escapeHtml(paymentDescription)}</strong>
+              <span>Total pago: ${formatCurrency(order.total)}</span>
+              ${order.savings ? `<span>Economia na compra: ${formatCurrency(order.savings)}</span>` : ""}
+              <span>Pontos Cliente ON: +${order.pointsEarned}</span>
+              <span>Validade dos pontos: até ${escapeHtml(order.pointsExpireAt || "")}</span>
+              ${Number.isFinite(order.pointsBalanceAfter) ? `<span>Saldo Cliente ON após pedido: ${order.pointsBalanceAfter} pontos</span>` : ""}
+              <span>Código de retirada: ${escapeHtml(order.pickupCode)}</span>
+            </div>
+          </article>
+
+          <article class="order-receipt-block">
+            <h2>${receiptTitle}</h2>
+            <div class="receipt-lines">
+              <strong>${escapeHtml(isPickup ? order.store.name : order.receiverName)}</strong>
+              <span>${escapeHtml(receiptAddress)}</span>
+              <span>${escapeHtml(isPickup ? order.store.time : "Entrega calculada conforme CEP informado.")}</span>
+              <span>Pedido gerado em ${escapeHtml(order.createdAt)}</span>
+            </div>
+          </article>
+
+          <article class="order-receipt-block">
+            <h2>Produtos</h2>
+            <div class="order-receipt-items">
+              ${order.items
+                .map(
+                  (item) => `
+                    <div class="order-receipt-item">
+                      ${itemImage(item, "summary-item-img")}
+                      <div>
+                        <strong>${escapeHtml(item.name)}</strong>
+                        <span>${escapeHtml(item.detail)}</span>
+                        <small>${item.quantity} un. ${formatCurrency(item.lineTotal)}</small>
+                      </div>
+                    </div>
+                  `,
+                )
+                .join("")}
+            </div>
+          </article>
+        </div>
+
+        <div class="order-receipt-summary">
+          <div>
+            <span>Itens</span>
+            <strong>${itemCount}</strong>
+          </div>
+          <div>
+            <span>Total gasto</span>
+            <strong>${formatCurrency(order.total)}</strong>
+          </div>
+          <div>
+            <span>Economia</span>
+            <strong>${formatCurrency(order.savings)}</strong>
+          </div>
+          <div>
+            <span>Pontos acumulados</span>
+            <strong>+${order.pointsEarned}</strong>
+          </div>
+          <div>
+            <span>Validade</span>
+            <strong>${escapeHtml(order.pointsExpireAt || "")}</strong>
+          </div>
+          ${Number.isFinite(order.pointsBalanceAfter) ? `
+            <div>
+              <span>Saldo Cliente ON</span>
+              <strong>${order.pointsBalanceAfter}</strong>
+            </div>
+          ` : ""}
+        </div>
+
+        <p class="order-receipt-note">As movimentações do pedido serão enviadas por SMS e e-mail para ${movementTarget}. Avisaremos quando estiver em separação e quando estiver pronto para retirada.</p>
+      </section>
+
+      <section class="order-complete-grid order-complete-grid-legacy" hidden>
         <article class="order-detail-card order-items-card">
           <h2>Produtos comprados</h2>
           <span>${itemCount} ${itemCount === 1 ? "item" : "itens"} no pedido</span>
@@ -3187,12 +7465,14 @@ function renderFinishedPage() {
           <div class="order-total-line"><span>Total gasto</span><strong>${formatCurrency(order.total)}</strong></div>
           <div class="order-saving-line"><span>Economia total</span><strong>${formatCurrency(order.savings)}</strong></div>
           <div class="order-points-line"><span>Pontos acumulados</span><strong>+${order.pointsEarned}</strong></div>
+          <div><span>Validade dos pontos</span><strong>${escapeHtml(order.pointsExpireAt || "")}</strong></div>
+          ${Number.isFinite(order.pointsBalanceAfter) ? `<div><span>Saldo Cliente ON</span><strong>${order.pointsBalanceAfter} pontos</strong></div>` : ""}
         </aside>
 
         <article class="order-detail-card order-customer-card">
           <h2>Dados do cliente</h2>
           <strong>${escapeHtml(order.customerName)}</strong>
-          <span>CPF: ${escapeHtml(order.customerCpf)}</span>
+          <span>CPF: ${escapeHtml(customerCpfDisplay)}</span>
           <span>CEP: ${escapeHtml(order.customerCep || "CEP cadastrado")}</span>
           ${!isPickup && order.receiverName ? `<span>Recebedor: ${escapeHtml(order.receiverName)}</span>` : ""}
           <small>${movementTarget}</small>
@@ -3206,7 +7486,7 @@ function renderFinishedPage() {
           <p>Para alterar ou cancelar este pedido, fale diretamente com a loja responsável.</p>
           <div class="order-contact-row">
             <a href="tel:${storePhoneHref}">${escapeHtml(order.store.phone || "Ligar para a loja")}</a>
-            <a href="mailto:${escapeHtml(order.store.email || "onoriodrogaria@gmail.com")}">Enviar e-mail</a>
+            <a href="${storeOrderWhatsappUrl}" target="_blank" rel="noopener">WhatsApp ${escapeHtml(order.store.whatsapp || order.store.phone || "")}</a>
           </div>
         </article>
 
@@ -3230,9 +7510,8 @@ function renderFinishedPage() {
 
 function renderCatalogPage(routeKey = "todos") {
   const config = getCatalogConfig(routeKey);
-  state.category = config.categoryId;
-  state.query = config.query;
-  const visibleProducts = filterProductsBy(config.categoryId, config.query);
+  const activeQuery = state.catalogQueryRoute === routeKey ? state.query : config.query;
+  const visibleProducts = filterProductsBy(config.categoryId, activeQuery, { ...config, query: activeQuery });
   const categoryLinks = categories
     .map(
       (category) => `
@@ -3256,6 +7535,30 @@ function renderCatalogPage(routeKey = "todos") {
           <small>Pronto para receber saldo real por loja quando integrar com o sistema.</small>
         </div>
       </section>
+      ${config.subcategories?.length ? `
+        <section class="catalog-subcategories" aria-label="Subcategorias de ${escapeHtml(config.title)}">
+          <div>
+            <span>O que você encontra aqui</span>
+            <h2>${escapeHtml(config.title)}</h2>
+          </div>
+          <div class="catalog-subcategory-list">
+            ${config.subcategories
+              .map(
+                (item) => `
+                  <button
+                    type="button"
+                    class="${normalizeText(activeQuery) === normalizeText(item) ? "is-active" : ""}"
+                    data-subcategory-search="${escapeHtml(item)}"
+                    data-subcategory-route="${escapeHtml(config.routeKey)}"
+                  >
+                    ${escapeHtml(item)}
+                  </button>
+                `,
+              )
+              .join("")}
+          </div>
+        </section>
+      ` : ""}
       <nav class="catalog-tabs" aria-label="Categorias do catalogo">
         <button type="button" class="${routeKey === "todos" ? "is-active" : ""}" data-catalog-route="todos">Todos</button>
         ${categoryLinks}
@@ -3303,7 +7606,7 @@ function renderProductPage(productId) {
   const relatedProducts = products
     .filter((item) => item.category === product.category && item.id !== product.id)
     .slice(0, 4);
-  const productFacts = productSummaryFacts(product)
+  const productFacts = productSummaryFacts(product, selectedVariantForProduct(product))
     .map(
       ([label, value]) => `
         <article>
@@ -3314,72 +7617,54 @@ function renderProductPage(productId) {
     )
     .join("");
   const isMedicine = product.category === "Medicamentos";
-  const bularioAction = isMedicine
-    ? `<a class="checkout-outline product-external-link" href="${ANVISA_BULARIO_URL}" target="_blank" rel="noopener">Consultar Bulário Anvisa</a>`
-    : "";
   const variants = productVariantOptions(product);
   const hasVariants = variants.length > 0;
-  const displayPrice = productBasePrice(product);
+  const selectedVariant = hasVariants ? selectedVariantForProduct(product) : null;
+  const selectedItemId = selectedVariant?.id || product.id;
+  const selectedDetail = selectedVariant?.detail || product.detail;
+  const selectedStock = selectedVariant?.stock || product.stock || "Consultar estoque";
+  const selectedAvailabilityProduct = selectedVariant ? { ...product, ...selectedVariant, parentId: product.id } : product;
+  const displayPrice = selectedVariant?.price || productBasePrice(product);
+  const selectedQuantity = productPageQuantity(product.id, selectedItemId);
   const variantKind = product.variantKind || "Opção";
-  const variantHeading = product.variantHeading || "Escolha a opção";
-  const variantDescription = product.variantDescription || "Cada opção entra na cesta com seu próprio valor.";
-  const variantPriceNote = variantKind === "Cor"
-    ? "O valor muda conforme a cor escolhida."
-    : variantKind === "Quantidade"
-      ? "O valor muda conforme a apresentação escolhida."
-      : "O valor muda conforme a opção escolhida.";
+  const productDisplayTitle = productPageTitle(product, selectedVariant);
+  const productMeta = productPageMeta(product, selectedVariant);
   const variantChooser = hasVariants
     ? `
-      <section class="product-variant-panel" aria-label="${escapeHtml(variantHeading)}">
-        <div class="product-variant-heading">
-          <span>Opções disponíveis</span>
-          <h2>${escapeHtml(variantHeading)}</h2>
-          <p>${escapeHtml(variantDescription)}</p>
-        </div>
-        <div class="product-variant-grid">
+      <div class="product-inline-variants" aria-label="${escapeHtml(product.variantHeading || "Escolha a opção")}">
+        <span>${escapeHtml(variantKind)}: <strong>${escapeHtml(variantSelectorLabel(selectedVariant))}</strong></span>
+        <div class="presentation-selector" role="listbox" aria-label="${escapeHtml(product.variantHeading || "Escolha a opção")}">
           ${variants
             .map(
-              (variant) => `
-                <article class="product-variant-card">
-                  <div>
-                    <div class="product-variant-title">
-                      ${variant.swatch ? `<span class="variant-swatch" style="--swatch: ${escapeHtml(variant.swatch)}"></span>` : ""}
-                      <span class="option-label">${escapeHtml(variantKind)} ${escapeHtml(variant.label)}</span>
-                    </div>
-                    <strong>${escapeHtml(variant.detail)}</strong>
-                    <small>${escapeHtml(variant.stock || product.stock || "Consultar estoque")}</small>
-                    ${variant.code ? `<small class="variant-code">Cód. ${escapeHtml(variant.code)}</small>` : ""}
-                  </div>
-                  <div>
-                    <b>${formatCurrency(variant.price)}</b>
-                    <button type="button" class="checkout-primary" data-add="${escapeHtml(variant.id)}">Adicionar</button>
-                    <button type="button" class="checkout-outline" data-buy-now="${escapeHtml(variant.id)}">Comprar agora</button>
-                  </div>
-                </article>
-              `,
+              (variant) => {
+                const isSelected = selectedVariant?.id === variant.id;
+                return `
+                <button
+                  type="button"
+                  class="presentation-option ${isSelected ? "is-selected" : ""}"
+                  data-select-variant="${escapeHtml(variant.id)}"
+                  data-product-id="${escapeHtml(product.id)}"
+                  aria-selected="${isSelected ? "true" : "false"}"
+                  role="option"
+                >
+                  ${variant.swatch ? `<span class="variant-swatch" style="--swatch: ${escapeHtml(variant.swatch)}"></span>` : ""}
+                  <span>${escapeHtml(variantSelectorLabel(variant))}</span>
+                </button>
+              `;
+              },
             )
             .join("")}
         </div>
-      </section>
+      </div>
     `
     : "";
-  const productActions = hasVariants
+  const descriptionLinks = isMedicine
     ? `
-      <div class="product-page-actions product-page-actions-note">
-        <span>Selecione uma das opções acima para adicionar à cesta.</span>
-        ${bularioAction}
+      <div class="product-description-links">
+        <a href="${escapeHtml(medicineLeafletUrl(product, product.medicine || {}))}" target="_blank" rel="noopener">Bula</a>
       </div>
     `
-    : `
-      <div class="product-page-actions">
-        <button type="button" class="checkout-primary" data-add="${escapeHtml(product.id)}">
-          Adicionar à cesta
-          ${svg("cart")}
-        </button>
-        <button type="button" class="checkout-outline" data-buy-now="${escapeHtml(product.id)}">Comprar agora</button>
-        ${bularioAction}
-      </div>
-    `;
+    : "";
 
   return `
     ${checkoutHeader()}
@@ -3397,70 +7682,31 @@ function renderProductPage(productId) {
       <section class="product-page-hero">
         <div class="product-page-media">
           ${productGalleryMarkup(product)}
-          <span class="stock-chip">${escapeHtml(product.stock || "Consultar estoque")}</span>
+          ${productStockChipMarkup(selectedAvailabilityProduct, selectedStock)}
         </div>
 
         <div class="product-page-copy">
           <span class="detail-category">${escapeHtml(product.category)}</span>
-          <h1>${escapeHtml(product.name)}</h1>
-          <p class="product-page-subtitle">${escapeHtml(product.detail)}</p>
+          <h1>${escapeHtml(productDisplayTitle)}</h1>
+          <p class="product-page-subtitle">${escapeHtml(productMeta)}</p>
+          <p class="product-page-seller">Vendido e entregue por <strong>Onório</strong></p>
+          ${variantChooser}
           ${productHighlightsMarkup(product)}
           <div class="product-page-rating" aria-label="Produto selecionado para compra rápida">
             <span>★★★★★</span>
             <small>Produto selecionado para compra rápida</small>
           </div>
-
-          <div class="product-page-price">
-            <span>${hasVariants ? "A partir de" : "Preço Onório"}</span>
-            ${product.oldPrice && product.oldPrice > displayPrice ? `<del class="product-page-old-price">${formatCurrency(product.oldPrice)}</del>` : ""}
-            <strong>${formatCurrency(displayPrice)}</strong>
-            ${product.promo ? `<em>${escapeHtml(product.promo)}</em>` : ""}
-            <small>${hasVariants ? variantPriceNote : (cardInstallmentText(product.price) || "Retire na loja ou receba em casa")}</small>
-          </div>
-
-          ${variantChooser}
-          ${productActions}
-
-          <div class="product-page-benefits">
-            <span>${svg("truck")} Entrega calculada pelo CEP</span>
-            <span>${svg("location")} Retirada nas lojas Onório</span>
-            <span>${svg("ticket")} Cliente ON acumula pontos</span>
-          </div>
+          ${descriptionLinks}
         </div>
+
+        ${productPurchasePanel(product, selectedItemId, displayPrice, selectedQuantity, selectedVariant)}
       </section>
 
-      <section class="product-info-grid" aria-label="Informações do produto">
+      ${medicineDetailsMarkup(product, selectedVariant)}
+
+      <section class="product-info-grid product-info-grid-after-details" aria-label="Informações do produto">
         ${productFacts}
       </section>
-
-      <section class="product-page-section">
-        <div>
-          <span>Descrição</span>
-          <h2>Sobre o produto</h2>
-          <p>${escapeHtml(product.description)}</p>
-        </div>
-        <div>
-          <span>Orientação</span>
-          <h2>Compra segura</h2>
-          <p>${escapeHtml(product.caution)}</p>
-          ${isMedicine ? `<p class="care-note">As informações do site não substituem orientação médica ou farmacêutica. Consulte a bula oficial quando necessário.</p>` : ""}
-        </div>
-      </section>
-
-      <section class="product-page-section">
-        <div>
-          <span>Recebimento</span>
-          <h2>Escolha como receber</h2>
-          <p>Você pode retirar na loja escolhida ou calcular entrega em domicílio no checkout. Para entrega, a taxa muda conforme a distância calculada pelo CEP.</p>
-        </div>
-        <div>
-          <span>Integração futura</span>
-          <h2>Estoque da loja</h2>
-          <p>Quando o sistema da drogaria for conectado, esta página poderá puxar saldo real, preço por filial, substitutos e restrições de venda automaticamente.</p>
-        </div>
-      </section>
-
-      ${medicineDetailsMarkup(product)}
 
       ${
         relatedProducts.length
@@ -3562,7 +7808,7 @@ function renderInfoStores() {
             <article>
               <span>${escapeHtml(store.name)}</span>
               <h2>${escapeHtml(store.fullAddress)}</h2>
-              <p>${escapeHtml(store.time)}. Atendimento pelo telefone ${escapeHtml(store.phone)}.</p>
+              <p>${store.note ? `${escapeHtml(store.note)}. ` : ""}${escapeHtml(store.time)}. Atendimento pelo telefone ${escapeHtml(store.phone)}.</p>
               <div>
                 <a href="${mapUrl(store.fullAddress)}" target="_blank" rel="noopener">Abrir no Google Maps</a>
                 <a href="${wazeUrl(store.fullAddress)}" target="_blank" rel="noopener">Abrir no Waze</a>
@@ -3571,6 +7817,303 @@ function renderInfoStores() {
           `,
         )
         .join("")}
+    </section>
+  `;
+}
+
+function renderPharmaceuticalServices() {
+  return `
+    <section class="pharma-service-grid" aria-label="Lista de serviços farmacêuticos">
+      ${pharmaceuticalServices
+        .map(
+          (service) => `
+            <article class="pharma-service-card">
+              <div class="pharma-service-meta">
+                <span>${escapeHtml(service.price)}</span>
+                <span>${escapeHtml(service.duration)}</span>
+              </div>
+              <h2>${escapeHtml(service.title)}</h2>
+              <p>${escapeHtml(service.text)}</p>
+              <div class="pharma-service-actions">
+                <a href="${whatsappUrl(`Olá, Drogaria Onório! Quero agendar ${service.title}.`)}" target="_blank" rel="noopener">Agendar</a>
+                <button type="button" data-service-more="${escapeHtml(service.title)}">Saiba mais</button>
+              </div>
+            </article>
+          `,
+        )
+        .join("")}
+    </section>
+  `;
+}
+
+function pbmTreatmentCountLabel(group) {
+  return `${group.items.length} ${group.items.length === 1 ? "medicamento" : "medicamentos"}`;
+}
+
+function pbmMedicineCardMarkup(item) {
+  const priceIsConsult = normalizeText(item.price).includes("sob consulta");
+  const consultText = `Olá, Drogaria Onório! Quero consultar PBM por CPF para ${item.name}.`;
+
+  return `
+    <article class="pbm-medicine-card">
+      <div>
+        <span class="pbm-medicine-program">${escapeHtml(item.program || "PBM")}</span>
+        <h3>${escapeHtml(item.name)}</h3>
+        <p>${escapeHtml(item.brand || "Laboratório participante")}</p>
+      </div>
+      <div class="pbm-medicine-price">
+        ${item.oldPrice ? `<del>${escapeHtml(item.oldPrice)}</del>` : ""}
+        <strong class="${priceIsConsult ? "is-consult" : ""}">${escapeHtml(item.price)}</strong>
+        <small>${priceIsConsult ? "validar disponibilidade" : "preço de referência"}</small>
+      </div>
+      <a href="${whatsappUrl(consultText)}" target="_blank" rel="noopener">Consultar na Onório</a>
+    </article>
+  `;
+}
+
+function renderPbmTreatmentGroups() {
+  return `
+    <section class="pbm-categories-panel" id="pbm-treatment-categories" aria-label="Categorias participantes">
+      <div class="pbm-section-title">
+        <span>Categorias participantes</span>
+        <h2>Exemplos de tratamentos que podem ter PBM</h2>
+        <p><strong>Conexão que cuida, qualidade que inspira.</strong> Organizamos as categorias por tratamento para visualizar como ficará a integração com consulta por CPF, PBM ativo, prescrição e estoque da loja.</p>
+      </div>
+      <div class="pbm-category-list" hidden>
+        ${pbmTreatmentGroups
+          .map(
+            (group) => `
+              <button type="button" data-pbm-scroll="${escapeHtml(group.id)}">
+                <span>
+                  ${escapeHtml(group.label)}
+                  <small>${escapeHtml(pbmTreatmentCountLabel(group))}</small>
+                </span>
+                <span aria-hidden="true">›</span>
+              </button>
+            `,
+          )
+          .join("")}
+      </div>
+    </section>
+
+    <section class="pbm-treatment-panel" aria-label="Medicamentos participantes por categoria">
+      ${pbmTreatmentGroups
+        .map(
+          (group) => `
+            <details class="pbm-treatment-group" id="pbm-treatment-${escapeHtml(group.id)}">
+              <summary>
+                <span>
+                  <strong>${escapeHtml(group.label)}</strong>
+                  <small>${escapeHtml(group.description)}</small>
+                </span>
+                <em>${escapeHtml(pbmTreatmentCountLabel(group))}</em>
+              </summary>
+              <div class="pbm-treatment-meta">
+                <p>Valores demonstrativos usados para montar o protótipo. Na loja real, a Onório valida CPF, PBM ativo, prescrição quando necessário e estoque antes de finalizar.</p>
+                <a href="${escapeHtml(group.source)}" target="_blank" rel="noopener">Ver referência pública</a>
+              </div>
+              <div class="pbm-medicine-grid">
+                ${group.items.map(pbmMedicineCardMarkup).join("")}
+              </div>
+            </details>
+          `,
+        )
+        .join("")}
+    </section>
+  `;
+}
+
+function pbmPartnerCardMarkup(partner, index, options = {}) {
+  const duplicateAttributes = options.duplicate
+    ? 'aria-hidden="true" data-pbm-partner-duplicate="true"'
+    : `data-pbm-partner-card="${index}"`;
+
+  return `
+    <article class="pbm-partner-card" ${duplicateAttributes}>
+      <div class="pbm-partner-logo" style="--partner-color: ${escapeHtml(partner.color)};">
+        ${escapeHtml(partner.logo)}
+      </div>
+      <strong>${escapeHtml(partner.lab)}</strong>
+      <span>${escapeHtml(partner.program)}</span>
+    </article>
+  `;
+}
+
+function renderPbmPartnerProgramCarousel() {
+  const partnerCards = pbmPartnerPrograms.map((partner, index) => pbmPartnerCardMarkup(partner, index)).join("");
+  const duplicatePartnerCards = pbmPartnerPrograms
+    .map((partner, index) => pbmPartnerCardMarkup(partner, index, { duplicate: true }))
+    .join("");
+
+  return `
+    <section class="pbm-program-panel" data-pbm-partner-carousel aria-label="Programa de Laboratórios Parceiros">
+      <div class="pbm-section-title">
+        <span>Programas parceiros</span>
+        <h2>Programa de Laboratórios Parceiros</h2>
+        <p>Carrossel demonstrativo com os laboratórios e programas de benefícios participantes para consulta por CPF e validação na Onório.</p>
+      </div>
+      <div class="pbm-partner-carousel">
+        <button type="button" class="pbm-partner-arrow" data-pbm-partner-dir="-1" aria-label="Ver laboratórios anteriores">‹</button>
+        <div class="pbm-partner-viewport" data-pbm-partner-viewport tabindex="0">
+          <div class="pbm-partner-track" data-pbm-partner-track>
+            ${partnerCards}
+            ${duplicatePartnerCards}
+          </div>
+        </div>
+        <button type="button" class="pbm-partner-arrow" data-pbm-partner-dir="1" aria-label="Ver próximos laboratórios">›</button>
+      </div>
+      <div class="pbm-partner-dots" aria-label="Indicadores do carrossel">
+        ${pbmPartnerPrograms
+          .map(
+            (_, index) => `
+              <button type="button" data-pbm-partner-dot="${index}" aria-label="Ir para laboratório ${index + 1}" ${index === 0 ? 'class="is-active"' : ""}></button>
+            `,
+          )
+          .join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderPbmHeroBenefits() {
+  const benefits = [
+    ["pill", "Medicamentos de referência"],
+    ["discount", "Economia no tratamento"],
+    ["heart", "Cuidado para sua saúde"],
+    ["user", "Melhor experiência"],
+  ];
+
+  return benefits
+    .map(
+      ([icon, text]) => `
+        <article class="pbm-benefit-card">
+          <span>${svg(icon)}</span>
+          <strong>${escapeHtml(text)}</strong>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderPbmProgramPage() {
+  const pbmProducts = products
+    .filter((product) => {
+      const source = normalizeText(`${product.promo || ""} ${product.keywords || ""} ${product.description || ""}`);
+      return source.includes("pbm") || source.includes("programa") || product.id === "allegra-120" || product.id === "losartana-generica";
+    })
+    .slice(0, 4);
+
+  return `
+    <section class="pbm-hero-panel" aria-label="Programa PBM Drogaria Onório">
+      <div class="pbm-hero-copy">
+        <div class="pbm-lockup">
+          <strong>PBM</strong>
+          <span>Programa de benefícios<br />em medicamentos</span>
+        </div>
+        <h2>Conheça os Programas de Descontos dos Laboratórios</h2>
+        <div class="pbm-benefit-grid" aria-label="Benefícios do PBM Onório">
+          ${renderPbmHeroBenefits()}
+        </div>
+        <p class="pbm-intro-text">Bem-vindo ao PBM Onório. Aqui você consulta benefícios oferecidos por laboratórios parceiros, valida seu CPF quando necessário e encontra condições especiais para cuidar da sua saúde com orientação da nossa equipe.</p>
+        <div class="pbm-hero-actions">
+          <button type="button" class="checkout-primary" data-pbm-scroll="categories">Ver medicamentos com PBM</button>
+          <a class="checkout-outline info-action-link" href="${whatsappUrl("Olá, Drogaria Onório! Quero consultar desconto PBM por CPF.")}" target="_blank" rel="noopener">Consultar pelo WhatsApp</a>
+        </div>
+      </div>
+      <div class="pbm-hero-visual" aria-hidden="true">
+        <div class="pbm-percent-device">
+          <span>%</span>
+        </div>
+        <div class="pbm-phone-card">
+          <strong>CPF</strong>
+          <span>consulta de benefícios</span>
+          <em>%</em>
+        </div>
+        <img src="assets/category-wellness-real.jpg" alt="" loading="lazy" />
+      </div>
+    </section>
+
+    <section class="pbm-step-section" aria-label="Como usar os descontos PBM">
+      <div class="pbm-section-title">
+        <span>Como funciona</span>
+        <h2>Como utilizar os descontos PBM</h2>
+        <p>O desconto depende do laboratório, do medicamento, do CPF e das regras de cada programa.</p>
+      </div>
+      <div class="pbm-step-grid">
+        ${pbmSteps
+          .map(
+            (step, index) => `
+              <article>
+                <span>${index + 1}</span>
+                <strong>${escapeHtml(step.title)}</strong>
+                <p>${escapeHtml(step.text)}</p>
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
+    </section>
+
+    <section class="pbm-routine-panel">
+      <div class="pbm-routine-photo">
+        <img src="assets/category-wellness-real.jpg" alt="Cliente consultando descontos no celular" loading="lazy" />
+      </div>
+      <div>
+        <span>Na rotina da Onório</span>
+        <h2>Desconto com orientação, segurança e conferência da farmácia.</h2>
+        <p>A equipe confirma se o produto participa do programa, se o CPF está apto, se existe regra de prescrição e se há estoque na unidade escolhida.</p>
+      </div>
+    </section>
+
+    ${renderPbmTreatmentGroups()}
+
+    ${renderPbmPartnerProgramCarousel()}
+
+    ${pbmProducts.length ? `
+      <section class="pbm-products-panel">
+        <div class="pbm-section-title">
+          <span>Vitrine demonstrativa</span>
+          <h2>Medicamentos que podem entrar no fluxo PBM</h2>
+        </div>
+        <div class="catalog-product-grid product-grid">
+          ${pbmProducts.map((product) => productCardMarkup(product, "catalog-product-card")).join("")}
+        </div>
+      </section>
+    ` : ""}
+
+    <section class="pbm-faq-panel">
+      <details open>
+        <summary>O que são Programas de Benefícios?</summary>
+        <p>Os Programas de Benefícios são iniciativas desenvolvidas pelos laboratórios para oferecer vantagens exclusivas aos pacientes, como descontos e condições especiais na compra de determinados medicamentos.</p>
+      </details>
+      <details>
+        <summary>Todos os medicamentos possuem benefício?</summary>
+        <p>Não. Apenas produtos e apresentações participantes fazem parte dos programas, conforme disponibilidade e regras definidas por cada laboratório.</p>
+      </details>
+      <details>
+        <summary>Como posso conseguir os descontos?</summary>
+        <p>Para aproveitar os benefícios, basta realizar seu cadastro nos programas participantes. Isso pode ser feito diretamente na loja, pelos canais do laboratório, como site ou telefone, e também através do site da drogaria, quando disponível.</p>
+      </details>
+      <details>
+        <summary>Quais produtos participam dos programas?</summary>
+        <p>Diversos medicamentos fazem parte dos programas de benefícios. Em nosso site você pode consultar se o seu produto participa e verificar as condições disponíveis no momento da compra.</p>
+      </details>
+      <details>
+        <summary>Os descontos são fixos?</summary>
+        <p>Não. Os percentuais e condições podem variar de acordo com campanhas promocionais e regras vigentes de cada laboratório. Por isso, recomendamos sempre consultar as ofertas atualizadas antes da compra.</p>
+      </details>
+      <details>
+        <summary>Os benefícios são aplicados automaticamente?</summary>
+        <p>Nem sempre. Em alguns casos, é necessário validar o CPF do cliente ou confirmar o cadastro ativo no programa do laboratório para liberar o benefício.</p>
+      </details>
+      <details>
+        <summary>É possível combinar benefícios com cupons de desconto?</summary>
+        <p>Não. Os benefícios dos programas não são cumulativos com cupons de desconto, promoções ou outras campanhas ativas da drogaria. Em cada compra, será aplicado apenas um tipo de benefício, conforme as regras vigentes.</p>
+      </details>
+      <div class="pbm-faq-note">
+        <strong>Importante:</strong>
+        <span>As condições dos programas de benefícios podem sofrer alterações sem aviso prévio, conforme regras estabelecidas pelos laboratórios parceiros.</span>
+      </div>
     </section>
   `;
 }
@@ -3632,38 +8175,390 @@ function renderInfoActions(page) {
   `;
 }
 
+function renderHistoryStoryPage(page) {
+  const valueCards = (page.values || [])
+    .map(([title, text]) => `
+      <article>
+        <strong>${escapeHtml(title)}</strong>
+        <span>${escapeHtml(text)}</span>
+      </article>
+    `)
+    .join("");
+  const attributeItems = (page.attributes || [])
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+  const voiceCards = (page.voice || [])
+    .map(([title, text]) => `
+      <article>
+        <strong>${escapeHtml(title)}</strong>
+        <span>${escapeHtml(text)}</span>
+      </article>
+    `)
+    .join("");
+  const missionCards = (page.sections || [])
+    .map((section) => `
+      <article>
+        <span>${escapeHtml(section.eyebrow || "")}</span>
+        <h2>${escapeHtml(section.title)}</h2>
+        <p>${escapeHtml(section.text || "")}</p>
+      </article>
+    `)
+    .join("");
+
+  return `
+    <section class="history-hero-panel" aria-label="História da Drogaria Onório">
+      <div class="history-hero-copy">
+        <span>${escapeHtml(page.eyebrow)}</span>
+        <h1>${escapeHtml(page.title)}</h1>
+        <p>${escapeHtml(page.text)}</p>
+        <strong>Conexão que cuida, qualidade que inspira.</strong>
+      </div>
+      <div class="history-hero-art" aria-label="Marca Drogaria Onório">
+        <img src="assets/onorio-avatar-transparent.png" alt="Rosto da marca Drogaria Onório" />
+        <div>
+          <strong>Drogaria Onório</strong>
+          <span>Mais de 25 anos de cuidado em Ribeirão Preto</span>
+        </div>
+      </div>
+    </section>
+    <section class="history-proof-grid" aria-label="Pilares da história Onório">
+      ${(page.cards || [])
+        .map(([title, text]) => `
+          <article>
+            <strong>${escapeHtml(title)}</strong>
+            <span>${escapeHtml(text)}</span>
+          </article>
+        `)
+        .join("")}
+    </section>
+    <section class="history-manifest-panel">
+      <div class="history-manifest-label">
+        <span>Manifesto</span>
+        <strong>O cuidado que permanece.</strong>
+      </div>
+      <div class="history-manifest-copy">
+        <p>Há coisas na vida que não acabam: o amor que deixamos, o cuidado que entregamos e o impacto que geramos no coração de quem nos cerca.</p>
+        <p>A Onório nasce desse ciclo de dar e receber. É uma homenagem à memória de um avô que ensinou que saúde é mais do que ausência de dor: é carinho, dedicação e presença de quem nos faz bem.</p>
+        <p>Acreditamos que cada gesto importa. Que o cuidado vai além do remédio e toca a alma. Que modernidade e tradição podem caminhar juntas para criar experiências que permanecem.</p>
+      </div>
+    </section>
+    <section class="history-split-panel">
+      <div>
+        <span>Essência Onório</span>
+        <h2>Uma farmácia que une proximidade, inovação e simplicidade.</h2>
+        <p>A marca valoriza cada cliente como único, com uma experiência simples, humana e confiável. O atendimento nasce no detalhe: entender a necessidade, orientar com clareza e resolver com cuidado.</p>
+      </div>
+      <ul>
+        ${attributeItems}
+      </ul>
+    </section>
+    <section class="history-mission-grid" aria-label="Missão e visão">
+      ${missionCards}
+    </section>
+    <section class="history-values-panel">
+      <div class="history-section-heading">
+        <span>Valores</span>
+        <h2>O jeito Onório de cuidar</h2>
+      </div>
+      <div class="history-value-grid">
+        ${valueCards}
+      </div>
+    </section>
+    <section class="history-voice-panel">
+      <div class="history-section-heading">
+        <span>Tom de voz</span>
+        <h2>Humano, positivo e direto</h2>
+      </div>
+      <div class="history-voice-grid">
+        ${voiceCards}
+      </div>
+    </section>
+  `;
+}
+
+function couponPageCardMarkup(coupon) {
+  return `
+    <article class="active-coupon-card">
+      <div class="active-coupon-icon">${escapeHtml(couponValueLabel(coupon))}</div>
+      <div class="active-coupon-copy">
+        <span>${escapeHtml(coupon.scopeLabel)}</span>
+        <h3>${escapeHtml(coupon.title)}</h3>
+        <p>${escapeHtml(coupon.description)}</p>
+      </div>
+      <div class="active-coupon-code">
+        <strong>${escapeHtml(coupon.code)}</strong>
+        <button type="button" data-copy-coupon="${escapeHtml(coupon.code)}" aria-label="Copiar cupom ${escapeHtml(coupon.code)}">
+          Copiar
+        </button>
+      </div>
+      <small>${escapeHtml(coupon.rule)} Valido ate ${escapeHtml(coupon.validUntil)}.</small>
+      <a href="#" data-route="#revisao">Aplicar na cesta</a>
+    </article>
+  `;
+}
+
+function renderCouponProgramPage() {
+  const couponSteps = [
+    ["ticket", "Escolha o cupom ideal", "Veja qual cupom combina com os produtos da sua cesta."],
+    ["discount", "Copie o codigo", "Clique em Copiar e guarde o nome do cupom para usar no pedido."],
+    ["shield", "Confira as regras", "Cada cupom vale para 1 CPF e cadastro, conforme a campanha."],
+    ["cart", "Aplique na cesta", "Cole o cupom no resumo da compra e aproveite o desconto."],
+  ];
+
+  return `
+    <section class="coupon-page-panel" aria-label="Cupons ativos da Drogaria Onorio">
+      <div class="coupon-page-heading">
+        <span>Cupons ativos</span>
+        <h2>Cupons ativos no momento</h2>
+        <p>Copie o nome do cupom e aplique no resumo da cesta. O site aceita apenas um cupom por compra, CPF e cadastro.</p>
+      </div>
+      <div class="coupon-page-grid">
+        ${availableCoupons.map(couponPageCardMarkup).join("")}
+      </div>
+    </section>
+    <section class="coupon-howto-panel" aria-label="Como usar os cupons de desconto na Drogaria Onorio">
+      <div class="coupon-howto-heading">
+        <span>Como usar</span>
+        <h2>Como usar os cupons de desconto na Drogaria Onorio?</h2>
+      </div>
+      <div class="coupon-howto-steps">
+        ${couponSteps
+          .map(
+            ([icon, title, text], index) => `
+              <article>
+                <div class="coupon-howto-number">${String(index + 1).padStart(2, "0")}</div>
+                <div class="coupon-howto-line" aria-hidden="true"></div>
+                <div class="coupon-howto-copy">
+                  <span>${svg(icon)}</span>
+                  <div>
+                    <strong>${escapeHtml(title)}</strong>
+                    <p>${escapeHtml(text)}</p>
+                  </div>
+                </div>
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
+    </section>
+    <section class="coupon-rules-panel">
+      <h2>Regras gerais dos cupons</h2>
+      <div>
+        <span>Um cupom por CPF e cadastro.</span>
+        <span>Cupons nao acumulam entre si, Cliente ON, PBM ou outras campanhas quando a regra impedir.</span>
+        <span>O desconto de categoria vale apenas para produtos participantes da cesta.</span>
+      </div>
+    </section>
+  `;
+}
+
+function renderHelpGuidePage() {
+  const helpTopics = [
+    {
+      id: "compra",
+      icon: "cart",
+      title: "Compra online",
+      text: "Escolha produtos, veja apresentacoes e acompanhe sua cesta.",
+      items: [
+        ["Como comprar no site?", "Pesquise pelo produto, abra a pagina do item, escolha a apresentacao quando houver e adicione a cesta. Depois avance para login, entrega, pagamento e finalizacao."],
+        ["Posso comprar medicamento com receita?", "No prototipo, medicamentos sob prescricao mostram aviso de uso responsavel. Na versao real, a loja devera validar receita, disponibilidade e regras da legislacao antes de concluir a venda."],
+        ["O estoque ja esta ligado ao sistema da loja?", "Ainda nao. O catalogo e demonstrativo. Quando integrarmos ao sistema da drogaria, o saldo, preco por loja e restricoes serao puxados automaticamente."],
+      ],
+    },
+    {
+      id: "retirada",
+      icon: "location",
+      title: "Retirada na loja",
+      text: "Veja unidades, distancia do CEP e tempo de separacao.",
+      items: [
+        ["Como funciona o compre e retire?", "O cliente escolhe retirar na loja, seleciona a filial e finaliza o pedido. A equipe separa os itens e avisa quando estiver pronto para retirada."],
+        ["Quanto tempo leva para retirar?", "A proposta do prototipo e retirada gratis em ate 60 minutos, conforme disponibilidade de estoque e confirmacao da farmacia."],
+        ["Quais lojas aparecem?", "Loja 1 na Av. Arnaldo Victaliano, 1191 - Iguatemi, e Loja 2 na Av. Portugal, 2777 - Jardim Botanico, dentro do Posto Copercana."],
+      ],
+    },
+    {
+      id: "entrega",
+      icon: "truck",
+      title: "Entrega",
+      text: "CEP, taxa por distancia e opcoes fora de Ribeirao Preto.",
+      items: [
+        ["Como o frete e calculado?", "Em Ribeirao Preto, o prototipo calcula a loja mais proxima pelo CEP. Ate 10 km, a taxa e R$ 6,90; acima disso, R$ 8,90."],
+        ["E se o cliente for de outra cidade?", "O prototipo mostra a opcao de SEDEX como estimativa. Na versao real, precisamos integrar com a API/contrato dos Correios para preco e prazo oficiais."],
+        ["Posso alterar endereco?", "Sim. No checkout ha fluxo para atualizar dados e adicionar novo endereco com CEP, numero, complemento, bairro, cidade e estado."],
+      ],
+    },
+    {
+      id: "pagamento",
+      icon: "payment",
+      title: "Pagamento",
+      text: "Pix, cartao, PicPay, Mercado Pago e boleto.",
+      items: [
+        ["Quais formas de pagamento existem?", "Pix, cartao de credito, Mercado Pago, PicPay e boleto. Cartao parcela em ate 3x sem juros acima de R$ 100,00 e ate 6x acima de R$ 1.000,00."],
+        ["Pix tem desconto?", "Sim. Ao selecionar Pix no pagamento, a cesta aplica 5% de desconto nos produtos, conforme regra definida para o prototipo."],
+        ["O QR Code Pix ja recebe pagamento real?", "O QR Code e demonstrativo e usa a chave CNPJ informada. Para producao, sera necessario integrar com banco, PSP ou gateway para confirmar pagamento automaticamente."],
+      ],
+    },
+    {
+      id: "cupons",
+      icon: "ticket",
+      title: "Cupons e descontos",
+      text: "Cupons Onorio, PBM e Cliente ON.",
+      items: [
+        ["Como usar um cupom?", "Abra a pagina de cupons, copie o codigo e cole no resumo da cesta. O site aceita um cupom por compra, CPF e cadastro."],
+        ["Os cupons valem para tudo?", "Depende. ONORIO10 vale para o site todo; LEITE10, DERMO5, HIGIENE10 e HOMEM10 aplicam desconto apenas nos produtos participantes da categoria."],
+        ["PBM combina com cupom?", "Por regra do prototipo, os beneficios ficam separados. Na versao real, cada PBM, cupom e campanha deve respeitar a regra do laboratorio e da drogaria."],
+      ],
+    },
+    {
+      id: "conta",
+      icon: "user",
+      title: "Conta e pedidos",
+      text: "Login, dados do cliente e acompanhamento.",
+      items: [
+        ["Preciso criar conta para comprar?", "O prototipo mostra login antes da finalizacao para vincular pedido, CPF, telefone, e-mail, endereco e pontos Cliente ON."],
+        ["Como acompanho o pedido?", "A area Meus pedidos esta preparada para receber status como pagamento, separacao, pronto para retirada ou saiu para entrega quando houver integracao."],
+        ["Posso alterar meus dados?", "Sim. O checkout tem tela para atualizar dados pessoais e adicionar novo endereco antes de finalizar."],
+      ],
+    },
+    {
+      id: "trocas",
+      icon: "shield",
+      title: "Trocas e cancelamento",
+      text: "Orientacoes para ajustes depois da compra.",
+      items: [
+        ["Como cancelar ou alterar pedido?", "Na tela de pedido finalizado, o cliente ve a loja responsavel. O contato deve ser feito pelo WhatsApp ou telefone da filial escolhida."],
+        ["Posso trocar produto?", "A troca depende do tipo de produto, integridade, nota, prazo e regras sanitarias. Medicamentos e itens de saude precisam seguir a legislacao aplicavel."],
+        ["Recebi produto divergente. O que fazer?", "O cliente deve falar com a loja responsavel, informar numero do pedido e enviar foto do item recebido para conferencia."],
+      ],
+    },
+    {
+      id: "atendimento",
+      icon: "headset",
+      title: "Atendimento",
+      text: "Canais para falar com a Onorio.",
+      items: [
+        ["Quais telefones posso usar?", "Loja 1: (16) 3618-0883. Loja 2: (16) 3442-2440. WhatsApp principal: (16) 99799-7878."],
+        ["Qual e-mail de contato?", "O e-mail principal do prototipo e onoriodrogaria@gmail.com."],
+        ["Qual horario de atendimento?", "A informacao legal do rodape indica segunda a sexta das 8h as 20h e sabado das 8h as 15h."],
+      ],
+    },
+  ];
+
+  return `
+    <section class="help-guide-hero" aria-label="Central de ajuda Drogaria Onorio">
+      <div>
+        <span>Central de ajuda Onorio</span>
+        <h2>Resolva sua duvida em poucos cliques.</h2>
+        <p>Um guia rapido para o cliente entender como comprar, pagar, retirar, receber em casa e falar com a Drogaria Onorio.</p>
+      </div>
+      <div class="help-guide-search" role="search">
+        ${svg("eye")}
+        <input type="search" data-help-search placeholder="Busque por entrega, Pix, cupom, retirada..." autocomplete="off" />
+      </div>
+    </section>
+
+    <section class="help-topic-grid" aria-label="Assuntos de ajuda">
+      ${helpTopics
+        .map(
+          (topic) => `
+            <button type="button" class="help-topic-card" data-help-jump="${escapeHtml(topic.id)}">
+              <span>${svg(topic.icon)}</span>
+              <strong>${escapeHtml(topic.title)}</strong>
+              <small>${escapeHtml(topic.text)}</small>
+            </button>
+          `,
+        )
+        .join("")}
+    </section>
+
+    <section class="help-answer-list" aria-label="Perguntas frequentes">
+      ${helpTopics
+        .map(
+          (topic) => `
+            <article class="help-answer-group" id="help-${escapeHtml(topic.id)}" data-help-group>
+              <div class="help-answer-title">
+                <span>${svg(topic.icon)}</span>
+                <div>
+                  <h2>${escapeHtml(topic.title)}</h2>
+                  <p>${escapeHtml(topic.text)}</p>
+                </div>
+              </div>
+              <div class="help-faq-list">
+                ${topic.items
+                  .map(
+                    ([question, answer], index) => `
+                      <details data-help-question ${index === 0 ? "open" : ""}>
+                        <summary>${escapeHtml(question)}</summary>
+                        <p>${escapeHtml(answer)}</p>
+                      </details>
+                    `,
+                  )
+                  .join("")}
+              </div>
+            </article>
+          `,
+        )
+        .join("")}
+    </section>
+
+    <section class="help-contact-panel">
+      <div>
+        <span>Ainda precisa de ajuda?</span>
+        <h2>Fale com a equipe da Drogaria Onorio.</h2>
+        <p>Se a duvida envolver pedido, receita, troca, disponibilidade ou cancelamento, a loja confirma pelo atendimento.</p>
+      </div>
+      <div>
+        <a class="checkout-primary" href="${whatsappUrl("Ola, Drogaria Onorio! Preciso de ajuda pelo site.")}" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+        <a class="checkout-outline" href="tel:+551634422440">Ligar para a loja</a>
+      </div>
+    </section>
+  `;
+}
+
 function renderInfoExtras(pageKey, page) {
   return `
+    ${page.storyPage ? renderHistoryStoryPage(page) : ""}
     ${page.stores ? renderInfoStores() : ""}
     ${page.requestForm ? renderInfoRequestForm(page.requestForm) : ""}
-    ${renderInfoSections(page)}
+    ${page.serviceGrid ? renderPharmaceuticalServices() : ""}
+    ${page.pbmPage ? renderPbmProgramPage() : ""}
+    ${page.couponPage ? renderCouponProgramPage() : ""}
+    ${page.helpGuidePage ? renderHelpGuidePage() : ""}
+    ${page.storyPage ? "" : renderInfoSections(page)}
     ${renderInfoActions(page)}
   `;
 }
 
 function renderInfoPage(pageKey = "atendimento") {
   const page = infoPages[pageKey] || infoPages.atendimento;
+  const isPbmPage = pageKey === "pbm";
+  const isHistoryPage = pageKey === "historia";
+  const hasCustomInfoPage = isPbmPage || pageKey === "ajuda" || isHistoryPage;
   return `
     ${checkoutHeader()}
-    <main class="checkout-page info-page">
+    <main class="checkout-page info-page ${isPbmPage ? "info-page-pbm" : ""} ${pageKey === "ajuda" ? "info-page-ajuda" : ""} ${isHistoryPage ? "info-page-historia" : ""}">
       <button type="button" class="checkout-back" data-route="#home">‹ Voltar para a loja</button>
-      <section class="info-hero">
-        <span>${escapeHtml(page.eyebrow)}</span>
-        <h1>${escapeHtml(page.title)}</h1>
-        <p>${escapeHtml(page.text)}</p>
-      </section>
-      <div class="info-card-grid">
-        ${page.cards
-          .map(
-            ([title, text]) => `
-              <article>
-                <strong>${escapeHtml(title)}</strong>
-                <span>${escapeHtml(text)}</span>
-              </article>
-            `,
-          )
-          .join("")}
-      </div>
+      ${hasCustomInfoPage ? "" : `
+        <section class="info-hero">
+          <span>${escapeHtml(page.eyebrow)}</span>
+          <h1>${escapeHtml(page.title)}</h1>
+          <p>${escapeHtml(page.text)}</p>
+        </section>
+      `}
+      ${!hasCustomInfoPage && page.cards?.length ? `
+        <div class="info-card-grid">
+          ${page.cards
+            .map(
+              ([title, text]) => `
+                <article>
+                  <strong>${escapeHtml(title)}</strong>
+                  <span>${escapeHtml(text)}</span>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+      ` : ""}
       ${renderInfoExtras(pageKey, page)}
       <div class="info-actions">
         ${infoPrimaryAction(page)}
@@ -3671,6 +8566,19 @@ function renderInfoPage(pageKey = "atendimento") {
       </div>
     </main>
   `;
+}
+
+function globalFooterMarkup() {
+  const footer = document.querySelector(".app-shell .site-footer");
+  if (!footer) return "";
+
+  return footer.outerHTML
+    .replace('id="legal-info"', 'id="legal-info-global"')
+    .replace('class="site-footer"', 'class="site-footer site-footer-global"');
+}
+
+function renderPageWithGlobalFooter(markup) {
+  return `${markup}${globalFooterMarkup()}`;
 }
 
 function renderCheckoutFlow() {
@@ -3681,7 +8589,7 @@ function renderCheckoutFlow() {
   const isInfo = route.startsWith("#pagina/");
   const isProduct = route.startsWith("#produto/");
   const isCheckout =
-    ["#cesta", "#login", "#revisao", "#entrega", "#pagamento", "#finalizado"].includes(route) ||
+    ["#cesta", "#login", "#revisao", "#dados-cliente", "#novo-endereco", "#entrega", "#pagamento", "#finalizado"].includes(route) ||
     isCatalog ||
     isInfo ||
     isProduct;
@@ -3699,20 +8607,27 @@ function renderCheckoutFlow() {
     "#cesta": renderCartCheckoutPage,
     "#login": renderLoginPage,
     "#revisao": renderReviewPage,
+    "#dados-cliente": renderCustomerDataPage,
+    "#novo-endereco": renderAddressEditPage,
     "#entrega": renderDeliveryPage,
     "#pagamento": renderPaymentPage,
     "#finalizado": renderFinishedPage,
   };
 
+  let pageMarkup = "";
+
   if (isCatalog) {
-    checkoutFlow.innerHTML = renderCatalogPage(decodeURIComponent(route.replace("#catalogo/", "")) || "todos");
+    pageMarkup = renderCatalogPage(decodeURIComponent(route.replace("#catalogo/", "")) || "todos");
   } else if (isProduct) {
-    checkoutFlow.innerHTML = renderProductPage(decodeURIComponent(route.replace("#produto/", "")) || "");
+    pageMarkup = renderProductPage(decodeURIComponent(route.replace("#produto/", "")) || "");
   } else if (isInfo) {
-    checkoutFlow.innerHTML = renderInfoPage(decodeURIComponent(route.replace("#pagina/", "")) || "atendimento");
+    pageMarkup = renderInfoPage(decodeURIComponent(route.replace("#pagina/", "")) || "atendimento");
   } else {
-    checkoutFlow.innerHTML = renderers[route]();
+    pageMarkup = renderers[route]();
   }
+
+  checkoutFlow.innerHTML = renderPageWithGlobalFooter(pageMarkup);
+  initPbmPartnerCarousel();
   window.scrollTo({ top: 0, behavior: "auto" });
 }
 
@@ -3721,6 +8636,7 @@ function navigateTo(route) {
   closeAppDownload();
   closeCartDrawer();
   closeModal();
+  closePbmAuthDialog();
 
   if (route === "#finalizado") {
     finalizeCurrentOrder();
@@ -3729,6 +8645,7 @@ function navigateTo(route) {
   if (route === "#home") {
     state.category = "all";
     state.query = "";
+    state.catalogQueryRoute = "";
     window.history.pushState(null, "", `${window.location.pathname}${window.location.search}`);
     document.querySelector("#search-input") && (document.querySelector("#search-input").value = "");
     renderCategories();
@@ -3746,12 +8663,14 @@ function navigateTo(route) {
   window.location.hash = route;
 }
 
-function navigateToCatalog(routeKey = "todos") {
+function navigateToCatalog(routeKey = "todos", queryOverride = null) {
   const config = getCatalogConfig(routeKey);
   state.category = config.categoryId;
-  state.query = config.query;
+  state.query = queryOverride ?? config.query;
+  state.catalogQueryRoute = queryOverride !== null || routeKey === "busca" ? routeKey : "";
   closeCartDrawer();
   closeModal();
+  closePbmAuthDialog();
   window.location.hash = `#catalogo/${encodeURIComponent(routeKey)}`;
   renderCart();
 }
@@ -3762,28 +8681,25 @@ function navigateToProduct(productId) {
 
   closeCartDrawer();
   closeModal();
+  closePbmAuthDialog();
   window.location.hash = `#produto/${encodeURIComponent(product.id)}`;
   renderCart();
 }
 
 function renderCategories() {
   const categoryStrip = document.querySelector("#category-strip");
+  const catalogMatch = window.location.hash.match(/^#catalogo\/(.+)/);
+  const activeRouteKey = catalogMatch ? decodeURIComponent(catalogMatch[1]) : "";
   categoryStrip.innerHTML = categories
+    .filter((category) => category.showInMenu !== false)
     .map(
       (category) => {
         const categoryQuery = category.query || "";
-        const hasArt = Boolean(category.art);
-        const hasPhotoOnly = Boolean(category.photoOnly && category.image);
-        const hasScene = !hasPhotoOnly && Boolean(category.image || category.products?.length || category.sceneIcon || category.badge);
-        const categoryImage = (hasScene || hasPhotoOnly) && category.image
-          ? ` style="--category-image: url('${escapeHtml(category.image)}')"`
-          : "";
-        const visualClass = `category-visual ${hasPhotoOnly ? "has-photo" : hasScene ? "has-category-scene" : hasArt ? "has-product-art" : category.image ? "has-photo" : ""}`;
-        const visualContent = hasPhotoOnly ? "" : hasScene ? categoryScene(category) : hasArt ? productArtwork(category.art) : svg(category.icon);
-        const isActive =
-          category.id === state.category &&
-          state.query === categoryQuery &&
-          !category.scrollTarget;
+        const visualClass = "category-visual has-menu-icon";
+        const visualContent = svg(category.menuIcon || category.icon || "grid");
+        const isActive = activeRouteKey
+          ? category.routeKey === activeRouteKey
+          : category.id === state.category && state.query === categoryQuery && !category.scrollTarget;
 
         return `
       <button
@@ -3794,7 +8710,7 @@ function renderCategories() {
         ${categoryQuery ? `data-query="${escapeHtml(categoryQuery)}"` : ""}
         ${category.scrollTarget ? `data-scroll-target="${escapeHtml(category.scrollTarget)}"` : ""}
       >
-        <span class="${visualClass}"${categoryImage}>${visualContent}</span>
+        <span class="${visualClass}">${visualContent}</span>
         <span class="category-label">${category.label}</span>
       </button>
     `;
@@ -3809,13 +8725,24 @@ function filteredProducts() {
 
 function productCardMarkup(product, extraClass = "") {
   const hasVariants = hasProductVariants(product);
-  const actionLabel = hasVariants ? (product.variantActionLabel || "Escolher opção") : "Adicionar";
-  const actionAttribute = hasVariants ? `data-product-page="${product.id}"` : `data-add="${product.id}"`;
+  const cardActionLabel = hasVariants ? "Ver apresentações" : "Adicionar";
+  const cardActionAttribute = hasVariants
+    ? `data-product-page="${escapeHtml(product.id)}"`
+    : `data-add="${escapeHtml(product.id)}"`;
   const price = productBasePrice(product);
   const hasSalePrice = product.oldPrice && product.oldPrice > price;
+  const salePercent = productDiscountPercent(product, price);
+  const stockChip = productStockChipMarkup(product, product.stock || "Consultar estoque");
+  const promoChip = product.promo ? `<small class="promo-chip">${escapeHtml(product.promo)}</small>` : "";
 
   return `
-    <article class="product-card ${extraClass}">
+    <article
+      class="product-card ${extraClass}"
+      data-product-card="${escapeHtml(product.id)}"
+      tabindex="0"
+      aria-label="Abrir detalhes de ${escapeHtml(product.name)}"
+    >
+      ${salePercent ? `<span class="discount-badge">-${salePercent}%</span>` : ""}
       <button
         type="button"
         class="favorite-button ${state.favorites.has(product.id) ? "is-active" : ""}"
@@ -3832,10 +8759,7 @@ function productCardMarkup(product, extraClass = "") {
           <h3>${product.name}</h3>
         </button>
         <p>${product.detail}</p>
-        <div class="product-chip-row">
-          <small class="stock-chip">${escapeHtml(product.stock || "Consultar estoque")}</small>
-          ${product.promo ? `<small class="promo-chip">${escapeHtml(product.promo)}</small>` : ""}
-        </div>
+        ${stockChip || promoChip ? `<div class="product-chip-row">${stockChip}${promoChip}</div>` : ""}
         <button type="button" class="detail-button" data-product-page="${product.id}">
           Ver detalhes
         </button>
@@ -3844,8 +8768,8 @@ function productCardMarkup(product, extraClass = "") {
           ${hasSalePrice ? `<del class="product-old-price">${formatCurrency(product.oldPrice)}</del>` : ""}
           ${formatCurrency(price)}
         </div>
-        <button type="button" class="add-button" ${actionAttribute}>
-          ${actionLabel}
+        <button type="button" class="add-button" ${cardActionAttribute}>
+          ${cardActionLabel}
           ${svg("cart")}
         </button>
       </div>
@@ -3880,15 +8804,74 @@ function renderProducts() {
   grid.innerHTML = productsToRender.map((product) => productCardMarkup(product)).join("");
 }
 
+function isCardClickTargetInteractive(target) {
+  return Boolean(target.closest("button, a, input, select, textarea, label"));
+}
+
+function productIdFromCard(card) {
+  return (
+    card?.dataset.productCard ||
+    card?.querySelector("[data-product-page]")?.dataset.productPage ||
+    card?.querySelector("[data-add]")?.dataset.add ||
+    ""
+  );
+}
+
+function navigateFromProductCard(card) {
+  const productId = productIdFromCard(card);
+  if (productId) {
+    navigateToProduct(productId);
+  }
+}
+
+function hydrateStaticProductCards() {
+  document.querySelectorAll(".mini-product-card").forEach((card) => {
+    const productId = productIdFromCard(card);
+    if (!productId) return;
+
+    const product = getProduct(productId);
+    card.dataset.productCard = productId;
+    card.tabIndex = 0;
+    card.setAttribute("aria-label", `Abrir detalhes de ${product?.name || "produto"}`);
+
+    const salePercent = product ? productDiscountPercent(product) : 0;
+    let badge = card.querySelector(".discount-badge");
+    if (salePercent) {
+      if (!badge) {
+        badge = document.createElement("span");
+        badge.className = "discount-badge";
+        card.prepend(badge);
+      }
+      badge.textContent = `-${salePercent}%`;
+    }
+
+    card.querySelectorAll(".mini-add").forEach((button) => {
+      button.removeAttribute("data-add");
+      button.removeAttribute("data-product-page");
+      button.classList.toggle("mini-select-presentation", hasProductVariants(product));
+      button.classList.toggle("mini-cart-action", !hasProductVariants(product));
+
+      if (hasProductVariants(product)) {
+        button.dataset.productPage = productId;
+        button.setAttribute("aria-label", `Ver apresentações de ${product?.name || "produto"}`);
+        button.innerHTML = `Ver apresentações ${svg("cart")}`;
+      } else {
+        button.dataset.add = productId;
+        button.setAttribute("aria-label", `Adicionar ${product?.name || "produto"} à cesta`);
+        button.innerHTML = `Adicionar ${svg("cart")}`;
+      }
+    });
+  });
+}
+
 function calculateCart() {
-  const items = [...state.cart.entries()].map(([id, quantity]) => ({
-    ...getProduct(id),
-    quantity,
-  }));
+  const items = cartItemsFromState();
   const subtotal = roundMoney(items.reduce((sum, item) => sum + item.price * item.quantity, 0));
-  const pointsEarned = Math.floor(subtotal * LOYALTY_POINTS_PER_REAL);
+  const pointsEarned = loyaltyPointsFromSubtotal(subtotal);
+  const couponResult = couponDiscountForCart(subtotal, items);
+  const couponDiscount = couponResult.discount;
   const pixDiscount = state.customer.payment === "Pix" ? roundMoney(subtotal * PIX_DISCOUNT_RATE) : 0;
-  const availablePointsDiscount = availablePointsDiscountForCart(subtotal, pixDiscount);
+  const availablePointsDiscount = availablePointsDiscountForCart(subtotal, pixDiscount + couponDiscount);
   const pointsDiscount = state.usePoints && subtotal > 0
     ? availablePointsDiscount
     : 0;
@@ -3897,15 +8880,19 @@ function calculateCart() {
     items,
     subtotal,
     pointsEarned,
+    couponDiscount,
+    coupon: couponResult.coupon,
+    couponEligibility: couponResult.eligibility,
     pixDiscount,
     availablePointsDiscount,
     pointsDiscount,
     shipping,
-    total: roundMoney(Math.max(0, subtotal - pixDiscount - pointsDiscount + shipping)),
+    total: roundMoney(Math.max(0, subtotal - couponDiscount - pixDiscount - pointsDiscount + shipping)),
   };
 }
 
 function renderCart() {
+  syncDeliveryFulfillmentStore();
   updateAccountHeader();
 
   const cartItems = document.querySelector("#cart-items");
@@ -4007,8 +8994,9 @@ function renderCart() {
   renderCheckoutFlow();
 }
 
-function addToCart(id) {
-  state.cart.set(id, (state.cart.get(id) || 0) + 1);
+function addToCart(id, quantity = 1) {
+  const amount = Math.max(1, Number(quantity) || 1);
+  state.cart.set(id, (state.cart.get(id) || 0) + amount);
   renderCart();
   showToast(`${getProduct(id).name} adicionado ao carrinho.`);
 }
@@ -4072,7 +9060,8 @@ function collectCustomerFromForm() {
 
 function buildOrderMessage() {
   collectCustomerFromForm();
-  const { items, subtotal, pointsEarned, pixDiscount, pointsDiscount, shipping, total } = calculateCart();
+  const { items, subtotal, pointsEarned, couponDiscount, coupon, pixDiscount, pointsDiscount, shipping, total } = calculateCart();
+  const pointsExpireAt = formatLoyaltyExpiryDate();
   const deliveryLabel = state.delivery === "pickup" ? "Retirar na loja" : "Receber em casa";
   const itemLines = items
     .map(
@@ -4087,11 +9076,12 @@ function buildOrderMessage() {
     itemLines,
     "",
     `Subtotal: ${formatCurrency(subtotal)}`,
+    `Cupom: ${couponDiscount ? `${coupon?.code || state.coupon} - ${formatCurrency(couponDiscount)}` : "nao utilizado"}`,
     `Desconto Pix: ${pixDiscount ? `- ${formatCurrency(pixDiscount)}` : formatCurrency(0)}`,
     `Desconto Cliente ON: ${pointsDiscount ? `- ${formatCurrency(pointsDiscount)}` : "não utilizado"}`,
     `Entrega: ${formatCurrency(shipping)}`,
     `Total: ${formatCurrency(total)}`,
-    `${LOYALTY_PROGRAM_NAME}: +${pointsEarned} ${pointsEarned === 1 ? "ponto" : "pontos"} estimados nesta compra`,
+    `${LOYALTY_PROGRAM_NAME}: +${pointsEarned} ${pointsEarned === 1 ? "ponto" : "pontos"} estimados nesta compra (válidos até ${pointsExpireAt})`,
     "",
     `Recebimento: ${deliveryLabel}`,
     `Pagamento: ${state.customer.payment || "A combinar"}`,
@@ -4180,6 +9170,7 @@ function openCheckoutModal() {
       <span>Desconto Cliente ON: ${pointsDiscount ? `- ${formatCurrency(pointsDiscount)}` : "não utilizado"}</span>
       <span>Entrega: ${formatCurrency(shipping)}</span>
       <span>${LOYALTY_PROGRAM_NAME}: +${pointsEarned} ${pointsEarned === 1 ? "ponto" : "pontos"}</span>
+      <span>Validade dos pontos: ${formatLoyaltyExpiryDate()}</span>
       <span>${items.map((item) => `${item.quantity}x ${item.name}`).join(", ")}</span>
     </div>
     <p class="care-note">
@@ -4196,6 +9187,50 @@ function openCheckoutModal() {
 
 function closeModal() {
   document.querySelector("#modal-backdrop").hidden = true;
+}
+
+function closePbmAuthDialog() {
+  document.querySelectorAll("[data-pbm-auth-overlay]").forEach((overlay) => {
+    overlay.hidden = true;
+    overlay.querySelector("[data-pbm-cpf-step]")?.removeAttribute("hidden");
+    overlay.querySelector("[data-pbm-authorize-step]")?.setAttribute("hidden", "");
+  });
+}
+
+function openPbmAuthDialog(trigger) {
+  const overlay = trigger?.closest(".product-page")?.querySelector("[data-pbm-auth-overlay]") || document.querySelector("[data-pbm-auth-overlay]");
+  if (!overlay) return;
+
+  closeAppDownload();
+  closeCartDrawer();
+  overlay.hidden = false;
+  overlay.querySelector("[data-pbm-cpf-step]")?.removeAttribute("hidden");
+  overlay.querySelector("[data-pbm-authorize-step]")?.setAttribute("hidden", "");
+  window.requestAnimationFrame(() => overlay.querySelector("[data-pbm-cpf-input]")?.focus());
+}
+
+function showPbmAuthorizationStep(trigger) {
+  const overlay = trigger?.closest("[data-pbm-auth-overlay]");
+  const cpfInput = overlay?.querySelector("[data-pbm-cpf-input]");
+  const digits = String(cpfInput?.value || "").replace(/\D/g, "");
+
+  if (digits.length !== 11) {
+    showToast("Informe um CPF com 11 dígitos para consultar o desconto.");
+    cpfInput?.focus();
+    return;
+  }
+
+  state.customer.cpf = cpfInput.value;
+  overlay.querySelector("[data-pbm-cpf-step]")?.setAttribute("hidden", "");
+  overlay.querySelector("[data-pbm-authorize-step]")?.removeAttribute("hidden");
+}
+
+function formatCpfInput(value = "") {
+  const digits = String(value).replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`;
+  if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`;
+  return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
 }
 
 function openCartDrawer() {
@@ -4293,6 +9328,120 @@ function initCampaignCarousel() {
   schedule();
 }
 
+let pbmPartnerCarouselTimer = null;
+let pbmPartnerCarouselFrame = null;
+
+function initPbmPartnerCarousel() {
+  window.clearInterval(pbmPartnerCarouselTimer);
+  window.cancelAnimationFrame(pbmPartnerCarouselFrame);
+  const carousel = document.querySelector("[data-pbm-partner-carousel]");
+  if (!carousel) return;
+
+  const viewport = carousel.querySelector("[data-pbm-partner-viewport]");
+  const track = carousel.querySelector("[data-pbm-partner-track]");
+  const cards = [...carousel.querySelectorAll("[data-pbm-partner-card]")];
+  const dots = [...carousel.querySelectorAll("[data-pbm-partner-dot]")];
+  const prev = carousel.querySelector('[data-pbm-partner-dir="-1"]');
+  const next = carousel.querySelector('[data-pbm-partner-dir="1"]');
+  if (!viewport || !track || !cards.length) return;
+
+  let isPaused = false;
+  let lastFrameTime = 0;
+  const speedPxPerMs = 0.035;
+
+  const cardStep = () => {
+    const first = cards[0];
+    const second = cards[1];
+    return second ? second.offsetLeft - first.offsetLeft : first.getBoundingClientRect().width + 12;
+  };
+
+  const loopWidth = () => track.scrollWidth / 2;
+
+  const normalizeLoopPosition = () => {
+    const width = loopWidth();
+    if (!width) return;
+
+    if (viewport.scrollLeft >= width) {
+      viewport.scrollLeft -= width;
+    } else if (viewport.scrollLeft < 0) {
+      viewport.scrollLeft += width;
+    }
+  };
+
+  const activeIndex = () => {
+    const width = loopWidth();
+    const safeLeft = width ? viewport.scrollLeft % width : viewport.scrollLeft;
+    return Math.max(0, Math.min(cards.length - 1, Math.round(safeLeft / cardStep()) % cards.length));
+  };
+
+  const updateDots = () => {
+    const current = activeIndex();
+    dots.forEach((dot, index) => dot.classList.toggle("is-active", index === current));
+  };
+
+  const goTo = (index) => {
+    const nextIndex = (index + cards.length) % cards.length;
+    viewport.scrollTo({ left: cards[nextIndex].offsetLeft, behavior: "smooth" });
+    dots.forEach((dot, dotIndex) => dot.classList.toggle("is-active", dotIndex === nextIndex));
+  };
+
+  const move = (direction) => {
+    isPaused = true;
+    viewport.scrollBy({ left: cardStep() * direction, behavior: "smooth" });
+    window.setTimeout(() => {
+      normalizeLoopPosition();
+      updateDots();
+      isPaused = false;
+      lastFrameTime = 0;
+    }, 420);
+  };
+
+  const animate = (time) => {
+    if (!lastFrameTime) lastFrameTime = time;
+    const delta = time - lastFrameTime;
+    lastFrameTime = time;
+
+    if (!isPaused && loopWidth() > viewport.clientWidth) {
+      viewport.scrollLeft += delta * speedPxPerMs;
+      normalizeLoopPosition();
+      updateDots();
+    }
+
+    pbmPartnerCarouselFrame = window.requestAnimationFrame(animate);
+  };
+
+  prev?.addEventListener("click", () => move(-1));
+  next?.addEventListener("click", () => move(1));
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      isPaused = true;
+      goTo(Number(dot.dataset.pbmPartnerDot || 0));
+      window.setTimeout(() => {
+        isPaused = false;
+        lastFrameTime = 0;
+      }, 900);
+    });
+  });
+  viewport.addEventListener("scroll", updateDots, { passive: true });
+  carousel.addEventListener("mouseenter", () => {
+    isPaused = true;
+  });
+  carousel.addEventListener("mouseleave", () => {
+    isPaused = false;
+    lastFrameTime = 0;
+  });
+  carousel.addEventListener("focusin", () => {
+    isPaused = true;
+  });
+  carousel.addEventListener("focusout", () => {
+    isPaused = false;
+    lastFrameTime = 0;
+  });
+
+  pbmPartnerCarouselFrame = window.requestAnimationFrame(animate);
+  updateDots();
+}
+
 function initCollapsingCategoryBar() {
   document.querySelector(".market-header")?.classList.remove("is-compact");
 }
@@ -4300,13 +9449,17 @@ function initCollapsingCategoryBar() {
 function bindEvents() {
   document.addEventListener("click", async (event) => {
     const addButton = event.target.closest("[data-add]");
+    const variantSelectButton = event.target.closest("[data-select-variant]");
     const categoryButton = event.target.closest("[data-category]");
     const favoriteButton = event.target.closest("[data-favorite]");
+    const productQtyButton = event.target.closest("[data-product-qty]");
     const increaseButton = event.target.closest("[data-increase]");
     const decreaseButton = event.target.closest("[data-decrease]");
     const removeButton = event.target.closest("[data-remove]");
     const detailButton = event.target.closest("[data-detail]");
     const productPageButton = event.target.closest("[data-product-page]");
+    const galleryImageButton = event.target.closest("[data-gallery-image]");
+    const productCard = event.target.closest(".product-card");
     const miniProductCard = event.target.closest(".mini-product-card");
     const buyNowButton = event.target.closest("[data-buy-now]");
     const modalAddButton = event.target.closest("[data-modal-add]");
@@ -4317,6 +9470,12 @@ function bindEvents() {
     const campaignActionButton = event.target.closest("[data-campaign-action]");
     const routeButton = event.target.closest("[data-route]");
     const catalogRouteButton = event.target.closest("[data-catalog-route]");
+    const subcategorySearchButton = event.target.closest("[data-subcategory-search]");
+    const pbmScrollButton = event.target.closest("[data-pbm-scroll]");
+    const pbmActivateButton = event.target.closest("[data-pbm-activate]");
+    const pbmAuthCloseButton = event.target.closest("[data-pbm-auth-close]");
+    const pbmCpfSubmitButton = event.target.closest("[data-pbm-cpf-submit]");
+    const helpJumpButton = event.target.closest("[data-help-jump]");
     const infoPageButton = event.target.closest("[data-info-page]");
     const appDownloadButton = event.target.closest("#app-download-button, [data-app-download-toggle]");
     const cartPillButton = event.target.closest("[data-open-cart]");
@@ -4325,6 +9484,9 @@ function bindEvents() {
     const socialLoginButton = event.target.closest("[data-social-login]");
     const calculateShippingButton = event.target.closest("[data-calc-shipping]");
     const applyCouponButton = event.target.closest("[data-apply-coupon]");
+    const couponInput = event.target.closest("[data-coupon-input]");
+    const couponOptionButton = event.target.closest("[data-coupon-code]");
+    const copyCouponButton = event.target.closest("[data-copy-coupon]");
     const deliveryTab = event.target.closest("[data-delivery-tab]");
     const openStoreButton = event.target.closest("[data-open-store-modal]");
     const closeStoreButton = event.target.closest("[data-close-store-modal]");
@@ -4333,12 +9495,46 @@ function bindEvents() {
     const copyPixButton = event.target.closest("[data-copy-pix]");
     const usePointsButton = event.target.closest("[data-use-points]");
     const whatsappFormButton = event.target.closest("[data-whatsapp-form]");
+    const serviceMoreButton = event.target.closest("[data-service-more]");
     const addAddressButton = event.target.closest("[data-add-address]");
     const saveCustomerDataButton = event.target.closest("[data-save-customer-data]");
+    const autofillAddressButton = event.target.closest("[data-autofill-address]");
+    const saveCustomerProfileButton = event.target.closest("[data-save-customer-profile]");
+    const saveAddressProfileButton = event.target.closest("[data-save-address-profile]");
+    const scrollTopButton = event.target.closest("[data-scroll-top]");
+
+    if (event.target.matches("[data-pbm-auth-overlay]")) {
+      closePbmAuthDialog();
+      return;
+    }
+
+    if (scrollTopButton) {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
 
     if (appDownloadButton) {
       event.preventDefault();
       toggleAppDownload(appDownloadButton);
+      return;
+    }
+
+    if (pbmActivateButton) {
+      event.preventDefault();
+      openPbmAuthDialog(pbmActivateButton);
+      return;
+    }
+
+    if (pbmAuthCloseButton) {
+      event.preventDefault();
+      closePbmAuthDialog();
+      return;
+    }
+
+    if (pbmCpfSubmitButton) {
+      event.preventDefault();
+      showPbmAuthorizationStep(pbmCpfSubmitButton);
       return;
     }
 
@@ -4367,10 +9563,57 @@ function bindEvents() {
       return;
     }
 
+    if (subcategorySearchButton) {
+      event.preventDefault();
+      navigateToCatalog(
+        subcategorySearchButton.dataset.subcategoryRoute || "busca",
+        subcategorySearchButton.dataset.subcategorySearch || "",
+      );
+      return;
+    }
+
+    if (pbmScrollButton) {
+      event.preventDefault();
+      const scrollTarget = pbmScrollButton.dataset.pbmScroll;
+      const target = document.getElementById(
+        scrollTarget === "categories" ? "pbm-treatment-categories" : `pbm-treatment-${scrollTarget}`,
+      );
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      return;
+    }
+
+    if (helpJumpButton) {
+      event.preventDefault();
+      const target = document.getElementById(`help-${helpJumpButton.dataset.helpJump}`);
+      target?.scrollIntoView({ behavior: "smooth", block: "start" });
+      target?.querySelector("details")?.setAttribute("open", "");
+      return;
+    }
+
     if (infoPageButton) {
       event.preventDefault();
       closeAppDownload();
       navigateTo(`#pagina/${encodeURIComponent(infoPageButton.dataset.infoPage)}`);
+      return;
+    }
+
+    if (variantSelectButton) {
+      event.preventDefault();
+      state.selectedVariants[variantSelectButton.dataset.productId] = variantSelectButton.dataset.selectVariant;
+      renderCart();
+      return;
+    }
+
+    if (productQtyButton) {
+      event.preventDefault();
+      const productId = productQtyButton.dataset.productId;
+      const itemId = productQtyButton.dataset.itemId;
+      const key = productPageQuantityKey(productId, itemId);
+      const nextQuantity = productPageQuantity(productId, itemId) + Number(productQtyButton.dataset.productQty || 0);
+      state.productPageQuantities[key] = Math.max(1, Math.min(99, nextQuantity));
+      renderCart();
       return;
     }
 
@@ -4380,17 +9623,81 @@ function bindEvents() {
       return;
     }
 
-    if (miniProductCard && !addButton) {
-      const productId = miniProductCard.querySelector("[data-add]")?.dataset.add;
-      if (productId) {
-        event.preventDefault();
-        navigateToProduct(productId);
-        return;
+    if (galleryImageButton) {
+      event.preventDefault();
+      const gallery = galleryImageButton.closest(".product-gallery");
+      const mainImage = gallery?.querySelector("[data-gallery-main]");
+
+      if (mainImage) {
+        mainImage.src = galleryImageButton.dataset.galleryImage;
+        mainImage.alt = galleryImageButton.dataset.galleryAlt || mainImage.alt;
       }
+
+      gallery?.querySelectorAll("[data-gallery-image]").forEach((button) => {
+        button.classList.toggle("is-active", button === galleryImageButton);
+      });
+      return;
+    }
+
+    if (productCard && !isCardClickTargetInteractive(event.target)) {
+      event.preventDefault();
+      navigateFromProductCard(productCard);
+      return;
+    }
+
+    if (miniProductCard && !isCardClickTargetInteractive(event.target)) {
+      event.preventDefault();
+      navigateFromProductCard(miniProductCard);
+      return;
     }
 
     if (!event.target.closest("#app-download, .app-download")) {
       closeAppDownload();
+    }
+
+    if (autofillAddressButton) {
+      event.preventDefault();
+      await autofillAddressFromCep();
+      return;
+    }
+
+    if (saveCustomerProfileButton) {
+      event.preventDefault();
+      saveCustomerProfile();
+      showToast("Dados do cliente atualizados.");
+      navigateTo("#revisao");
+      return;
+    }
+
+    if (saveAddressProfileButton) {
+      event.preventDefault();
+      state.delivery = "home";
+      state.customer.receiverName ||= state.customer.fullName || state.customer.name || "";
+      buildManualCustomerAddress();
+
+      if (normalizeCep(state.customer.cep || state.cep).length !== 8) {
+        showToast("Informe um CEP com 8 numeros para salvar o endereco.");
+        return;
+      }
+
+      if (!state.customer.addressStreet.trim()) {
+        showToast("Informe a rua ou avenida do endereco.");
+        return;
+      }
+
+      if (!state.customer.addressNumber.trim()) {
+        showToast("Informe o numero do endereco.");
+        return;
+      }
+
+      if (!state.customer.receiverName.trim()) {
+        showToast("Informe o nome de quem vai receber.");
+        return;
+      }
+
+      showToast("Endereco salvo para entrega.");
+      navigateTo("#revisao");
+      return;
     }
 
     if (addAddressButton) {
@@ -4403,6 +9710,8 @@ function bindEvents() {
       state.customer.addressComplement = "";
       state.customer.receiverName = state.customer.fullName || state.customer.name || "";
       state.deliveryQuote = null;
+      state.deliveryFulfillmentStoreId = "";
+      state.deliveryFulfillmentNote = "";
       state.shippingStatus = "idle";
       state.shippingError = "";
       renderCart();
@@ -4449,16 +9758,14 @@ function bindEvents() {
 
       try {
         const quote = await quoteDeliveryByCep(cep);
-        state.deliveryQuote = quote;
-        state.customer.address = quote.address;
-        state.customer.cep = quote.formattedCep;
-        state.customer.receiverName ||= state.customer.fullName || state.customer.name || "";
-        state.selectedStore = quote.nearestStoreId;
+        applyDeliveryQuoteToCustomer(quote);
         state.shippingStatus = "done";
         state.shippingError = "";
         showToast(`${quote.serviceLabel} calculado: ${formatCurrency(quote.fee)}.`);
       } catch (error) {
         state.deliveryQuote = null;
+        state.deliveryFulfillmentStoreId = "";
+        state.deliveryFulfillmentNote = "";
         state.shippingStatus = "error";
         state.shippingError = error.message || "Não foi possível calcular o frete.";
         showToast(state.shippingError);
@@ -4468,9 +9775,62 @@ function bindEvents() {
       return;
     }
 
+    if (couponInput) {
+      state.couponPanelOpen = true;
+      renderCart();
+      window.requestAnimationFrame(() => {
+        const input = document.querySelector("#coupon-input");
+        input?.focus();
+        input?.setSelectionRange(input.value.length, input.value.length);
+      });
+      return;
+    }
+
+    if (copyCouponButton) {
+      const couponCode = copyCouponButton.dataset.copyCoupon || "";
+      try {
+        await navigator.clipboard?.writeText(couponCode);
+        showToast(`Cupom ${couponCode} copiado.`);
+      } catch (error) {
+        showToast(`Cupom ${couponCode}: copie o codigo exibido.`);
+      }
+      return;
+    }
+
+    if (couponOptionButton) {
+      const couponCode = couponOptionButton.dataset.couponCode || "";
+      const coupon = findCoupon(couponCode);
+      const { subtotal, items } = calculateCart();
+      const eligibility = couponEligibility(coupon, subtotal, items);
+
+      if (!eligibility.eligible) {
+        showToast(eligibility.reason);
+        return;
+      }
+
+      state.coupon = coupon.code;
+      const result = couponDiscountForCart(subtotal, items);
+      state.couponPanelOpen = false;
+      renderCart();
+      showToast(`Cupom ${coupon.code} aplicado: - ${formatCurrency(result.discount)}.`);
+      return;
+    }
+
     if (applyCouponButton) {
       state.coupon = document.querySelector("#coupon-input")?.value.trim() || "";
-      showToast(state.coupon ? `Cupom ${state.coupon} adicionado ao protótipo.` : "Digite um cupom para aplicar.");
+      const { couponDiscount, couponEligibility: eligibility } = calculateCart();
+      const coupon = findCoupon(state.coupon);
+      state.couponPanelOpen = false;
+
+      if (!state.coupon) {
+        state.couponPanelOpen = true;
+        showToast("Digite ou escolha um cupom para aplicar.");
+      } else if (!couponDiscount) {
+        showToast(eligibility?.reason || "Cupom nao disponivel para esta cesta.");
+      } else {
+        state.coupon = coupon?.code || state.coupon;
+        showToast(`Cupom ${state.coupon.toUpperCase()} aplicado: - ${formatCurrency(couponDiscount)}.`);
+      }
       renderCart();
       return;
     }
@@ -4504,6 +9864,9 @@ function bindEvents() {
       const selectedStore = document.querySelector('input[name="pickup-store"]:checked')?.value;
       state.selectedStore = selectedStore || state.selectedStore;
       state.delivery = "pickup";
+      state.storeSelectionConfirmed = true;
+      state.deliveryFulfillmentStoreId = "";
+      state.deliveryFulfillmentNote = "";
       state.storeModalOpen = false;
       navigateTo("#pagamento");
       return;
@@ -4551,6 +9914,13 @@ function bindEvents() {
       return;
     }
 
+    if (serviceMoreButton) {
+      event.preventDefault();
+      const service = pharmaceuticalServices.find((item) => item.title === serviceMoreButton.dataset.serviceMore);
+      showToast(service ? `${service.title}: ${service.text}` : "Consulte a equipe para mais detalhes.");
+      return;
+    }
+
     if (
       document.body.classList.contains("cart-open") &&
       !event.target.closest("#cart-panel") &&
@@ -4560,11 +9930,11 @@ function bindEvents() {
     }
 
     if (addButton) {
-      addToCart(addButton.dataset.add);
+      addToCart(addButton.dataset.add, addButton.dataset.addQuantity);
     }
 
     if (buyNowButton) {
-      addToCart(buyNowButton.dataset.buyNow);
+      addToCart(buyNowButton.dataset.buyNow, buyNowButton.dataset.buyQuantity);
       navigateTo("#cesta");
       return;
     }
@@ -4574,6 +9944,10 @@ function bindEvents() {
     }
 
     if (categoryButton) {
+      if (categoryButton.dataset.routeKey === "servicos") {
+        navigateTo("#pagina/servicos-saude");
+        return;
+      }
       navigateToCatalog(categoryButton.dataset.routeKey || "todos");
       return;
     }
@@ -4654,7 +10028,16 @@ function bindEvents() {
 
   document.addEventListener("keydown", (event) => {
     if (!["Enter", " "].includes(event.key)) return;
-    const keyboardTarget = event.target.closest("[data-info-page], [data-catalog-route]");
+    const cardTarget = event.target.matches(".product-card, .mini-product-card")
+      ? event.target
+      : null;
+    if (cardTarget) {
+      event.preventDefault();
+      navigateFromProductCard(cardTarget);
+      return;
+    }
+
+    const keyboardTarget = event.target.closest("[data-info-page], [data-catalog-route], [data-subcategory-search], [data-pbm-scroll], [data-help-jump]");
     if (!keyboardTarget) return;
     event.preventDefault();
     keyboardTarget.click();
@@ -4711,6 +10094,9 @@ function bindEvents() {
   document.addEventListener("input", (event) => {
     const customerField = event.target.closest("[data-checkout-customer]");
     const stateField = event.target.closest("[data-checkout-state]");
+    const couponField = event.target.closest("[data-coupon-input]");
+    const helpSearchField = event.target.closest("[data-help-search]");
+    const pbmCpfField = event.target.closest("[data-pbm-cpf-input]");
 
     if (customerField) {
       state.customer[customerField.dataset.checkoutCustomer] = customerField.value;
@@ -4724,15 +10110,46 @@ function bindEvents() {
       if (stateField.dataset.checkoutState === "cep" && normalizeCep(state.deliveryQuote?.cep) !== normalizeCep(stateField.value)) {
         state.customer.cep = formatCep(stateField.value);
         state.deliveryQuote = null;
+        state.deliveryFulfillmentStoreId = "";
+        state.deliveryFulfillmentNote = "";
         state.shippingStatus = "idle";
         state.shippingError = "";
       }
+      if (stateField.matches("[data-address-cep]")) {
+        window.clearTimeout(cepLookupTimer);
+        if (normalizeCep(stateField.value).length === 8) {
+          cepLookupTimer = window.setTimeout(() => {
+            autofillAddressFromCep();
+          }, 650);
+        }
+      }
+    }
+
+    if (couponField) {
+      state.coupon = couponField.value;
+    }
+
+    if (helpSearchField) {
+      const query = normalizeText(helpSearchField.value);
+      document.querySelectorAll("[data-help-question]").forEach((item) => {
+        const matches = !query || normalizeText(item.textContent).includes(query);
+        item.hidden = !matches;
+      });
+      document.querySelectorAll("[data-help-group]").forEach((group) => {
+        const visibleQuestions = [...group.querySelectorAll("[data-help-question]")].some((item) => !item.hidden);
+        group.hidden = !visibleQuestions;
+      });
+    }
+
+    if (pbmCpfField) {
+      pbmCpfField.value = formatCpfInput(pbmCpfField.value);
     }
   });
 
   document.addEventListener("change", (event) => {
     const paymentField = event.target.closest("[data-payment-select]");
     const storeField = event.target.closest('input[name="pickup-store"]');
+    const productQuantitySelect = event.target.closest("[data-product-quantity-select]");
 
     if (paymentField) {
       state.customer.payment = paymentField.dataset.paymentSelect;
@@ -4741,6 +10158,12 @@ function bindEvents() {
 
     if (storeField) {
       state.selectedStore = storeField.value;
+    }
+
+    if (productQuantitySelect) {
+      const key = productPageQuantityKey(productQuantitySelect.dataset.productId, productQuantitySelect.dataset.itemId);
+      state.productPageQuantities[key] = Math.max(1, Math.min(99, Number(productQuantitySelect.value) || 1));
+      renderCart();
     }
   });
 
@@ -4794,6 +10217,7 @@ function bindEvents() {
 
 renderCategories();
 renderProducts();
+hydrateStaticProductCards();
 renderCart();
 setAppQrCode();
 initCampaignCarousel();

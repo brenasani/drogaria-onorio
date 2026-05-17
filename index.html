@@ -9,7 +9,7 @@
     />
     <title>Drogaria Onório | App de compras</title>
     <link rel="icon" type="image/png" href="assets/onorio-avatar-transparent.png?v=2" />
-    <link rel="stylesheet" href="styles.css?v=20260514-store-distance" />
+  <link rel="stylesheet" href="styles.css?v=20260516-tarja-galeria-limpa" />
   </head>
   <body>
     <div class="app-shell" id="top">
@@ -74,8 +74,15 @@
               </span>
             </button>
             <button type="button" class="cart-pill" id="cart-pill" aria-label="0 itens na cesta. Total R$ 0,00.">
-              <span id="cart-count">0 itens</span>
-              <strong id="cart-total-pill">R$ 0,00</strong>
+              <svg class="cart-pill-icon" aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M5 9h14l-1.2 11H6.2z" />
+                <path d="M9 9a3 3 0 0 1 6 0" />
+                <path d="M9 13v3M15 13v3" />
+              </svg>
+              <span>
+                <span id="cart-count">0 itens</span>
+                <strong id="cart-total-pill">R$ 0,00</strong>
+              </span>
             </button>
           </nav>
         </div>
@@ -111,7 +118,7 @@
                 <div class="campaign-copy">
                   <span>Cliente ON</span>
                   <h1>Cada compra vira ponto para abater no valor final.</h1>
-                  <p>A cada R$ 1,00 em compras, o cliente ganha 1 ponto. A cada 100 pontos, abate R$ 1,00.</p>
+                  <p>A cada R$ 1,00 em compras, o cliente ganha 2 pontos. Ex.: R$ 100,00 geram R$ 2,00 em benefício, com validade de 6 meses.</p>
                   <button type="button" class="primary-soft" data-campaign-action="loyalty">
                     Conhecer pontos
                     <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -120,7 +127,7 @@
                   </button>
                 </div>
                 <div class="campaign-photo loyalty-badge" aria-hidden="true">
-                  <strong>R$ 1 = 1 ponto</strong>
+                  <strong>R$ 1 = 2 pontos</strong>
                   <small>100 pontos = R$ 1 de desconto</small>
                 </div>
               </article>
@@ -183,19 +190,19 @@
           </section>
 
           <section class="benefit-strip" aria-label="Vantagens de comprar na Onório">
-            <article data-info-page="cep" tabindex="0">
+            <article>
               <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M3 13h13v6H3zM16 16h2.5l2-3H16zM6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
               </svg>
               <span>Receba em até 1 hora com entrega rápida</span>
             </article>
-            <article data-info-page="descontos" tabindex="0">
+            <article>
               <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6" />
               </svg>
               <span>Genéricos até 95% e ofertas leve 3 pague 2</span>
             </article>
-            <article data-info-page="clienteon" tabindex="0">
+            <article>
               <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M20 12v9H4v-9" />
                 <path d="M2 7h20v5H2z" />
@@ -205,20 +212,165 @@
               </svg>
               <span>Cliente ON: use pontos para abater no total</span>
             </article>
-            <article data-info-page="cep" tabindex="0">
+            <article>
               <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M4 10.5 12 4l8 6.5V20H4z" />
                 <path d="M9 20v-6h6v6" />
               </svg>
               <span>Retire na farmácia sem pegar fila</span>
             </article>
-            <article data-catalog-route="medicamentos" tabindex="0">
+            <article>
               <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="m20 12-8 8-8-8 8-8z" />
                 <path d="M12 8v8M8 12h8" />
               </svg>
               <span>Descontos e benefícios em medicamentos</span>
             </article>
+          </section>
+
+          <section class="trend-video-section" aria-labelledby="trend-video-title">
+            <div class="shelf-heading trend-video-heading">
+              <div>
+                <span>Em alta agora</span>
+                <h2 id="trend-video-title">Campanhas e lançamentos para ficar de olho</h2>
+                <p>Cards em estilo vídeo com produtos e marcas em destaque no mercado.</p>
+              </div>
+              <a href="#catalogo/beleza" data-catalog-route="beleza">Ver beleza</a>
+            </div>
+            <div class="trend-video-viewport" aria-label="Propagandas em vídeo de produtos em alta">
+              <div class="trend-video-track">
+                <a class="trend-video-card trend-creamy" href="https://www.creamy.com.br/rotinas" target="_blank" rel="noopener">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Skincare</span>
+                  <div class="trend-pack">
+                    <span>Creamy</span>
+                    <small>Rotina de dermocosméticos</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-linus" href="https://uselinus.com.br/" target="_blank" rel="noopener">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Lifestyle</span>
+                  <div class="trend-pack">
+                    <span>Linus</span>
+                    <small>Chinelos confortáveis</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-vichy" href="https://www.vichy.com.br/" target="_blank" rel="noopener">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Dermo</span>
+                  <div class="trend-pack">
+                    <span>Vichy</span>
+                    <small>Mineral 89 e proteção solar</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-risque" href="https://www.risque.com.br/" target="_blank" rel="noopener">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Beleza</span>
+                  <div class="trend-pack">
+                    <span>Risqué</span>
+                    <small>Esmaltes e novas cores</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-principia" href="https://www.principiaskin.com/produtos/indicacoes/rosto/oleosidade/serum-anti-idade-nc-10-niacinamida-zinco-pca.html" target="_blank" rel="noopener">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Tratamento</span>
+                  <img src="assets/products/principia-niacinamida-30ml.jpg" alt="" loading="lazy" />
+                  <div class="trend-pack">
+                    <span>Principia</span>
+                    <small>Ativos para rotina facial</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-elseve" href="https://www.loreal-paris.com.br/elseve" target="_blank" rel="noopener">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Cabelo</span>
+                  <div class="trend-pack">
+                    <span>Elseve</span>
+                    <small>Shampoo e tratamento</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-colgate" href="https://www.colgate.com.br/" target="_blank" rel="noopener">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Higiene</span>
+                  <img src="assets/products/colgate-total-12-90g.webp" alt="" loading="lazy" />
+                  <div class="trend-pack">
+                    <span>Colgate</span>
+                    <small>Pasta, escova e cuidado bucal</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-creamy" href="https://www.creamy.com.br/rotinas" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Skincare</span>
+                  <div class="trend-pack">
+                    <span>Creamy</span>
+                    <small>Rotina de dermocosméticos</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-linus" href="https://uselinus.com.br/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Lifestyle</span>
+                  <div class="trend-pack">
+                    <span>Linus</span>
+                    <small>Chinelos confortáveis</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-vichy" href="https://www.vichy.com.br/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Dermo</span>
+                  <div class="trend-pack">
+                    <span>Vichy</span>
+                    <small>Mineral 89 e proteção solar</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-risque" href="https://www.risque.com.br/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Beleza</span>
+                  <div class="trend-pack">
+                    <span>Risqué</span>
+                    <small>Esmaltes e novas cores</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-principia" href="https://www.principiaskin.com/produtos/indicacoes/rosto/oleosidade/serum-anti-idade-nc-10-niacinamida-zinco-pca.html" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Tratamento</span>
+                  <img src="assets/products/principia-niacinamida-30ml.jpg" alt="" loading="lazy" />
+                  <div class="trend-pack">
+                    <span>Principia</span>
+                    <small>Ativos para rotina facial</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-elseve" href="https://www.loreal-paris.com.br/elseve" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Cabelo</span>
+                  <div class="trend-pack">
+                    <span>Elseve</span>
+                    <small>Shampoo e tratamento</small>
+                  </div>
+                </a>
+                <a class="trend-video-card trend-colgate" href="https://www.colgate.com.br/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+                  <span class="trend-sound">▶</span>
+                  <span class="trend-play">▶</span>
+                  <span class="trend-tag">Higiene</span>
+                  <img src="assets/products/colgate-total-12-90g.webp" alt="" loading="lazy" />
+                  <div class="trend-pack">
+                    <span>Colgate</span>
+                    <small>Pasta, escova e cuidado bucal</small>
+                  </div>
+                </a>
+              </div>
+            </div>
           </section>
 
           <div class="section-heading">
@@ -242,7 +394,7 @@
             <div class="mini-product-row">
               <article class="mini-product-card">
                 <span class="discount-badge">-18%</span>
-                <button type="button" class="mini-add" data-add="nivea" aria-label="Adicionar Nivea">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="nivea" aria-label="Escolher apresentação de Nivea">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/nivea.jpg" alt="Nivea Creme Lata 56g" loading="lazy" />
                 <small>Super oferta</small>
                 <h3>Nivea Creme Lata 56g</h3>
@@ -252,7 +404,7 @@
               </article>
               <article class="mini-product-card">
                 <span class="discount-badge">-22%</span>
-                <button type="button" class="mini-add" data-add="protetor" aria-label="Adicionar protetor solar">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="protetor" aria-label="Escolher apresentação de protetor solar">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/protetor-solar.jpg" alt="Protetor Solar FPS 50" loading="lazy" />
                 <small>Leve agora</small>
                 <h3>Protetor Solar FPS 50</h3>
@@ -262,7 +414,7 @@
               </article>
               <article class="mini-product-card">
                 <span class="discount-badge">-14%</span>
-                <button type="button" class="mini-add" data-add="benegrip" aria-label="Adicionar Benegrip">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="benegrip" aria-label="Escolher apresentação de Benegrip">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/benegrip.webp" alt="Benegrip 20 comprimidos" loading="lazy" />
                 <small>Farmácia</small>
                 <h3>Benegrip 20 comprimidos</h3>
@@ -272,7 +424,7 @@
               </article>
               <article class="mini-product-card">
                 <span class="discount-badge">-12%</span>
-                <button type="button" class="mini-add" data-add="colonia" aria-label="Adicionar colônia">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="colonia" aria-label="Escolher apresentação de colônia">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/colonia.webp" alt="Colônia Lavanda 100ml" loading="lazy" />
                 <small>Perfumaria</small>
                 <h3>Colônia Lavanda 100ml</h3>
@@ -282,7 +434,7 @@
               </article>
               <article class="mini-product-card">
                 <span class="discount-badge">-9%</span>
-                <button type="button" class="mini-add" data-add="vitamina-c" aria-label="Adicionar vitamina C">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="vitamina-c" aria-label="Escolher apresentação de vitamina C">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/vitamina-c.webp" alt="Vitamina C 60 cápsulas" loading="lazy" />
                 <small>Bem-estar</small>
                 <h3>Vitamina C 60 cápsulas</h3>
@@ -292,7 +444,7 @@
               </article>
               <article class="mini-product-card">
                 <span class="discount-badge">-6%</span>
-                <button type="button" class="mini-add" data-add="dorflex" aria-label="Adicionar Dorflex">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="dorflex" aria-label="Escolher apresentação de Dorflex">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/dorflex.webp" alt="Dorflex 36 comprimidos" loading="lazy" />
                 <small>Mais buscado</small>
                 <h3>Dorflex 36 comprimidos</h3>
@@ -313,7 +465,7 @@
             </div>
             <div class="mini-product-row">
               <article class="mini-product-card">
-                <button type="button" class="mini-add" data-add="agua" aria-label="Adicionar Água Crystal">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="agua" aria-label="Escolher apresentação de Água Crystal">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/agua-crystal-500ml.jpg" alt="Água Crystal 500ml" loading="lazy" />
                 <small>Conveniência</small>
                 <h3>Água Crystal 500ml</h3>
@@ -322,7 +474,7 @@
               </article>
               <article class="mini-product-card">
                 <span class="discount-badge">-8%</span>
-                <button type="button" class="mini-add" data-add="tylenol" aria-label="Adicionar Tylenol">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="tylenol" aria-label="Escolher apresentação de Tylenol">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/tylenol-2.jpg" alt="Tylenol 500mg c/ 20" loading="lazy" />
                 <small>Farmácia</small>
                 <h3>Tylenol 500mg c/ 20</h3>
@@ -331,7 +483,7 @@
                 <strong>R$ 19,90</strong>
               </article>
               <article class="mini-product-card">
-                <button type="button" class="mini-add" data-add="nivea" aria-label="Adicionar hidratante">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="nivea" aria-label="Escolher apresentação de hidratante">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/nivea.jpg" alt="Hidratante cuidado diário" loading="lazy" />
                 <small>Dermocosmético</small>
                 <h3>Hidratante cuidado diário</h3>
@@ -340,7 +492,7 @@
               </article>
               <article class="mini-product-card">
                 <span class="discount-badge">-20%</span>
-                <button type="button" class="mini-add" data-add="protetor" aria-label="Adicionar protetor">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="protetor" aria-label="Escolher apresentação de protetor">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/protetor-solar.jpg" alt="Proteção solar facial" loading="lazy" />
                 <small>Verão</small>
                 <h3>Proteção solar facial</h3>
@@ -349,7 +501,7 @@
                 <strong>R$ 42,90</strong>
               </article>
               <article class="mini-product-card">
-                <button type="button" class="mini-add" data-add="colonia" aria-label="Adicionar perfume">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="colonia" aria-label="Escolher apresentação de perfume">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/colonia.webp" alt="Perfume suave 100ml" loading="lazy" />
                 <small>Perfumaria</small>
                 <h3>Perfume suave 100ml</h3>
@@ -357,7 +509,7 @@
                 <strong>R$ 39,90</strong>
               </article>
               <article class="mini-product-card">
-                <button type="button" class="mini-add" data-add="vitamina-c" aria-label="Adicionar suplemento">+</button>
+                <button type="button" class="mini-add mini-select-presentation" data-product-page="vitamina-c" aria-label="Escolher apresentação de suplemento">Escolher apresentação</button>
                 <img class="mini-photo" src="assets/products/vitamina-c.webp" alt="Suplemento de rotina" loading="lazy" />
                 <small>Vida saudável</small>
                 <h3>Suplemento de rotina</h3>
@@ -511,9 +663,18 @@
               </article>
               <div class="discount-story-art discount-story-pbm" data-info-page="pbm" aria-hidden="true">
                 <span class="discount-bubble">%</span>
+                <span class="discount-slogan-card">Conexão que cuida, qualidade que inspira.</span>
                 <img class="discount-avatar" src="assets/onorio-avatar-transparent.png" alt="" loading="lazy" />
-                <img class="discount-product discount-product-one" src="assets/products/benegrip.webp" alt="" loading="lazy" />
-                <img class="discount-product discount-product-two" src="assets/products/dorflex.webp" alt="" loading="lazy" />
+                <span class="onorio-hand onorio-hand-left"></span>
+                <span class="onorio-hand onorio-hand-right"></span>
+                <span class="medicine-box medicine-box-green">
+                  <b></b>
+                  <i></i>
+                </span>
+                <span class="medicine-box medicine-box-orange">
+                  <b></b>
+                  <i></i>
+                </span>
                 <small>PBM por CPF</small>
               </div>
               <article class="discount-story-copy" data-info-page="cupons" tabindex="0">
@@ -522,11 +683,13 @@
                 <button type="button" data-info-page="cupons">Conferir cupons</button>
               </article>
               <div class="discount-story-art discount-story-coupons" data-info-page="cupons" aria-hidden="true">
-                <span class="discount-ticket">ON</span>
+                <span class="discount-ticket">10%</span>
                 <span class="discount-bubble discount-bubble-small">%</span>
-                <img class="discount-product discount-product-three" src="assets/products/vitamina-c.webp" alt="" loading="lazy" />
-                <img class="discount-product discount-product-four" src="assets/products/nivea.jpg" alt="" loading="lazy" />
-                <small>Ofertas, genéricos e leve 3 pague 2</small>
+                <span class="coupon-card coupon-card-one">R$ 10</span>
+                <span class="coupon-card coupon-card-two">15%</span>
+                <span class="coupon-card coupon-card-three">5%</span>
+                <span class="coupon-card coupon-card-four">20%</span>
+                <span class="coupon-card coupon-card-five">R$ 5</span>
               </div>
             </div>
           </section>
@@ -549,46 +712,42 @@
             </article>
             <article>
               <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="M12 21a8 8 0 1 0-8-8" />
-                <path d="M7 18c.7-2.2 2.5-3.5 5-3.5s4.3 1.3 5 3.5M9 10h.01M15 10h.01" />
+                <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" />
+                <path d="M8.5 13.5c.9 1.8 2.1 2.7 3.5 2.7s2.6-.9 3.5-2.7M9 9.5h.01M15 9.5h.01" />
               </svg>
               <strong>Atendimento humanizado</strong>
               <span>Estamos aqui para cuidar de você.</span>
             </article>
           </section>
 
+          <section class="home-help-guide" aria-labelledby="home-help-title">
+            <div class="home-help-copy">
+              <span>Guia de ajuda</span>
+              <h2 id="home-help-title">Precisa de ajuda para comprar na OnÃ³rio?</h2>
+              <p>Encontre orientaÃ§Ãµes sobre compra online, retirada, entrega, pagamento, cupons, trocas e atendimento.</p>
+            </div>
+            <div class="home-help-topics" aria-label="Assuntos da central de ajuda">
+              <span>Compra online</span>
+              <span>Pagamento</span>
+              <span>Retirada</span>
+              <span>Entrega</span>
+            </div>
+            <div class="home-help-actions">
+              <button type="button" class="checkout-primary" data-info-page="ajuda">Abrir central de ajuda</button>
+              <a class="checkout-outline" href="https://wa.me/5516997997878" target="_blank" rel="noopener">Falar no WhatsApp</a>
+            </div>
+          </section>
+
           <section class="health-space" aria-labelledby="health-title">
             <div class="shelf-heading">
               <h2 id="health-title">Espaço Mais Saúde</h2>
-              <div>
-                <button type="button" aria-label="Voltar serviços">‹</button>
-                <button type="button" aria-label="Avançar serviços">›</button>
-              </div>
             </div>
-            <div class="service-card-row">
-              <article>
-                <div class="service-photo vaccine"></div>
-                <h3>Aplicação de injetáveis</h3>
-                <p>Serviço conforme prescrição e disponibilidade da unidade.</p>
-                <button type="button" data-info-page="servicos-saude">Consultar serviço</button>
-              </article>
-              <article>
-                <div class="service-photo test"></div>
-                <h3>Testes rápidos</h3>
-                <p>Agende e retire dúvidas com a equipe.</p>
-                <button type="button" data-info-page="testes">Agendar teste</button>
-              </article>
+            <div class="service-card-row service-card-row-single">
               <article>
                 <div class="service-photo clinic"></div>
                 <h3>Serviços farmacêuticos</h3>
-                <p>Orientação, cuidado e acompanhamento.</p>
-                <button type="button" data-info-page="servicos">Conferir serviços</button>
-              </article>
-              <article>
-                <div class="service-photo delivery"></div>
-                <h3>Compre e retire</h3>
-                <p>Faça o pedido online e busque na loja.</p>
-                <button type="button" data-info-page="cep">Ver como funciona</button>
+                <p>Aferição de pressão, glicemia, aplicação de GLP-1, brincos, curativos e outros cuidados na drogaria.</p>
+                <button type="button" data-info-page="servicos-saude">Conferir serviços</button>
               </article>
             </div>
           </section>
@@ -721,8 +880,8 @@
 
       <footer class="site-footer" aria-label="Rodapé da Drogaria Onório">
         <div class="footer-help">
-          <a href="#" data-info-page="atendimento">
-            <strong>Central de atendimento</strong>
+          <a href="#" data-info-page="ajuda">
+            <strong>Central de ajuda</strong>
             <span>Confira dúvidas frequentes ou fale com a gente.</span>
           </a>
           <a href="#" data-info-page="aplicativo">
@@ -789,6 +948,7 @@
           </div>
           <div>
             <h3>Atendimento</h3>
+            <button type="button" data-info-page="ajuda">Central de ajuda</button>
             <button type="button" data-info-page="atendimento">Central de atendimento</button>
             <a href="https://wa.me/5516997997878?text=Ol%C3%A1%2C%20Drogaria%20On%C3%B3rio!%20Preciso%20de%20atendimento%20pelo%20site." target="_blank" rel="noopener">Tire dúvidas pelo WhatsApp</a>
             <button type="button" data-info-page="trocas">Troca ou devolução</button>
@@ -836,7 +996,7 @@
         <section class="footer-legal" id="legal-info" aria-label="Informações legais da Drogaria Onório">
           <div class="back-to-top">
             <span></span>
-            <a href="#top">Voltar ao Topo</a>
+            <a href="#top" data-scroll-top>Voltar ao Topo</a>
             <span></span>
           </div>
           <p class="copyright">Copyright © Drogaria Onório. Todos os direitos reservados.</p>
@@ -941,6 +1101,6 @@
       </section>
     </div>
 
-    <script src="app.js?v=20260514-store-distance"></script>
+    <script src="app.js?v=20260516-bulas-oficiais"></script>
   </body>
 </html>

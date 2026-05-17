@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 170" role="img" aria-label="Caixa de medicamento genérica">
+  <defs>
+    <linearGradient id="frontGreen" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eef8f2"/>
+    </linearGradient>
+    <linearGradient id="sideGreen" x1="0" x2="1">
+      <stop offset="0" stop-color="#d9eee5"/>
+      <stop offset="1" stop-color="#b8d9cb"/>
+    </linearGradient>
+    <filter id="shadowGreen" x="-20%" y="-25%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#2d2926" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadowGreen)" transform="translate(16 18)">
+    <path d="M28 22h230l62 24v84H90l-62-22z" fill="url(#frontGreen)"/>
+    <path d="M258 22l62 24v84l-62-22z" fill="url(#sideGreen)"/>
+    <path d="M28 22h230l62 24H90z" fill="#f8fffb"/>
+    <path d="M48 52h226v50H48z" fill="#0b7753"/>
+    <path d="M274 52l32 12v50l-32-12z" fill="#096342"/>
+    <path d="M64 35h112" stroke="#9bcab8" stroke-width="9" stroke-linecap="round"/>
+    <path d="M64 122h92" stroke="#cfe5db" stroke-width="8" stroke-linecap="round"/>
+    <path d="M180 122h42" stroke="#cfe5db" stroke-width="8" stroke-linecap="round"/>
+    <path d="M58 65h74" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+    <path d="M58 84h118" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+    <circle cx="238" cy="78" r="18" fill="#ff8f1c"/>
+    <path d="M230 78h16M238 70v16" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>

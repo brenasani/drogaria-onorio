@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" role="img" aria-label="Produtos de cuidados especiais">
+  <rect width="320" height="220" rx="22" fill="#f7fbf6"/>
+  <ellipse cx="160" cy="185" rx="104" ry="16" fill="#dfeee0"/>
+  <rect x="42" y="62" width="74" height="100" rx="18" fill="#fff" stroke="#006747" stroke-width="4"/>
+  <path d="M57 92c14-16 35-16 49 0v35c-14 12-35 12-49 0Z" fill="#d8f3e9"/>
+  <text x="79" y="121" font-family="Arial" font-size="14" font-weight="700" text-anchor="middle" fill="#006747">ADULTO</text>
+  <rect x="142" y="50" width="62" height="118" rx="14" fill="#fff6dd" stroke="#ff8f1c" stroke-width="4"/>
+  <text x="173" y="105" font-family="Arial" font-size="14" font-weight="700" text-anchor="middle" fill="#8a4d00">NUTRI</text>
+  <rect x="224" y="78" width="56" height="84" rx="10" fill="#eaf8ff" stroke="#2d91b8" stroke-width="4"/>
+  <path d="M237 96h30M237 116h30M237 136h30" stroke="#2d91b8" stroke-width="5" stroke-linecap="round"/>
+</svg>

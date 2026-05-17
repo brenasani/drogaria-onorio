@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Conveniência">
+  <defs>
+    <filter id="shadow" x="-24%" y="-24%" width="148%" height="154%">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#20342e" flood-opacity=".18"/>
+    </filter>
+    <linearGradient id="water" x1="167" y1="38" x2="190" y2="181" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#effbff"/>
+      <stop offset=".5" stop-color="#b7e4f8"/>
+      <stop offset="1" stop-color="#82cdec"/>
+    </linearGradient>
+    <linearGradient id="sprite" x1="103" y1="30" x2="138" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e6fff5"/>
+      <stop offset=".45" stop-color="#52c97c"/>
+      <stop offset="1" stop-color="#009a57"/>
+    </linearGradient>
+    <linearGradient id="power" x1="57" y1="23" x2="78" y2="146" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#20262d"/>
+      <stop offset="1" stop-color="#050709"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="120" cy="120" r="112" fill="#ffffff"/>
+  <circle cx="178" cy="60" r="48" fill="#e8f8f1"/>
+  <circle cx="56" cy="184" r="44" fill="#fff3e4"/>
+
+  <g filter="url(#shadow)">
+    <g transform="translate(31 75) rotate(-11 23 59)">
+      <rect x="2" y="12" width="41" height="96" rx="9" fill="#d71920"/>
+      <path d="M2 30h41v47H2z" fill="#e2232a"/>
+      <path d="M6 77h33v24H6z" fill="#ffffff"/>
+      <text x="24" y="95" text-anchor="middle" fill="#d71920" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="900">cola</text>
+      <ellipse cx="23" cy="12" rx="19" ry="7" fill="#b51218"/>
+      <ellipse cx="23" cy="108" rx="18" ry="6" fill="#ba171d"/>
+    </g>
+
+    <g transform="translate(86 31) rotate(11 28 77)">
+      <path d="M16 2h28l7 20v126c0 10-8 18-18 18h-6c-10 0-18-8-18-18V22z" fill="url(#sprite)"/>
+      <path d="M18 1h24v11H18z" fill="#0b8f55"/>
+      <path d="M13 46c13-8 28-8 43 0v63c-16 8-30 8-43 0z" fill="#ffffff" opacity=".94"/>
+      <text x="34" y="85" text-anchor="middle" fill="#1aa35f" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="900" transform="rotate(-90 34 85)">LIMÃO</text>
+      <circle cx="33" cy="124" r="12" fill="#dfff86"/>
+      <path d="M23 124h20" stroke="#1aa35f" stroke-width="4" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(151 49) rotate(5 24 72)">
+      <path d="M14 2h22l7 19v125c0 10-8 18-18 18h0c-10 0-18-8-18-18V21z" fill="url(#water)"/>
+      <path d="M16 1h19v11H16z" fill="#1f8bc2"/>
+      <path d="M9 61h35v58H9z" fill="#ffffff" opacity=".88"/>
+      <text x="27" y="85" text-anchor="middle" fill="#1f8bc2" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="900">ÁGUA</text>
+      <path d="M15 102h24" stroke="#85cdec" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(70 118)">
+      <rect x="0" y="0" width="64" height="94" rx="12" fill="#08090b"/>
+      <ellipse cx="32" cy="0" rx="30" ry="9" fill="#1f2229"/>
+      <ellipse cx="32" cy="94" rx="29" ry="8" fill="#020304"/>
+      <path d="M26 20l9 20 8-19-6 37 12-20-11 36-8-25-7 26-8-37 9 15z" fill="#41b749"/>
+      <text x="32" y="78" text-anchor="middle" fill="#f3f3f3" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="800">ENERGY</text>
+    </g>
+
+    <g transform="translate(47 27) rotate(-7 21 62)">
+      <path d="M12 1h20l6 18v106c0 9-7 16-16 16h0c-9 0-16-7-16-16V19z" fill="url(#power)"/>
+      <path d="M14 0h17v10H14z" fill="#0c1118"/>
+      <path d="M8 52h28v44H8z" fill="#1f83c6"/>
+      <text x="22" y="77" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="900">POWER</text>
+    </g>
+  </g>
+</svg>

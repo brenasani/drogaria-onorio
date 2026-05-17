@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" role="img" aria-label="Produtos da linha pet">
+  <rect width="320" height="220" rx="22" fill="#fff8ed"/>
+  <ellipse cx="160" cy="185" rx="110" ry="18" fill="#ecd9bf"/>
+  <circle cx="92" cy="95" r="31" fill="#d28a4c"/>
+  <circle cx="72" cy="80" r="10" fill="#a96835"/>
+  <circle cx="112" cy="80" r="10" fill="#a96835"/>
+  <circle cx="82" cy="96" r="4" fill="#202020"/>
+  <circle cx="102" cy="96" r="4" fill="#202020"/>
+  <path d="M85 111c7 7 14 7 21 0" fill="none" stroke="#202020" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="196" cy="93" r="28" fill="#eee2d6"/>
+  <path d="M176 75l-12-18 22 8M214 75l13-18-23 8" fill="#3b2b28"/>
+  <circle cx="187" cy="94" r="4" fill="#202020"/>
+  <circle cx="207" cy="94" r="4" fill="#202020"/>
+  <path d="M196 103l-8 10M196 103l8 10" stroke="#202020" stroke-width="3" stroke-linecap="round"/>
+  <rect x="126" y="130" width="82" height="38" rx="12" fill="#006747"/>
+  <text x="167" y="154" font-family="Arial" font-size="16" font-weight="700" text-anchor="middle" fill="#fff">PET</text>
+</svg>
