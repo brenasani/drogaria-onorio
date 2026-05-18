@@ -2915,10 +2915,14 @@ const state = {
   shippingStatus: "idle",
   shippingError: "",
   coupon: "",
+  couponDraft: "",
   couponPanelOpen: false,
   loggedIn: false,
   usePoints: false,
   currentOrder: null,
+  prescriptionFileName: "",
+  prescriptionSent: false,
+  prescriptionStoreId: "",
   selectedVariants: {},
   productPageQuantities: {},
   catalogQueryRoute: "",
@@ -2988,65 +2992,360 @@ const PBM_PROGRAM_LINKS = [
 const roundMoney = (value) => Math.round((value + Number.EPSILON) * 100) / 100;
 let cepLookupTimer = null;
 
-const COUPON_CPF_RULE = "1 cupom por CPF e cadastro.";
+const COUPON_CPF_RULE = "1 compra por CPF e cadastro.";
+const COUPON_NON_CUMULATIVE_RULE = "Cupom não é cumulativo e não permite usar pontos Cliente ON no mesmo pedido.";
+const COUPON_USAGE_STORAGE_KEY = "onorio-coupon-usage-v1";
+const CAMPAIGN_MONTH_NAMES = [
+  "janeiro",
+  "fevereiro",
+  "março",
+  "abril",
+  "maio",
+  "junho",
+  "julho",
+  "agosto",
+  "setembro",
+  "outubro",
+  "novembro",
+  "dezembro",
+];
 
-const availableCoupons = [
-  {
-    code: "ONORIO10",
-    title: "10% no site todo",
-    description: "Ganhe 10% de desconto em produtos participantes do site.",
-    value: 0.1,
+function campaignValidUntil(monthIndex, referenceDate = new Date()) {
+  const year = referenceDate.getFullYear();
+  const lastDay = new Date(year, monthIndex + 1, 0).getDate();
+  return `${String(lastDay).padStart(2, "0")}/${String(monthIndex + 1).padStart(2, "0")}/${year}`;
+}
+
+function campaignRule(monthIndex) {
+  return `${COUPON_CPF_RULE} Válido de 01/${String(monthIndex + 1).padStart(2, "0")} até ${campaignValidUntil(monthIndex)}. ${COUPON_NON_CUMULATIVE_RULE}`;
+}
+
+function monthlyCampaignCoupon({
+  month,
+  code,
+  title,
+  description,
+  value = 0.1,
+  keywords = [],
+  routeKeys = [],
+  productCategories = [],
+}) {
+  return {
+    code,
+    title,
+    description,
+    value,
     discountType: "percent",
+    scope: "campaign",
+    scopeLabel: `Campanha de ${CAMPAIGN_MONTH_NAMES[month]}`,
+    activeMonth: month,
+    keywords,
+    routeKeys,
+    productCategories,
+    rule: campaignRule(month),
+    validUntil: campaignValidUntil(month),
+  };
+}
+
+function isCouponActive(coupon, referenceDate = new Date()) {
+  return coupon.activeMonth === undefined || coupon.activeMonth === referenceDate.getMonth();
+}
+
+function readCouponUsageStore() {
+  try {
+    return JSON.parse(localStorage.getItem(COUPON_USAGE_STORAGE_KEY) || "{}");
+  } catch (error) {
+    return {};
+  }
+}
+
+function writeCouponUsageStore(usageStore) {
+  try {
+    localStorage.setItem(COUPON_USAGE_STORAGE_KEY, JSON.stringify(usageStore));
+  } catch (error) {
+    // A versão real fará essa trava por CPF no backend; no protótipo guardamos no navegador.
+  }
+}
+
+function customerCouponKey() {
+  const cpfDigits = String(state.customer.cpf || "").replace(/\D/g, "");
+
+  if (cpfDigits.length >= 3 && !String(state.customer.cpf || "").includes("*")) {
+    return `cpf:${cpfDigits}`;
+  }
+
+  return `cliente:${normalizeText(state.customer.email || state.customer.fullName || state.customer.name || "demo")}`;
+}
+
+function couponUsagePeriod(coupon, referenceDate = new Date()) {
+  if (coupon?.activeMonth !== undefined) {
+    return `${referenceDate.getFullYear()}-${String(coupon.activeMonth + 1).padStart(2, "0")}`;
+  }
+
+  return "fixo";
+}
+
+function couponUsageKey(coupon) {
+  if (!coupon?.code) return "";
+  return `${customerCouponKey()}::${coupon.code}::${couponUsagePeriod(coupon)}`;
+}
+
+function hasCustomerUsedCoupon(coupon) {
+  const key = couponUsageKey(coupon);
+  if (!key) return false;
+  return Boolean(readCouponUsageStore()[key]);
+}
+
+function markCouponUsedForCustomer(coupon, order) {
+  const key = couponUsageKey(coupon);
+  if (!key) return;
+
+  const usageStore = readCouponUsageStore();
+  usageStore[key] = {
+    coupon: coupon.code,
+    customer: customerCouponKey(),
+    period: couponUsagePeriod(coupon),
+    order: order?.number || "",
+    usedAt: new Date().toISOString(),
+  };
+  writeCouponUsageStore(usageStore);
+}
+
+const baseCoupons = [
+  {
+    code: "BEMVINDO10",
+    title: "R$ 10 na primeira compra",
+    description: "Ganhe R$ 10 de desconto na primeira compra online.",
+    value: 10,
+    discountType: "fixed",
     scope: "all",
-    scopeLabel: "Site todo",
-    rule: COUPON_CPF_RULE,
-    validUntil: "31/12/2026",
-  },
-  {
-    code: "LEITE10",
-    title: "10% em leite e formulas",
-    description: "Ganhe 10% em leite, formulas infantis e nutricao infantil.",
-    value: 0.1,
-    discountType: "percent",
-    scope: "milk",
-    scopeLabel: "Leites e formulas",
-    rule: COUPON_CPF_RULE,
-    validUntil: "31/12/2026",
-  },
-  {
-    code: "DERMO5",
-    title: "5% em dermocosmeticos",
-    description: "Ganhe 5% em dermocosmeticos, skincare e protetor solar.",
-    value: 0.05,
-    discountType: "percent",
-    scope: "dermo",
-    scopeLabel: "Dermocosmeticos",
-    rule: COUPON_CPF_RULE,
-    validUntil: "31/12/2026",
-  },
-  {
-    code: "HIGIENE10",
-    title: "10% em higiene pessoal",
-    description: "Ganhe 10% em sabonetes, desodorantes, saude bucal e higiene.",
-    value: 0.1,
-    discountType: "percent",
-    scope: "hygiene",
-    scopeLabel: "Higiene pessoal",
-    rule: COUPON_CPF_RULE,
-    validUntil: "31/12/2026",
-  },
-  {
-    code: "HOMEM10",
-    title: "10% em linha homem",
-    description: "Ganhe 10% em barba, cuidado masculino e produtos linha homem.",
-    value: 0.1,
-    discountType: "percent",
-    scope: "men",
-    scopeLabel: "Linha homem",
-    rule: COUPON_CPF_RULE,
+    scopeLabel: "Primeira compra",
+    rule: `${COUPON_CPF_RULE} Válido somente para primeira compra. ${COUPON_NON_CUMULATIVE_RULE}`,
     validUntil: "31/12/2026",
   },
 ];
+
+const monthlyCampaignCoupons = [
+  monthlyCampaignCoupon({
+    month: 0,
+    code: "FERIAS10",
+    title: "10% em férias e verão",
+    description: "Protetor solar, pós-sol, repelentes, hidratantes, travel size e primeiros socorros.",
+    keywords: ["protetor solar", "pos-sol", "pós-sol", "repelente", "hidratante", "travel", "curativo", "garrafa", "necessaire", "lenco umedecido", "lenço umedecido"],
+    routeKeys: ["beleza", "primeiros-socorros"],
+  }),
+  monthlyCampaignCoupon({
+    month: 1,
+    code: "FOLIA10",
+    title: "10% em folia e autocuidado",
+    description: "Isotônicos, vitaminas, energéticos, preservativos, desodorantes, skincare e maquiagem.",
+    keywords: ["isotonico", "isotônico", "vitamina", "energetico", "energético", "preservativo", "lubrificante", "desodorante", "agua micelar", "máscara facial", "mascara facial", "fixador de maquiagem", "skincare"],
+    routeKeys: ["bem-estar-saude", "beleza", "higiene-pessoal", "conveniencia"],
+  }),
+  monthlyCampaignCoupon({
+    month: 2,
+    code: "MULHER10",
+    title: "10% no mês da mulher",
+    description: "Dermocosméticos, skincare, maquiagem, perfumaria feminina, séruns e cabelo.",
+    keywords: ["dermocosmetico", "dermocosmético", "skincare", "maquiagem", "hidratante", "perfume", "perfumaria", "cabelo", "unha", "intimo feminino", "íntimo feminino", "serum", "sérum", "mascara capilar", "máscara capilar"],
+    routeKeys: ["beleza"],
+    productCategories: ["Cosméticos", "Perfumaria"],
+  }),
+  monthlyCampaignCoupon({
+    month: 3,
+    code: "ANIVERSARIO10",
+    title: "10% na campanha de aniversário",
+    description: "Combos de higiene, perfumaria, vitaminas, dermocosméticos, conveniência e kits promocionais.",
+    keywords: ["combo", "kit", "higiene", "perfumaria", "vitamina", "dermocosmetico", "dermocosmético", "conveniencia", "conveniência", "queridinho"],
+    routeKeys: ["higiene-pessoal", "beleza", "bem-estar-saude", "conveniencia"],
+  }),
+  monthlyCampaignCoupon({
+    month: 4,
+    code: "MAES10",
+    title: "10% em presentes de Dia das Mães",
+    description: "Kits de perfumaria, skincare premium, hidratantes, maquiagem, escovas e nécessaires.",
+    keywords: ["kit", "perfumaria", "perfume", "skincare", "hidratante", "aromatizador", "escova", "maquiagem", "vela", "necessaire", "presente"],
+    routeKeys: ["beleza"],
+    productCategories: ["Cosméticos", "Perfumaria"],
+  }),
+  monthlyCampaignCoupon({
+    month: 5,
+    code: "INVERNO10",
+    title: "10% em inverno e imunidade",
+    description: "Vitaminas C e D, própolis, chás, mel, pastilhas, hidratantes labiais e cremes corporais.",
+    keywords: ["vitamina c", "vitamina d", "propolis", "própolis", "cha", "chá", "mel", "pastilha", "umidificador", "hidratante labial", "creme corporal", "lenco", "lenço", "oleo corporal", "óleo corporal", "imunidade"],
+    routeKeys: ["bem-estar-saude", "beleza", "conveniencia"],
+  }),
+  monthlyCampaignCoupon({
+    month: 6,
+    code: "INFANTIL10",
+    title: "10% em cuidados infantis",
+    description: "Vitaminas infantis, shampoo infantil, lenços, fraldas, mamadeiras, fórmulas e linha baby.",
+    keywords: ["infantil", "baby", "fralda", "lenco umedecido", "lenço umedecido", "mamadeira", "chupeta", "formula infantil", "fórmula infantil", "ninho", "shampoo infantil", "mordedor", "lancheira", "protetor solar infantil"],
+    routeKeys: ["mamae-bebe"],
+    productCategories: ["Mamãe e bebê"],
+  }),
+  monthlyCampaignCoupon({
+    month: 7,
+    code: "PAIS10",
+    title: "10% em cuidado masculino",
+    description: "Perfumes masculinos, barba, desodorantes, fitness, suplementos e higiene masculina.",
+    keywords: ["masculino", "homem", "barba", "barbear", "perfume masculino", "desodorante", "fitness", "suplemento", "necessaire masculina", "modelador capilar"],
+    routeKeys: ["higiene-pessoal", "beleza", "bem-estar-saude"],
+  }),
+  monthlyCampaignCoupon({
+    month: 8,
+    code: "BEMESTAR10",
+    title: "10% em saúde, bem-estar e projeto verão",
+    description: "Whey protein, creatina, barras proteicas, snacks fit, vitaminas, chás, sono, aromaterapia e colágeno.",
+    keywords: ["whey", "whey protein", "creatina", "barra proteica", "barrinha proteina", "barrinha proteína", "snack fit", "vitamina", "coqueteleira", "zero acucar", "zero açúcar", "cha calmante", "chá calmante", "oleo essencial", "óleo essencial", "difusor", "aromaterapia", "sono", "relaxante", "colageno", "colágeno"],
+    routeKeys: ["bem-estar-saude", "conveniencia"],
+    productCategories: ["Suplementos"],
+  }),
+  monthlyCampaignCoupon({
+    month: 9,
+    code: "ROSA10",
+    title: "10% em Outubro Rosa",
+    description: "Dermocosméticos, íntimos, hidratantes, vitaminas femininas, perfumaria, maquiagem e kits de autocuidado.",
+    keywords: ["dermocosmetico", "dermocosmético", "intimo", "íntimo", "hidratante", "vitamina feminina", "perfumaria", "necessaire", "autocuidado", "maquiagem", "serum", "sérum", "rosa"],
+    routeKeys: ["beleza", "higiene-pessoal"],
+    productCategories: ["Cosméticos", "Perfumaria"],
+  }),
+  monthlyCampaignCoupon({
+    month: 10,
+    code: "BLACK15",
+    title: "15% em Black Friday Onório",
+    description: "Perfumaria, dermocosméticos, vitaminas, higiene pessoal, fitness, infantis, kits e aparelhos de cuidado.",
+    value: 0.15,
+    keywords: ["perfumaria", "perfume", "dermocosmetico", "dermocosmético", "vitamina", "higiene", "escova eletrica", "escova elétrica", "secador", "modelador", "fitness", "infantil", "kit", "combo", "aparelho"],
+    routeKeys: ["beleza", "higiene-pessoal", "bem-estar-saude", "mamae-bebe", "equipamentos-acessorios"],
+  }),
+  monthlyCampaignCoupon({
+    month: 11,
+    code: "FESTAS10",
+    title: "10% em verão e festas",
+    description: "Kits presenteáveis, protetor solar, bronzeadores, pós-sol, perfumaria, maquiagem, glow e viagem.",
+    keywords: ["kit", "presente", "protetor solar", "bronzeador", "pos-sol", "pós-sol", "perfumaria", "maquiagem", "skincare glow", "necessaire", "garrafa", "viagem", "chinelo", "verao", "verão", "fixador", "hidratante iluminador"],
+    routeKeys: ["beleza", "conveniencia"],
+  }),
+];
+
+const allCoupons = [...baseCoupons, ...monthlyCampaignCoupons];
+const availableCoupons = allCoupons.filter((coupon) => isCouponActive(coupon));
+const homeCampaignSlides = [
+  {
+    eyebrow: "Campanha de janeiro",
+    title: "Férias com cuidado do começo ao fim.",
+    description: "Use FERIAS10 em protetor solar, pós-sol, repelentes, hidratantes, travel size e primeiros socorros durante janeiro.",
+    badge: "FERIAS10",
+    note: "10% em verão e viagem",
+    photo: 'url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80")',
+  },
+  {
+    eyebrow: "Campanha de fevereiro",
+    title: "Folia, energia e autocuidado na mesma cesta.",
+    description: "Use FOLIA10 em vitaminas, isotônicos, desodorantes, skincare refrescante e itens de bem-estar durante fevereiro.",
+    badge: "FOLIA10",
+    note: "10% em folia e cuidado",
+    photo: 'url("https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=1200&q=80")',
+  },
+  {
+    eyebrow: "Campanha de março",
+    title: "Mês da Mulher com beleza e autocuidado.",
+    description: "Use MULHER10 em dermocosméticos, skincare, maquiagem, perfumaria feminina, séruns e cabelo durante março.",
+    badge: "MULHER10",
+    note: "10% em beleza selecionada",
+    photo: 'url("assets/category-beauty.jpg")',
+  },
+  {
+    eyebrow: "Campanha de abril",
+    title: "Aniversário Onório com economia na rotina.",
+    description: "Use ANIVERSARIO10 em combos de higiene, perfumaria, vitaminas, dermocosméticos, conveniência e kits durante abril.",
+    badge: "ANIVERSARIO10",
+    note: "10% em kits e combos",
+    photo: 'url("assets/category-offers-v2.jpg")',
+  },
+  {
+    eyebrow: "Campanha de maio",
+    title: "Mês das Mães: cuidado em forma de presente.",
+    description: "Use MAES10 em kits de perfumaria, skincare, hidratantes, maquiagem e nécessaires participantes durante maio.",
+    badge: "MAES10",
+    note: "10% em presentes selecionados",
+    photo: 'url("assets/category-mom-baby-real.jpg")',
+    position: "center center",
+  },
+  {
+    eyebrow: "Campanha de junho",
+    title: "Inverno e imunidade para cuidar melhor.",
+    description: "Use INVERNO10 em vitaminas C e D, própolis, chás, mel, pastilhas e hidratantes durante junho.",
+    badge: "INVERNO10",
+    note: "10% em imunidade",
+    photo: 'url("assets/category-wellness-real.jpg")',
+  },
+  {
+    eyebrow: "Campanha de julho",
+    title: "Férias infantis com cuidado de farmácia.",
+    description: "Use INFANTIL10 em vitaminas infantis, shampoo, lenços, fraldas, mamadeiras, fórmulas e linha baby durante julho.",
+    badge: "INFANTIL10",
+    note: "10% em cuidados infantis",
+    photo: 'url("assets/category-baby.jpg")',
+  },
+  {
+    eyebrow: "Campanha de agosto",
+    title: "Mês dos Pais com cuidado masculino.",
+    description: "Use PAIS10 em perfumes masculinos, barba, desodorantes, fitness, suplementos e higiene masculina durante agosto.",
+    badge: "PAIS10",
+    note: "10% em linha masculina",
+    photo: 'url("assets/category-hygiene-real.jpg")',
+  },
+  {
+    eyebrow: "Campanha de setembro",
+    title: "Saúde, bem-estar e projeto verão.",
+    description: "Use BEMESTAR10 em whey, creatina, barras proteicas, snacks fit, vitaminas, sono, aromaterapia e colágeno durante setembro.",
+    badge: "BEMESTAR10",
+    note: "10% em bem-estar",
+    photo: 'url("assets/category-wellness-real.jpg")',
+  },
+  {
+    eyebrow: "Campanha de outubro",
+    title: "Outubro Rosa com cuidado e autoestima.",
+    description: "Use ROSA10 em dermocosméticos, íntimos, hidratantes, vitaminas femininas, perfumaria, maquiagem e autocuidado durante outubro.",
+    badge: "ROSA10",
+    note: "10% em autocuidado",
+    photo: 'url("assets/category-beauty.jpg")',
+  },
+  {
+    eyebrow: "Campanha de novembro",
+    title: "Black Friday Onório com ofertas de verdade.",
+    description: "Use BLACK15 em perfumaria, dermocosméticos, vitaminas, higiene pessoal, fitness, infantis, kits e aparelhos durante novembro.",
+    badge: "BLACK15",
+    note: "15% em itens selecionados",
+    photo: 'url("assets/category-offers-v2.jpg")',
+  },
+  {
+    eyebrow: "Campanha de dezembro",
+    title: "Verão e festas com presentes cheios de cuidado.",
+    description: "Use FESTAS10 em kits presenteáveis, protetor solar, bronzeadores, perfumaria, maquiagem, glow e viagem durante dezembro.",
+    badge: "FESTAS10",
+    note: "10% em verão e festas",
+    photo: 'url("https://images.unsplash.com/photo-1544377193-33dcf4d68fb5?auto=format&fit=crop&w=1200&q=80")',
+  },
+];
+
+function applyCurrentMonthlyCampaignHero(referenceDate = new Date()) {
+  const campaign = homeCampaignSlides[referenceDate.getMonth()];
+  const slide = document.querySelector("[data-monthly-campaign-slide]");
+  if (!campaign || !slide) return;
+
+  slide.style.setProperty("--campaign-photo", campaign.photo);
+  slide.style.setProperty("--campaign-position", campaign.position || "center center");
+  slide.querySelector("[data-monthly-campaign-eyebrow]").textContent = campaign.eyebrow;
+  slide.querySelector("[data-monthly-campaign-title]").textContent = campaign.title;
+  slide.querySelector("[data-monthly-campaign-description]").textContent = campaign.description;
+  slide.querySelector("[data-monthly-campaign-cta]").textContent = "Ver campanha";
+  slide.querySelector("[data-monthly-campaign-badge]").textContent = campaign.badge;
+  slide.querySelector("[data-monthly-campaign-note]").textContent = campaign.note;
+}
 
 function getCustomerHeaderName() {
   return state.customer.name || state.customer.fullName || "Cliente Onório";
@@ -3076,7 +3375,7 @@ function updateAccountHeader() {
   }
 
   accountTitles.forEach((item) => {
-    item.textContent = "Cliente Onório";
+    item.textContent = "Cliente ON";
   });
   accountSubtitles.forEach((item) => {
     item.textContent = "Entrar ou cadastrar";
@@ -3090,13 +3389,13 @@ const pickupStores = [
   {
     id: "loja-arnaldo",
     name: "Loja 1 - Av. Arnaldo Victaliano",
-    address: "Av. Arnaldo Victaliano, 1191 - Iguatemi - Ribeirão Preto/SP",
+    address: "Av. Arnaldo Victaliano, 1155 - Iguatemi - Ribeirão Preto/SP",
     time: "Retirada grátis em até 60 minutos",
-    fullAddress: "Av. Arnaldo Victaliano, 1191 - Iguatemi - Ribeirão Preto/SP",
+    fullAddress: "Av. Arnaldo Victaliano, 1155 - Iguatemi - Ribeirão Preto/SP",
     phone: "(16) 3618-0883",
     phoneHref: "+551636180883",
-    whatsapp: "(16) 3618-0883",
-    whatsappHref: "551636180883",
+    whatsapp: "(16) 99620-7433",
+    whatsappHref: "5516996207433",
     email: "drogariaciasaude@yahoo.com.br",
     lat: -21.1957848,
     lng: -47.7804726,
@@ -3110,8 +3409,8 @@ const pickupStores = [
     fullAddress: "Av. Portugal, 2777 - Jardim Botânico - Ribeirão Preto/SP",
     phone: "(16) 3442-2440",
     phoneHref: "+551634422440",
-    whatsapp: "(16) 3442-2440",
-    whatsappHref: "551634422440",
+    whatsapp: "(16) 99799-7878",
+    whatsappHref: "5516997997878",
     email: "onoriodrogaria@gmail.com",
     lat: -21.2099552,
     lng: -47.7908571,
@@ -3149,7 +3448,7 @@ const infoPages = {
       ["Pagamento e cupons", "Pix, cartao, boleto, Mercado Pago, PicPay e cupons Onorio"],
     ],
     helpGuidePage: true,
-    primary: ["Falar com atendimento", "atendimento"],
+    primary: null,
   },
   aplicativo: {
     eyebrow: "App Onorio",
@@ -3208,13 +3507,13 @@ const infoPages = {
     primary: ["Ir para pagamento", "pagamento"],
   },
   servicos: {
-    eyebrow: "Saude",
-    title: "Servicos da Drogaria Onorio",
+    eyebrow: "Saúde",
+    title: "Serviços Farmacêuticos da Drogaria Onório",
     text: "Area para aplicacao de injetaveis, glicemia, afericao de pressao, orientacao farmaceutica e atendimento da loja.",
     cards: [
       ["Aplicacao de injetaveis", "Conforme prescricao e disponibilidade"],
       ["Glicemia", "Consulta de disponibilidade na unidade"],
-      ["Servicos farmaceuticos", "Orientacao e acompanhamento"],
+      ["Serviços Farmacêuticos", "Orientacao e acompanhamento"],
     ],
     primary: ["Falar com atendimento", "atendimento"],
   },
@@ -3254,11 +3553,11 @@ const infoPages = {
   cupons: {
     eyebrow: "Cupons",
     title: "Cupons Onorio",
-    text: "Cupons proprios da Drogaria Onorio para site todo, nutricao infantil, dermocosmeticos, higiene pessoal e linha homem.",
+    text: "Cupons proprios da Drogaria Onorio liberados conforme o calendario de campanhas de cada mes.",
     cards: [
       ["Cupom na cesta", "Cliente digita o codigo no resumo do pedido"],
       ["Regra por CPF", "Cada cupom pode ser usado uma vez por CPF e cadastro"],
-      ["Campanhas proprias", "ONORIO10, LEITE10, DERMO5, HIGIENE10 e HOMEM10"],
+      ["Campanhas mensais", "O site mostra automaticamente os cupons validos do mes vigente"],
     ],
     couponPage: true,
     primary: ["Ver ofertas", "top-ofertas"],
@@ -3350,7 +3649,7 @@ Object.assign(infoPages, {
     title: "Nossas farmácias",
     text: "Escolha a unidade mais próxima e abra a rota direto no Google Maps ou no Waze pelo celular.",
     cards: [
-      ["Loja 1", "Av. Arnaldo Victaliano, 1191 - Iguatemi - Ribeirão Preto/SP"],
+      ["Loja 1", "Av. Arnaldo Victaliano, 1155 - Iguatemi - Ribeirão Preto/SP"],
       ["Loja 2", "Av. Portugal, 2777 - Jardim Botânico - Ribeirão Preto/SP"],
       ["Retirada", "Compre online e retire grátis em até 60 minutos após confirmação da loja."],
     ],
@@ -3399,11 +3698,12 @@ Object.assign(infoPages, {
     primary: ["Enviar orçamento", "whatsapp"],
   },
   "servicos-saude": {
-    eyebrow: "Serviços farmacêuticos",
-    title: "Serviços farmacêuticos Onório",
+    eyebrow: "Serviços Farmacêuticos",
+    title: "Serviços Farmacêuticos Onório",
     text: "Cuidados realizados na drogaria com acolhimento, orientação e disponibilidade conforme unidade.",
     cards: [],
     serviceGrid: true,
+    heroMascot: "assets/onorio-farmaceutica-mascote.svg",
     sections: [],
     primary: ["Falar no WhatsApp", "whatsapp"],
   },
@@ -3497,7 +3797,8 @@ Object.assign(infoPages, {
     cards: [
       ["Loja 1", "(16) 3618-0883"],
       ["Loja 2", "(16) 3442-2440"],
-      ["WhatsApp", "(16) 99799-7878"],
+      ["WhatsApp Loja 1", "(16) 99620-7433"],
+      ["WhatsApp Loja 2", "(16) 99799-7878"],
       ["E-mail", "onoriodrogaria@gmail.com"],
     ],
     actions: [
@@ -3705,6 +4006,7 @@ const pbmTreatmentGroups = [
     description: "Tratamentos de pressão, coração e glaucoma que podem ter benefício validado por CPF.",
     items: parsePbmLines(`
 Corus Losartana Potássica 25mg 30 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 57,16|R$ 57,74
+Diovan Valsartana 160mg 28 Comprimidos|Novartis|VMS|R$ 156,77|R$ 158,35
 Micardis Anlo Telmisartana 80mg + Besilato de Anlodipino 5mg 30 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|R$ 155,17|R$ 167,68
 Lumigan RC Bimatoprosta 0,1mg/ml 3ml Solução Estéril|Allergan|Programas Comerciais Abbvie|R$ 170,30|R$ 172,52
 Diovan Amlo Fix Valsartana 160mg + Besilato de Anlodipino 5mg 28 Comprimidos|Novartis|VMS|R$ 178,15|R$ 179,95
@@ -3712,14 +4014,12 @@ Diovan Valsartana 320mg 28 comprimidos|Novartis|VMS|R$ 156,77|R$ 158,35
 Diovan HCT Valsartana 160mg + Hidroclorotiazida 12,5mg 28 Comprimidos revestidos|Novartis|VMS|R$ 162,97|R$ 164,62
 Diovan Valsartana 80mg 28 Comprimidos|Novartis|VMS|R$ 156,77|R$ 158,35
 Atacand HCT Candesartana Cilexetila 16mg + Hidroclorotiazida 12,5mg 30 Comprimidos|Astrazeneca|LOGIXPHARMA|R$ 178,55|R$ 187,75
-Diovan Valsartana 160mg 28 Comprimidos|Novartis|VMS|R$ 156,77|R$ 158,35
 Allovita Minoxidil 50mg/ml 50ml Solução Capilar Spray 2 Unidades|Legrand Pharma|LOGIXPHARMA|R$ 89,09|R$ 94,57
 Pielus MX Minoxidil 50mg/ml 100ml|Mantecorp Skincare|LOGIXPHARMA|R$ 103,94|R$ 112,55
 Press Plus Besilato De Anlodipino 5mg/20mg 60 Cápsulas|Biolab|LOGIXPHARMA|R$ 248,55|R$ 251,06
 Press Plus Besilato De Anlodipino 5mg/10mg 60 cápsulas|Biolab|LOGIXPHARMA|R$ 230,04|R$ 232,36
 Brasart BCC Valsartana 320mg + Besilato de Anlodipino 10mg 30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 142,61|R$ 152,53
 Corus H Losartana Potássica 50mg + Hidroclorotiazida 12,5mg 30 Comprimidos Revestidos|Biosintética|LOGIXPHARMA|R$ 78,80|R$ 79,60
-Colírio Lumigan RC Bimatoprosta 0,1mg/ml 5ml|Allergan|Programas Comerciais Abbvie|R$ 283,77|R$ 287,46
 Micardis Anlo Telmisartana 40mg + Besilato de Anlodipino 5mg 30 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|R$ 120,64|R$ 130,93
 Alphagan-Z Tartarato De Brimonidina 1mg/ml 5ml Solução Oftálmica Estéril|Allergan|Programas Comerciais Abbvie|R$ 73,89|R$ 74,85
 Diovan HCT Valsartana 320mg + Hidroclorotiazida 25mg 28 Comprimidos revestidos|Novartis|VMS|R$ 187,46|R$ 189,35
@@ -3730,6 +4030,7 @@ Xalatan Latanoprosta 50mcg/ml 2,5ml Solução Oftálmica|Viatris|LOGIXPHARMA|R$ 
 Timoptol XE Maleato De Timolol 5mg/ml 5ml Solução Oftálmica Gel|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 68,99|R$ 84,91
 Diovan HCT Valsartana 160mg + Hidroclorotiazida 25mg 28 Comprimidos revestidos|Novartis|VMS|R$ 187,46|R$ 189,35
 Xalacom Latanoprosta 50mcg/ml + Maleato de Timolol 5mg/ml 2,5ml Gotas|Viatris|LOGIXPHARMA|R$ 279,50|R$ 291,28
+Atacand Candesartana Cilexetila 8mg 30 Comprimidos|Astrazeneca|LOGIXPHARMA|R$ 160,55|R$ 189,81
 Atacand Candesartana Cilexetila 16mg 30 Comprimidos|Astrazeneca|LOGIXPHARMA|R$ 179,64|R$ 188,90
 Ganfort UD Bimatoprosta 0,3mg/ml + Timolol 5mg/ml 30 Flaconetes de 0,4ml Solução Oftálmica|Allergan|Programas Comerciais Abbvie|R$ 242,68|R$ 245,13
 Nebilet Cloridrato De Nebivolol 5mg 60 Comprimidos|Biolab|LOGIXPHARMA|R$ 257,96|R$ 260,57
@@ -3739,6 +4040,7 @@ Brasart BCC Valsartana 160mg + Besilato de Anlodipino 5mg 30 Comprimidos Revesti
 Brasart BCC Valsartana 320mg + Besilato de Anlodipino 5mg 60 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 227,67|R$ 248,48
 Brasart BCC Valsartana 160mg + Besilato de Anlodipino 5mg 60 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 208,84|R$ 230,98
 Corus H Losartana Potássica 100mg + Hidroclorotiazida 25mg 30 Comprimidos revestidos|Aché|LOGIXPHARMA|R$ 158,18|R$ 159,78
+Colírio Lumigan RC Bimatoprosta 0,1mg/ml 5ml|Allergan|Programas Comerciais Abbvie|R$ 283,77|R$ 287,46
 Micardis Anlo Telmisartana 80mg + Besilato de Anlodipino 10mg 30 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|R$ 155,17|R$ 167,68
 Diovan Amlo Fix Valsartana 320mg + Besilato de Anlodipino 10mg 28 Comprimidos Revestidos|Novartis|VMS|R$ 210,33|R$ 212,45
 Diovan Amlo Fix Valsartana 80mg + Besilato de Anlodipino 5mg 28 Comprimidos|Novartis|VMS|R$ 178,15|R$ 179,95
@@ -3746,18 +4048,12 @@ Press Plus Besilato de Anlodipino 5mg + Cloridrato de Benazepril 10mg 30 Cápsul
 Combigan Tartarato de Brimonidina 2mg/ml + Maleato de Timolol 5mg/ml 5ml solução|Allergan|Programas Comerciais Abbvie|R$ 162,14|R$ 164,24
 Diovan HTC Valsartana 80mg + Hidroclorotiazida 12,5mg 28 Comprimidos Revestidos|Novartis|VMS|R$ 162,97|R$ 164,62
 Atacand HCT Candesartana Cilexetila 8mg + Hidroclorotiazida 12,5mg 30 Comprimidos|Astrazeneca|LOGIXPHARMA|R$ 178,44|R$ 187,63
-Atacand Candesartana Cilexetila 8mg 30 Comprimidos|Astrazeneca|LOGIXPHARMA|R$ 160,55|R$ 189,81
 Olzicar HCT Olmesartana Medoxomila 40mg + Hidroclorotiazida 25mg 30 Comprimidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 76,59|R$ 81,31
 Olzicar HCT Olmesartana Medoxomila 20mg + Hidroclorotiazida 12,5mg 30 Comprimidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 67,59|R$ 71,43
 Olzicar Anlo Olmesartana Medoxomila 40mg + Anlodipino 5mg 30 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 63,59|R$ 68,07
-Nebilet Cloridrato De Nebivolol 5mg 30 Comprimidos|Biolab|LOGIXPHARMA|R$ 171,49|R$ 173,22
-Loncord Nifedipino 40mg 20 Cápsulas|Diffucap|DIFFUCARE SITE|R$ 73,28|
-Cosopt Dorzolamida 2% + Maleato de Timolol 0,5% 10ml Solução Oftálmica|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 393,30|R$ 397,27
-Olzicar Anlo Olmesartana Medoxomila 40mg + Besilato de Anlodipino 10mg 30 Comprimidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 63,59|R$ 68,07
-Olzicar Anlo Olmesartana Medoxomila 20mg + Besilato de Anlodipino 5mg 30 Comprimidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 56,59|R$ 60,21
-Allovita Minoxidil 50mg/ml 50ml Solução Capilar Spray 3 Unidades|Legrand Pharma|LOGIXPHARMA|R$ 124,73|R$ 135,85
 Allovita Minoxidil 50mg/mL 1 Frasco Spray com 50 Ml + Extensor|Legrand Pharma|LOGIXPHARMA|R$ 57,21|R$ 63,60
-Diovan Amlo Fix Valsartana 160mg + Besilato de Anlodipino 10mg 28 Comprimidos Revestidos|Novartis|VMS|R$ 210,33|R$ 212,45
+Nebilet Cloridrato De Nebivolol 5mg 30 Comprimidos|Biolab|LOGIXPHARMA|R$ 171,49|R$ 173,22
+    
     `),
   },
   {
@@ -3768,25 +4064,26 @@ Diovan Amlo Fix Valsartana 160mg + Besilato de Anlodipino 10mg 28 Comprimidos Re
     items: parsePbmLines(`
 Donaren Retard Cloridrato De Trazodona 150mg 30 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|R$ 169,59|R$ 211,13
 Vognus Bromidrato de Vortioxetina 10mg 60 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 244,60|R$ 264,19
-Efexor XR Cloridrato De Venlafaxina 75mg 30 Cápsulas|Viatris|LOGIXPHARMA|R$ 490,79|R$ 495,75
 Wellbutrin XL Cloridrato De Bupropiona 150mg 30 Comprimidos|GSK|LOGIXPHARMA|R$ 209,09|R$ 211,20
 Wellbutrin XL Cloridrato De Bupropiona 300mg 30 Comprimidos|GSK|LOGIXPHARMA|R$ 257,71|R$ 260,31
 Efexor XR Cloridrato De Venlafaxina 150mg 30 Cápsulas|Viatris|LOGIXPHARMA|R$ 696,17|R$ 703,20
+Efexor XR Cloridrato De Venlafaxina 75mg 30 Cápsulas|Viatris|LOGIXPHARMA|R$ 490,79|R$ 495,75
 Efexor XR Cloridrato De Venlafaxina 37,5mg 30 Cápsulas|Viatris|LOGIXPHARMA|R$ 193,59|R$ 211,84
 Evortia Bromidrato De Vortioxetina 10mg 60 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 272,53|R$ 275,28
 Evortia Bromidrato De Vortioxetina 20mg 60 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 545,03|R$ 550,54
 Vognus Bromidrato de Vortioxetina 5mg 30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 92,63|R$ 100,21
-Vognus Vortioxetina 10mg 30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 153,01|R$ 165,16
+Vognus Vortioxetina 10mg  30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 153,01|R$ 165,16
 Luvox Maleato De Fluvoxamina 100mg 60 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 630,59|R$ 750,60
 Eudok Oxalato De Escitalopram 15mg 30 Cápsulas|União Química|LOGIXPHARMA|R$ 97,74|R$ 98,73
 Eudok Oxalato De Escitalopram 10mg 30 Cápsulas|União Química|LOGIXPHARMA|R$ 86,62|R$ 87,49
 Paxil CR Cloridrato De Paroxetina 25mg 30 Comprimidos|GSK|LOGIXPHARMA|R$ 257,93|R$ 260,54
 Paxil CR Paroxetina 12,5mg 30 Comprimidos|GSK|LOGIXPHARMA|R$ 124,85|R$ 126,11
 Evortia Bromidrato De Vortioxetina 15mg 60 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 463,22|R$ 467,90
-Evortia Bromidrato De Vortioxetina 5mg 30 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 91,87|R$ 92,80
 Evortia Bromidrato De Vortioxetina 10mg 30 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 151,40|R$ 152,93
 Eudok Oxalato De Escitalopram 20mg 30 Cápsulas|União Química|LOGIXPHARMA|R$ 133,39|R$ 134,74
-Extrato de Cannabis 200mg Zion 10ml|Zion|ENDOGEN - CANN DOC|R$ 399,90|
+Evortia Bromidrato De Vortioxetina 5mg 30 Comprimidos Revestidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 91,87|R$ 92,80
+Extrato de Cannabis 200mg Zion 10ml|Zion|ENDOGEN - CANN DOC|R$ 133,30|R$ 399,90
+    
     `),
   },
   {
@@ -3799,17 +4096,16 @@ Donila Duo Cloridrato de Donepezila 10mg + Cloridrato de Memantina 20mg 30 Compr
 Extrato de Cannabis Sativa 36,76mg/ml Ease Labs 30ml + Conta Gotas|Ease Labs|LOGIXPHARMA|R$ 430,90|R$ 432,00
 Vivencia Patch 5cm² Rivastigmina 9mg 4,6mg/24h 30 Adesivos Transdérmicos|Aché|LOGIXPHARMA|R$ 402,82|R$ 406,87
 Alois Duo Cloridrato de Memantina 20mg + Cloridrato de Donepezila 10mg 30 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|R$ 235,12|R$ 237,48
-Exelon Patch 10 Rivastigmina 18mg 9,5mg/24h 30 Adesivos|United Medical|PROGRAMA CAMINHANDO JUNTOS - KNIGHT|R$ 590,62|
+Exelon Patch 10 Rivastigmina 18mg 9,5mg/24h 30 Adesivos|United Medical|PROGRAMA CAMINHANDO JUNTOS - KNIGHT|R$ 196,87|R$ 590,62
 Exelon Patch 5 Rivastigmina 4,6mg/24h 30 Adesivos|United Medical|PROGRAMA CAMINHANDO JUNTOS - KNIGHT|R$ 413,23|R$ 417,40
 Vivencia Patch 10cm² Rivastigmina 18mg 9,5mg/24h 30 Adesivos Transdérmicos|Aché|LOGIXPHARMA|R$ 555,25|R$ 560,86
 Vivencia Patch 15cm² Rivastigmina 27mg 13,3mg/24h 30 Adesivos Transdérmicos|Aché|LOGIXPHARMA|R$ 555,25|R$ 560,86
-Exelon Patch Rivastigmina 27mg 30 Adesivos Transdérmicos|United Medical|PROGRAMA CAMINHANDO JUNTOS - KNIGHT|R$ 609,87|
+Exelon Patch Rivastigmina 27mg 30 Adesivos Transdérmicos|United Medical|PROGRAMA CAMINHANDO JUNTOS - KNIGHT|R$ 203,29|R$ 609,87
 Donila Duo Cloridrato de Donepezila 10mg + Cloridrato de Memantina 10mg 7 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 47,26|R$ 47,74
 Donila Duo Cloridrato de Donepezila 10mg + Cloridrato de Memantina 5mg 7 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 39,32|R$ 39,72
-Alois Duo 10mg + 10mg Apsen 7 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|R$ 42,75|
+Alois Duo 10mg + 10mg Apsen 7 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|Sob consulta|
 Donila Duo Cloridrato de Donepezila 10mg + Cloridrato de Memantina 15mg 7 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 53,98|R$ 54,53
-Alois Duo 10mg + 15mg Apsen 7 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|Sob consulta|
-Alois Duo 10mg + 5mg Apsen 7 Comprimidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|Sob consulta|
+    
     `),
   },
   {
@@ -3826,7 +4122,7 @@ Symbicort Spray Fumarato de Formoterol di-hidratado 6mcg + Budesonida 100mcg 120
 Fostair Dipropionato De Beclometasona 200mcg + Fumarato De Formoterol 6mcg 120 Doses pó inalatório|Chiesi|PROGRAMA ACESSAR - CHIESI|R$ 257,05|R$ 259,64
 Fostair HFA Dipropionato De Beclometasona 100mcg + Fumarato De Formoterol 6mcg 120 Doses spray|Chiesi|PROGRAMA ACESSAR - CHIESI|R$ 213,21|R$ 215,37
 Alenia Fumarato de Formoterol Di-Hidratado 12mcg + Budesonida 400mcg 60 Cápsulas + Inalador|Biosintética|LOGIXPHARMA|R$ 203,87|R$ 205,93
-Fasenra 30mg/mL Astrazeneca 1 Seringa com 1mL de Solução|Astrazeneca|PROGRAMA FAZBEM|Sob consulta|
+    
     `),
   },
 ];
@@ -3838,12 +4134,14 @@ pbmTreatmentGroups.push(
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Analg%C3%A9sicos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Medicamentos para dor e febre, com validação de benefício conforme apresentação participante.",
     items: parsePbmLines(`
-Tylenol Paracetamol 500mg 20 Comprimidos|Johnson & Johnson|Programa de benefícios|R$ 19,90|R$ 24,90
-Dorflex Analgésico e Relaxante Muscular 36 Comprimidos|Sanofi|LOGIXPHARMA|R$ 24,90|R$ 32,90
-Novalgina Dipirona Monoidratada 1g 10 Comprimidos|Sanofi|LOGIXPHARMA|R$ 18,90|R$ 24,90
-Neosaldina Dipirona + Cafeína + Isometepteno 20 Drágeas|Hypera|Mantecorp Saúde|R$ 29,90|R$ 37,90
-Dipirona Sódica 500mg 10 Comprimidos|EMS|PBM Genéricos|R$ 6,90|R$ 12,90
-Buscopan Composto 20 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|R$ 39,90|R$ 49,90
+Toragesic SL Trometamol Cetorolaco 10mg 10 Comprimidos Sublinguais|EMS|LOGIXPHARMA|R$ 38,44|R$ 38,83
+Traum Retard Cloridrato De Tramadol 100mg 10 Comprimidos|Aché|LOGIXPHARMA|R$ 94,59|R$ 104,18
+Restiva Buprenorfina 10mcg/h 4 Adesivos Transdérmicos|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 385,63|R$ 389,53
+Restiva Buprenorfina 5mcg/h 2 Adesivos Transdérmicos|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 138,58|R$ 159,65
+Restiva Buprenorfina 10mcg/h 2 Adesivos Uso Transdérmico|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 174,56|R$ 203,17
+Restiva Buprenorfina 5mcg/h 4 Adesivos Transdérmicos|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 302,90|R$ 305,96
+Betrat Nitrato de Tiamina 100mg + Cloridrato de Piridoxina 100mg + Cianocobalamina 5000mcg 60 Comprimidos|Myralis|LOGIXPHARMA|R$ 150,47|R$ 173,54
+    
     `),
   },
   {
@@ -3852,12 +4150,13 @@ Buscopan Composto 20 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|R$ 39,9
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Hiperplasia%20Prost%C3%A1tica%20Benigna?PS=48&map=c,specificationFilter_143,specificationFilter_177",
     description: "Tratamentos urológicos de uso contínuo, sempre com prescrição e consulta de benefício.",
     items: parsePbmLines(`
-Combodart Dutasterida + Tansulosina 30 Cápsulas|GSK|LOGIXPHARMA|Sob consulta|
-Avodart Dutasterida 0,5mg 30 Cápsulas|GSK|LOGIXPHARMA|Sob consulta|
-Omnic Ocas Tansulosina 0,4mg 30 Comprimidos|Astellas|Programa de benefícios|Sob consulta|
-Secotex Tansulosina 0,4mg 30 Cápsulas|Boehringer|Abraçar a Vida - Boehringer|Sob consulta|
-Dutasterida 0,5mg 30 Cápsulas|EMS|PBM Genéricos|Sob consulta|
-Tansulosina 0,4mg 30 Cápsulas|Eurofarma|Programa parceiro|Sob consulta|
+Avodart Dutasterida 0,5mg 90 Cápsulas|GSK|LOGIXPHARMA|R$ 438,31|R$ 442,74
+Dutam Dutasterida 0,5mg + Cloridrato de Tansulosina 0,4mg 90 Cápsulas|Zodiac|PROGRAMA VIVER ADIUM|R$ 304,59|R$ 331,54
+Combodart Dutasterida 0,5mg + Cloridrato de Tansulosina 0,4mg 90 Cápsulas|GSK|LOGIXPHARMA|R$ 415,08|R$ 419,27
+Combodart Dutasterida 0,5mg + Cloridrato de Tansulosina 0,4mg 30 Cápsulas|GSK|LOGIXPHARMA|R$ 128,34|R$ 162,05
+Tanduo Dutasterida 0,5mg + Cloridrato de Tansulosina 0,4mg 90 Cápsulas Liberação Prolongada|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|R$ 302,26|R$ 322,97
+Tamsulon Cloridrato De Tansulosina 0,4mg 30 Cápsulas|Zodiac|PROGRAMA VIVER ADIUM|R$ 269,59|R$ 303,48
+    
     `),
   },
   {
@@ -3866,12 +4165,55 @@ Tansulosina 0,4mg 30 Cápsulas|Eurofarma|Programa parceiro|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Com%20Vitaminas?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Vitaminas e suplementos com campanhas de recorrência, imunidade e bem-estar.",
     items: parsePbmLines(`
-Lavitan A-Z 60 Comprimidos|Cimed|Programa parceiro|R$ 29,90|R$ 39,90
-Centrum A-Z 30 Comprimidos|Haleon|Programa de benefícios|R$ 44,90|R$ 59,90
-Vitamina C Maxinutri 60 Cápsulas|Maxinutri|PBM Vitaminas|R$ 29,90|R$ 39,90
-Ômega 3 Catarinense 60 Cápsulas|Catarinense|Programa parceiro|R$ 39,90|R$ 49,90
-Complexo B 30 Comprimidos|Neo Química|PBM Genéricos|R$ 19,90|R$ 29,90
-Ensure Baunilha 850g|Abbott|Abbott - Abrace a Vida|R$ 170,43|R$ 199,90
+Mecobe Mecobalamina 1000mcg 30 Comprimidos sublinguais|Myralis|LOGIXPHARMA|R$ 30,33|R$ 50,06
+Mecobe Mecobalamina 1000mcg 90 Comprimidos Sublinguais|Myralis|LOGIXPHARMA|R$ 66,37|R$ 132,74
+D Prev Vitamina D 7000UI 4 Comprimidos|Dprev|LOGIXPHARMA|R$ 16,82|R$ 19,36
+Dprev Vitamina D 14.000UI 4 Comprimidos Revestidos|Dprev|LOGIXPHARMA|R$ 36,20|R$ 44,90
+DPrev Vitamina D 7000UI 30 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 38,88|R$ 75,75
+Sany D Vitamina D 14000UI 4 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 32,44|R$ 35,58
+D Prev Vitamina D 10.000UI 30 Comprimidos|Dprev|LOGIXPHARMA|R$ 108,49|R$ 137,37
+DPrev Vitamina D 50.000UI 4 Cápsulas|Myralis|LOGIXPHARMA|R$ 58,92|R$ 83,07
+DPrev Vitamina D 50000UI 4 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 58,92|R$ 77,72
+DPrev Vitamina D 10.000UI 4 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 21,49|R$ 29,22
+Pantogar 90 Cápsulas|Biolab|LOGIXPHARMA|R$ 350,94|R$ 354,48
+Dprev Colecalciferol 4000UI 30 Comprimidos Revestidos|Dprev|LOGIXPHARMA|R$ 48,59|R$ 59,04
+Sany D Vitamina D 7.000UI 30 Cápsulas|Aché|LOGIXPHARMA|Sob consulta|
+Addera D3 Vitamina D 7000UI 30 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 177,47|R$ 179,26
+Addera D3 Vitamina D 5.000UI 30 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 135,00|R$ 136,36
+DPrev Vitamina D 2.000UI 60 Comprimidos|Myralis|LOGIXPHARMA|R$ 54,96|R$ 76,81
+Addera D3 Vitamina D 10.000UI 10 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 123,63|R$ 124,88
+Addera D3 Vitamina D 50.000UI 4 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 71,44|R$ 142,88
+DPrev Vitamina D 7000UI 8 Comprimidos Revestidos|Myralis|LOGIXPHARMA|Sob consulta|
+DPrev Vitamina D 2000UI 30 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 41,67|R$ 56,31
+DPrev Vitamina D 5000UI 30 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 70,62|R$ 90,05
+Unizinco Zinco 17,60mg/ml 100ml Solução Oral + Copo Medidor|Myralis|LOGIXPHARMA|R$ 33,25|R$ 35,13
+Mecobe Mecobalamina 500mcg 30 Comprimidos Sublinguais|Myralis|LOGIXPHARMA|Sob consulta|
+Dodibe Mecobalamina 1000mcg Morango 30 Comprimidos Sublinguais|Aché|LOGIXPHARMA|Sob consulta|
+Sany D Vitamina D 10.000UI 4 Cápsulas|Aché|LOGIXPHARMA|R$ 27,49|R$ 27,77
+Sany D Vitamina D 50.000UI 4 Cápsulas|Aché|LOGIXPHARMA|R$ 81,33|R$ 82,15
+DPrev Vitamina D 5.000UI 30 Cápsulas|Myralis|LOGIXPHARMA|R$ 72,72|R$ 94,35
+Sany D Vitamina D 50.000UI 8 Comprimidos|Aché|LOGIXPHARMA|R$ 139,30|R$ 140,71
+Sany D Vitamina D 10.000UI 4 Comprimidos|Aché|LOGIXPHARMA|R$ 24,74|R$ 28,61
+Dprev Vitamina D 10000UI 8 Cápsulas|Myralis|LOGIXPHARMA|R$ 44,19|R$ 55,80
+Dprev Vitamina D 7000UI 12 Cápsulas|Myralis|LOGIXPHARMA|R$ 32,29|R$ 39,76
+DPrev Vitamina D 10.000UI 8 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 40,68|R$ 50,73
+DPrev Vitamina D 50.000ui 8 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 102,40|R$ 131,27
+DPrev Vitamina D 1.000UI 60 Comprimidos|Myralis|LOGIXPHARMA|R$ 46,19|R$ 61,08
+Addera D3 Vitamina D 7.000UI 4 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 45,04|R$ 45,49
+Sany D Vitamina D 50.000UI 4 Comprimidos|Aché|LOGIXPHARMA|R$ 88,78|R$ 89,68
+Addera D3 Vitamina D 50.000UI 4 Comprimidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 141,85|R$ 145,07
+Dodibe Mecobalamina 1000mcg Morango 90 Comprimidos Sublinguais|Aché|LOGIXPHARMA|R$ 67,17|R$ 134,35
+Sany D Vitamina D 4000UI 30 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 53,05|R$ 58,15
+Sany D Vitamina D 5.000UI 30 Cápsulas|Aché|LOGIXPHARMA|R$ 84,64|R$ 87,62
+Sany D Vitamina D 7.000UI 8 Cápsulas|Aché|LOGIXPHARMA|R$ 27,15|R$ 27,42
+Untral Biotina 2,5mg 90 Cápsulas|Aché|LOGIXPHARMA|R$ 336,76|R$ 340,16
+Addera D3 Vitamina D 10.000UI 4 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 70,23|R$ 70,94
+Betrat Nitrato de Tiamina 100mg + Cloridrato de Piridoxina 100mg + Cianocobalamina 5000mcg 42 Comprimidos|Myralis|LOGIXPHARMA|R$ 109,87|R$ 120,64
+Pantogar 60 Cápsulas|Biolab|LOGIXPHARMA|R$ 233,92|R$ 236,28
+Addera D3 Vitamina D 7.000UI 10 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 93,84|R$ 94,79
+Sany D Vitamina D 7.000UI 8 Comprimidos|Aché|LOGIXPHARMA|R$ 26,32|R$ 36,69
+DPrev Vitamina D 1.000UI 30 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 31,49|R$ 43,85
+    
     `),
   },
   {
@@ -3880,12 +4222,8 @@ Ensure Baunilha 850g|Abbott|Abbott - Abrace a Vida|R$ 170,43|R$ 199,90
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Circula%C3%A7%C3%A3o?PS=48&map=c,specificationFilter_143,specificationFilter_177",
     description: "Medicamentos para circulação e prevenção de eventos trombóticos, com venda sob prescrição.",
     items: parsePbmLines(`
-Xarelto Rivaroxabana 20mg 28 Comprimidos|Bayer|Bayer Para Você|Sob consulta|
-Eliquis Apixabana 5mg 60 Comprimidos|Pfizer|Programa parceiro|Sob consulta|
-Pradaxa Etexilato de Dabigatrana 150mg 30 Cápsulas|Boehringer|Abraçar a Vida - Boehringer|Sob consulta|
-Marevan Varfarina 5mg 30 Comprimidos|Farmoquímica|Programa parceiro|Sob consulta|
-Clopidogrel 75mg 28 Comprimidos|EMS|PBM Genéricos|Sob consulta|
-AAS Protect 100mg 30 Comprimidos|Sanofi|LOGIXPHARMA|Sob consulta|
+Timoptol XE Maleato De Timolol 5mg/ml 5ml Solução Oftálmica Gel|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 68,99|R$ 84,91
+    
     `),
   },
   {
@@ -3894,12 +4232,40 @@ AAS Protect 100mg 30 Comprimidos|Sanofi|LOGIXPHARMA|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Anticonvulsivantes?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Tratamentos neurológicos e de controle de crises, com prescrição e acompanhamento.",
     items: parsePbmLines(`
-Keppra Levetiracetam 500mg 30 Comprimidos|UCB|Programa parceiro|Sob consulta|
-Depakote ER Divalproato de Sódio 500mg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|Sob consulta|
-Trileptal Oxcarbazepina 600mg 20 Comprimidos|Novartis|Vale Mais Saúde|Sob consulta|
-Lamotrigina 100mg 30 Comprimidos|EMS|PBM Genéricos|Sob consulta|
-Topiramato 50mg 60 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
-Carbamazepina 200mg 30 Comprimidos|Neo Química|PBM Genéricos|Sob consulta|
+Depakote ER Divalproato De Sódio 500mg 60 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 252,40|R$ 330,80
+Vorpro Bromidrato de Vortioxetina 10mg 30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 124,59|R$ 138,26
+Depakote ER Divalproato De Sódio 250mg 60 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 138,30|R$ 164,30
+Tegretol CR Carbamazepina 200mg 60 Comprimidos|Novartis|VMS|R$ 101,58|R$ 102,61
+Vorpro Bromidrato de Vortioxetina 5mg 30 Comprimidos Revestidos|EMS|LOGIXPHARMA|R$ 72,99|R$ 81,94
+Lyrica Pregabalina 75mg 28 Cápsulas|Viatris|LOGIXPHARMA|R$ 218,87|R$ 221,07
+Tegretol CR Carbamazepina 400mg 60 Comprimidos Blister|Novartis|VMS|R$ 244,91|R$ 247,38
+Trileptal Oxcarbazepina 60mg/ml 100ml Suspensão Oral + 2 Seringas Dosadoras|Novartis|VMS|R$ 99,33|R$ 100,33
+Deradop XL Cloridrato de Bupropiona 150mg 30 Comprimidos|EMS|LOGIXPHARMA|Sob consulta|
+Deradop XL Cloridrato de Bupropiona 300mg 30 Comprimidos|EMS|LOGIXPHARMA|R$ 61,87|R$ 123,75
+Keppra Levetiracetam 250mg 60 Cápsulas|Ucb Biopharma|LOGIXPHARMA|R$ 205,39|R$ 207,46
+Keppra Levetiracetam 100 mg/ml 150ml|Ucb Biopharma|LOGIXPHARMA|R$ 177,80|R$ 179,60
+Lamictal Lamotrigina 200mg 30 Comprimidos|GSK|LOGIXPHARMA|R$ 387,94|R$ 391,86
+Lamictal Lamotrigina 100mg 30 comprimidos dispersíveis|GSK|LOGIXPHARMA|R$ 217,25|R$ 219,44
+Depakote Divalproato De Sódio 500mg 30 Comprimidos ER|Abbott|Abbott - Abrace a Vida|R$ 149,99|R$ 165,93
+Trileptal Oxcarbazepina 300mg 60 Comprimidos Revestidos|Novartis|VMS|R$ 262,37|R$ 265,02
+Trileptal Oxcarbazepina 600mg 60 Comprimidos|Novartis|VMS|R$ 503,40|R$ 508,48
+Extrato de Cannabis 160,32mg Greencare 30ml Gotas|GreenCare|LOGIXPHARMA|R$ 483,33|R$ 1.450,00
+Keppra XR Levetiracetam 500mg 60 Comprimidos Revestidos|Ucb Biopharma|LOGIXPHARMA|R$ 328,72|R$ 332,04
+Keppra Levetiracetam 750mg 60 Cápsulas|Ucb Biopharma|LOGIXPHARMA|R$ 852,52|R$ 861,13
+Vimpat Lacosamida 100mg 28 comprimidos revestidos|Ucb Biopharma|LOGIXPHARMA|R$ 381,23|R$ 385,08
+Lamictal Lamotrigina 50mg 30 Comprimidos|GSK|LOGIXPHARMA|R$ 133,69|R$ 135,04
+Lamictal Lamotrigina 25mg 30 Comprimidos Dispersíveis|GSK|LOGIXPHARMA|R$ 87,43|R$ 88,31
+Lyrica Pregabalina 150mg 28 Cápsulas|Viatris|LOGIXPHARMA|R$ 335,63|R$ 339,00
+Vimpat Lacosamida 200mg 28 comprimidos revestidos|Ucb Biopharma|LOGIXPHARMA|R$ 744,44|R$ 751,96
+Vimpat Lacosamida 50mg 14 comprimidos revestidos|Ucb Biopharma|LOGIXPHARMA|R$ 95,22|R$ 96,18
+Keppra XR Levetiracetam 750mg 60 Comprimidos Revestidos|Ucb Biopharma|LOGIXPHARMA|R$ 493,09|R$ 498,07
+Keppra Levetiracetam 750mg 30 Comprimidos|Ucb Biopharma|LOGIXPHARMA|R$ 426,29|R$ 430,60
+Vimpat Lacosamida 150mg 28 comprimidos revestidos|Ucb Biopharma|LOGIXPHARMA|R$ 571,88|R$ 577,66
+Tegretol Carbamazepina 200mg 20 Comprimidos|Novartis|VMS|R$ 34,20|R$ 37,17
+Trileptal Oxcarbazepina 600mg 20 Comprimidos|Novartis|VMS|R$ 142,55|R$ 161,72
+Trileptal Oxcarbazepina 300mg 20 Comprimidos|Novartis|VMS|R$ 87,19|R$ 88,07
+Tegretol CR Carbamazepina 400mg 20 comprimidos|Novartis|VMS|R$ 81,64|R$ 82,46
+    
     `),
   },
   {
@@ -3908,12 +4274,28 @@ Carbamazepina 200mg 30 Comprimidos|Neo Química|PBM Genéricos|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Para%20Congest%C3%A3o%20Nasal?PS=48&map=c,specificationFilter_177",
     description: "Itens para congestão nasal e sintomas respiratórios, com orientação de uso responsável.",
     items: parsePbmLines(`
-Sorine Solução Nasal 30ml|Hypermarcas|Mantecorp Saúde|R$ 21,90|R$ 29,90
-Neosoro Adulto 30ml|Neo Química|PBM Genéricos|R$ 8,90|R$ 12,90
-Rinosoro Jet 100ml|Farmoquímica|Programa parceiro|R$ 34,90|R$ 44,90
-Maresis Jato Contínuo 100ml|Libbs|Programa parceiro|R$ 42,90|R$ 54,90
-Salsep 360 Spray Nasal 50ml|Ache|Cuidados pela Vida|R$ 31,90|R$ 39,90
-Afrin Solução Nasal 20ml|Bayer|Bayer Para Você|Sob consulta|
+Descongestionante Neosoro Adulto Cloridrato De Nafazolina 30ml Solução Nasal|Neo Química|PBM/Laboratório|Sob consulta|
+Narix Cloreto De Benzalcônio 0,5mg/ml 30ml Solução Nasal|Cimed|PBM/Laboratório|R$ 7,99|R$ 10,06
+Cloridrato Oximetazolina 5mg/ml Genérico EMS 30ml Gotas|EMS|PBM/Laboratório|R$ 15,28|R$ 17,40
+Aturgyl Cloridrato De Oximetazolina 0,5mg/ml 15ml Spray|Mantecorp Farmasa|PBM/Laboratório|R$ 18,21|R$ 19,24
+Allegra D Cloridrato de Fexofenadina 60mg + Cloridrato de Pseudoefedrina 120mg 10 Comprimidos Revestidos|Allegra|PBM/Laboratório|Sob consulta|
+Sorine Cloridrato De Nafazolina 0,5mg/ml 30ml Solução Nasal|Aché|PBM/Laboratório|R$ 25,59|R$ 27,85
+Naridrin Cloridrato de Nafazolina 1mg/ml + Maleato de Mepiramina 0,2mg/ml + Dexpantenol 5mg/ml 15ml Solução Nasal Adulto|EMS|PBM/Laboratório|R$ 19,49|R$ 21,88
+Histadin D Loratadina 5mg + Sulfato de Pseudoefedrina 120mg 12 Comprimidos|União Química|PBM/Laboratório|R$ 55,03|R$ 59,20
+Loratadina 1mg/ml + Sulfato Pseudoefedina 12mg/ml Genérico Biosintética 60ml Xarope|Biosintética|PBM/Laboratório|R$ 28,15|R$ 34,17
+Cloridrato Oximetazolina 0,25mg/ml Genérico EMS 20ml Solução Pediátrica|EMS|PBM/Laboratório|R$ 11,10|R$ 12,11
+Winter AP Maleato de Dexbronfeniramina 6mg + Sulfato de Pseudoefedrina 120mg 8 Comprimidos|Diffucap|PBM/Laboratório|R$ 34,59|R$ 38,62
+Desalex D12 Desloratadina 2,5mg + Sulfato de Pseudoefedrina 120mg 10 Comprimidos|Supera RX|PBM/Laboratório|R$ 65,80|R$ 66,45
+Multisoro Cloridrato De Nafazolina 0,5mg/ml 30ml Gotas|Multilab|PBM/Laboratório|R$ 6,78|R$ 11,83
+Sinustrat Cloridrato De Nafazolina 0,5mg/ml 10ml Solução Nasal|Avert|PBM/Laboratório|R$ 19,08|R$ 19,27
+Singulair Montelucaste De Sódio 10mg 30 Comprimidos|Organon|PBM/Laboratório|R$ 95,51|R$ 96,47
+Histadin D Loratadina 1mg/ml + Sulfato de Pseudoefedrina 12mg/ml 60ml Xarope|União Química|PBM/Laboratório|R$ 60,06|R$ 60,67
+Piemonte Montelucaste De Sódio 4mg 30 Comprimidos Mastigáveis|Eurofarma|PBM/Laboratório|R$ 74,24|R$ 78,09
+Singulair Montelucaste De Sódio 5mg 30 Comprimidos|Organon|PBM/Laboratório|R$ 95,51|R$ 96,47
+Piemonte Montelucaste De Sódio 5mg 30 Comprimidos Mastigáveis|Eurofarma|PBM/Laboratório|R$ 77,31|R$ 78,09
+Lur D12 Desloratadina 2,5mg + Sulfato de Pseudoefedrina 120mg 10 Comprimidos|Aché|PBM/Laboratório|R$ 58,87|R$ 65,72
+Plurair 50mcg/dose Libbs 120 Doses Spray|Libbs|PBM/Laboratório|R$ 61,99|R$ 72,92
+    
     `),
   },
   {
@@ -3922,12 +4304,12 @@ Afrin Solução Nasal 20ml|Bayer|Bayer Para Você|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antial%C3%A9rgicos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Medicamentos para alergias, rinite e urticária, com campanhas e regras por CPF.",
     items: parsePbmLines(`
-Allegra Fexofenadina 120mg 10 Comprimidos|Sanofi|LOGIXPHARMA|R$ 58,59|R$ 59,90
-Loratadina 10mg 12 Comprimidos|EMS|PBM Genéricos|R$ 9,90|R$ 16,90
-Cetirizina 10mg 12 Comprimidos|Neo Química|PBM Genéricos|R$ 16,90|R$ 22,90
-Desloratadina 5mg 10 Comprimidos|Eurofarma|Programa parceiro|R$ 24,90|R$ 34,90
-Rupafin Rupatadina 10mg 10 Comprimidos|Libbs|Programa parceiro|Sob consulta|
-Avamys Spray Nasal 120 Doses|GSK|LOGIXPHARMA|Sob consulta|
+Avamys Furoato De Fluticasona 27,5mcg 120 Doses Spray Nasal|GSK|LOGIXPHARMA|R$ 61,04|R$ 77,07
+Dymista Cloridrato de Azelastina 137mcg/dose + Propionato de Fluticasona 50mcg/dose 23g Spray Nasal|Myralis|LOGIXPHARMA|R$ 117,32|R$ 158,12
+Patanol S Cloridrato De Olopatadina 2,22 mg/ml 2,5ml Solução Oftalmológica|Novartis|VMS|R$ 83,48|R$ 84,32
+Amome Furoato De Mometasona 50mcg 60 Doses Spray Nasal|Mantecorp Farmasa|LOGIXPHARMA|R$ 53,70|R$ 54,24
+Amome Furoato De Mometasona 50mcg 120 Doses Spray Nasal|Mantecorp Farmasa|LOGIXPHARMA|R$ 68,99|R$ 75,56
+    
     `),
   },
   {
@@ -3936,12 +4318,12 @@ Avamys Spray Nasal 120 Doses|GSK|LOGIXPHARMA|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antivirais?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Tratamentos antivirais sob prescrição, com consulta de benefício e disponibilidade.",
     items: parsePbmLines(`
-Zovirax Aciclovir Creme 10g|GSK|LOGIXPHARMA|Sob consulta|
-Aciclovir 200mg 25 Comprimidos|EMS|PBM Genéricos|Sob consulta|
-Valtrex Valaciclovir 500mg 10 Comprimidos|GSK|LOGIXPHARMA|Sob consulta|
-Oseltamivir 75mg 10 Cápsulas|Roche|Programa parceiro|Sob consulta|
-Tenofovir 300mg 30 Comprimidos|GSK|Programa parceiro|Sob consulta|
-Famciclovir 500mg 3 Comprimidos|Novartis|Vale Mais Saúde|Sob consulta|
+Herpstal Valaciclovir 500mg 10 Comprimidos Revestidos|Germed|LOGIXPHARMA|R$ 117,28|R$ 118,46
+Herpstal Valaciclovir 500mg 42 Comprimidos Revestidos|Natures Plus|LOGIXPHARMA|R$ 410,04|R$ 414,18
+Valtrex Valaciclovir 500mg 10 Comprimidos|GSK|LOGIXPHARMA|R$ 174,82|R$ 214,86
+Valtrex Cloridrato De Valaciclovir 500mg 42 Comprimidos|GSK|LOGIXPHARMA|R$ 620,43|R$ 810,32
+Penvir Fanciclovir 500mg 21 Comprimidos|EMS|LOGIXPHARMA|R$ 736,67|R$ 744,11
+    
     `),
   },
   {
@@ -3950,12 +4332,16 @@ Famciclovir 500mg 3 Comprimidos|Novartis|Vale Mais Saúde|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antipsic%C3%B3tico?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Medicamentos de saúde mental, com prescrição, controle e validação de programa parceiro.",
     items: parsePbmLines(`
-Risperdal Risperidona 2mg 30 Comprimidos|Janssen|Programa parceiro|Sob consulta|
-Zyprexa Olanzapina 5mg 28 Comprimidos|Lilly|Melhor Para Você|Sob consulta|
-Seroquel Quetiapina 25mg 28 Comprimidos|Astrazeneca|Programa FazBem|Sob consulta|
-Aristab Aripiprazol 10mg 30 Comprimidos|Aché|Cuidados pela Vida|Sob consulta|
-Risperidona 2mg 30 Comprimidos|EMS|PBM Genéricos|Sob consulta|
-Quetiapina 100mg 30 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
+Lutab Cloridrato De Lurasidona 20mg 30 Comprimidos|Aché|LOGIXPHARMA|R$ 211,33|R$ 223,47
+Extrato de Cannabis Sativa 36,76mg/ml Ease Labs 30ml + Conta Gotas|Ease Labs|LOGIXPHARMA|R$ 430,90|R$ 432,00
+Extrato de Cannabis 79,14mg/mL Mantecorp 30ml|Mantecorp Farmasa|LOGIXPHARMA|R$ 324,30|R$ 972,92
+Lutab Cloridrato De Lurasidona 40mg 30 Comprimidos|Aché|LOGIXPHARMA|R$ 414,67|R$ 446,88
+Depakote ER Divalproato De Sódio 250mg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 69,69|R$ 82,83
+Zyprexa Olanzapina 2,5mg 30 Comprimidos Revestidos|Biopas|LOGIXPHARMA|R$ 205,46|R$ 616,40
+Lutab Cloridrato De Lurasidona 80mg 30 Comprimidos|Aché|LOGIXPHARMA|R$ 497,40|R$ 524,61
+Zyprexa Olanzapina 10mg 30 Comprimidos Revestidos|Biopas|LOGIXPHARMA|R$ 1.802,94|R$ 1.821,15
+Zyprexa Olanzapina 5mg 30 Comprimidos Revestidos|Biopas|LOGIXPHARMA|R$ 758,33|R$ 910,52
+    
     `),
   },
   {
@@ -3964,12 +4350,27 @@ Quetiapina 100mg 30 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Colesterol?PS=48&map=c,specificationFilter_143,specificationFilter_177",
     description: "Medicamentos para colesterol e triglicerídeos, geralmente de uso contínuo e recorrente.",
     items: parsePbmLines(`
-Crestor Rosuvastatina 10mg 30 Comprimidos|Astrazeneca|Programa FazBem|Sob consulta|
-Lípitor Atorvastatina 20mg 30 Comprimidos|Viatris|LOGIXPHARMA|Sob consulta|
-Sinvastatina 20mg 30 Comprimidos|EMS|PBM Genéricos|R$ 17,90|R$ 31,90
-Rosuvastatina 20mg 30 Comprimidos|Neo Química|PBM Genéricos|Sob consulta|
-Ezetrol Ezetimiba 10mg 30 Comprimidos|Organon|Programa parceiro|Sob consulta|
-Fenofibrato 160mg 30 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
+Mecobe Mecobalamina 1000mcg 30 Comprimidos sublinguais|Myralis|LOGIXPHARMA|R$ 30,33|R$ 50,06
+Mecobe Mecobalamina 1000mcg 90 Comprimidos Sublinguais|Myralis|LOGIXPHARMA|R$ 66,37|R$ 132,74
+Coledue R Ezetimiba 10mg + Rosuvastatina Cálcica 10mg 30 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 78,59|R$ 82,80
+Mecobe Mecobalamina 500mcg 30 Comprimidos Sublinguais|Myralis|LOGIXPHARMA|Sob consulta|
+Lipless Ciprofibrato 100mg 90 Comprimidos|Biolab|LOGIXPHARMA|R$ 218,37|R$ 220,58
+Lipidil Fenofibrato 160mg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 140,24|R$ 165,53
+Crestor Rosuvastatina Cálcica 10mg  30 Comprimidos|Astrazeneca|PROGRAMA FAZBEM|R$ 226,59|R$ 253,75
+Rusovas Rosuvastatina Cálcica 20mg 90 Comprimidos|Brace Pharma|LOGIXPHARMA|R$ 242,82|R$ 245,27
+Rusovas Rosuvastatina Cálcica 10mg 90 Comprimidos|Brace Pharma|LOGIXPHARMA|R$ 144,71|R$ 146,17
+Repatha 140mg biolab 2 Canetas com 1ml|Biolab|LOGIXPHARMA|R$ 2.484,24|R$ 2.564,55
+Lipidil Fenofibrato 160mg 90 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 340,89|R$ 402,30
+Crestor Rosuvastatina Cálcica 5mg 60 comprimidos revestidos|Astrazeneca|PROGRAMA FAZBEM|R$ 207,99|R$ 232,15
+Lipitor Atorvastatina Cálcica 20mg 30 Comprimidos Revestidos|Viatris|LOGIXPHARMA|R$ 251,94|R$ 254,48
+Lipidil Fenofibrato 160mg 60 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 251,83|R$ 298,00
+Rusovas Rosuvastatina Cálcica 5mg 60 Comprimidos Revestidos|Brace Pharma|LOGIXPHARMA|R$ 115,83|R$ 117,00
+Rusovas Rosuvastatina Cálcica 10mg 30 Comprimidos Revestidos|Brace Pharma|LOGIXPHARMA|R$ 74,21|R$ 74,96
+Rusovas Rosuvastatina Cálcica 20mg 30 Comprimidos Revestidos|Brace Pharma|LOGIXPHARMA|R$ 129,49|R$ 130,80
+Crestor Rosuvastatina Cálcica 20mg  30 Comprimidos|Astrazeneca|PROGRAMA FAZBEM|R$ 377,99|R$ 423,31
+Lipitor Atorvastatina Cálcica 10mg 30 Comprimidos Revestidos|Viatris|LOGIXPHARMA|R$ 205,45|R$ 207,53
+Rusovas Rosuvastatina Cálcica 10mg 60 comprimidos revestidos|Brace Pharma|LOGIXPHARMA|R$ 126,08|R$ 127,35
+    
     `),
   },
   {
@@ -3978,12 +4379,10 @@ Fenofibrato 160mg 30 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Ansiol%C3%ADticos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Medicamentos para ansiedade e sono, com controle de prescrição e dispensação responsável.",
     items: parsePbmLines(`
-Rivotril Clonazepam 2mg 30 Comprimidos|Roche|Programa parceiro|Sob consulta|
-Frontal Alprazolam 0,5mg 30 Comprimidos|Viatris|LOGIXPHARMA|Sob consulta|
-Lexotan Bromazepam 3mg 30 Comprimidos|Roche|Programa parceiro|Sob consulta|
-Clonazepam 2mg 30 Comprimidos|EMS|PBM Genéricos|R$ 9,90|
-Diazepam 10mg 30 Comprimidos|Neo Química|PBM Genéricos|Sob consulta|
-Zolpidem 10mg 30 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
+Efexor XR Cloridrato De Venlafaxina 150mg 30 Cápsulas|Viatris|LOGIXPHARMA|R$ 696,17|R$ 703,20
+Efexor XR Cloridrato De Venlafaxina 75mg 30 Cápsulas|Viatris|LOGIXPHARMA|R$ 490,79|R$ 495,75
+Efexor XR Cloridrato De Venlafaxina 37,5mg 30 Cápsulas|Viatris|LOGIXPHARMA|R$ 193,59|R$ 211,84
+    
     `),
   },
   {
@@ -3992,12 +4391,30 @@ Zolpidem 10mg 30 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Anti-inflamat%C3%B3rios?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Anti-inflamatórios e corticoides, com atenção a prescrição, contraindicações e tempo de uso.",
     items: parsePbmLines(`
-Ibuprofeno 400mg 10 Comprimidos|EMS|PBM Genéricos|R$ 12,90|R$ 18,90
-Diclofenaco Potássico 50mg 20 Comprimidos|Neo Química|PBM Genéricos|R$ 14,90|R$ 24,90
-Nimesulida 100mg 12 Comprimidos|Eurofarma|Programa parceiro|R$ 12,90|R$ 19,90
-Prednisona 20mg 10 Comprimidos|EMS|PBM Genéricos|R$ 10,90|R$ 18,90
-Alivium Ibuprofeno 400mg 10 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|Sob consulta|
-Arcoxia Etoricoxibe 90mg 7 Comprimidos|Organon|Programa parceiro|Sob consulta|
+Alenia Refil Formoterol 12mcg + Budesonida 400mcg 60 Cápsulas para Inalação|Biosintética|LOGIXPHARMA|R$ 161,54|R$ 163,17
+Toragesic SL Trometamol Cetorolaco 10mg 10 Comprimidos Sublinguais|EMS|LOGIXPHARMA|R$ 38,44|R$ 38,83
+Alenia Fumarato de Formoterol 6mcg + Budesonida 200mcg 60 Cápsulas Refil|Aché|LOGIXPHARMA|R$ 120,10|R$ 121,29
+Flixotide Fluticasona 50mcg/dose 1 Frasco 120 Doses Spray|GSK|LOGIXPHARMA|R$ 170,73|R$ 218,35
+Flixotide Fluticasona 250mcg/dose 60 Doses Spray|GSK|LOGIXPHARMA|R$ 127,30|R$ 163,74
+Artrolive Sulfato de Glicosamina 500mg + Sulfato de Condroitina 400mg 90 Cápsulas|Aché|LOGIXPHARMA|R$ 358,54|R$ 362,16
+Alenia Fumarato de Formoterol Di-Hidratado 12mcg + Budesonida 400mcg 60 Cápsulas + Inalador|Biosintética|LOGIXPHARMA|R$ 203,87|R$ 205,93
+Psorex Propionato De Clobetasol 0,5mg/g 30g Creme|GSK|LOGIXPHARMA|R$ 49,91|R$ 50,41
+Psorex Propionato De Clobetasol 0,5mg/g 50g Loção|GSK|LOGIXPHARMA|R$ 73,76|R$ 74,50
+Betnovate Valerato de Betametasona 1mg/g 30g Creme|GSK|LOGIXPHARMA|R$ 56,87|R$ 57,44
+Mytro Trometamol Cetorolaco 10mg 10 Comprimidos Sublinguais|Myralis|LOGIXPHARMA|R$ 23,09|R$ 23,32
+Pentasa Mesalazina 1000mg 28 Supositórios + 28 Dedeiras|Ferring|LOGIXPHARMA|R$ 895,60|R$ 917,72
+Pentasa Mesalazina 2g 30 Sachês|Ferring|LOGIXPHARMA|R$ 1.333,21|R$ 1.346,68
+Pentasa Mesalazina 1000mg/g 1g 50 Sachês|Ferring|LOGIXPHARMA|R$ 815,89|R$ 1.111,99
+Psorex Propionato De Clobetasol 0,5mg/g 1 Bisnaga 30g Pomada|GSK|LOGIXPHARMA|R$ 51,29|R$ 51,81
+Betrat Nitrato de Tiamina 100mg + Cloridrato de Piridoxina 100mg + Cianocobalamina 5000mcg 90 Comprimidos|Myralis|LOGIXPHARMA|R$ 197,00|R$ 232,99
+Flutivate Propionato De Fluticasona 0,5mg 30g Creme Dermatológico|GSK|LOGIXPHARMA|R$ 131,14|R$ 132,45
+Tacroz Tacrolimo 1,0mg/g 10g Pomada|Glenmark|LOGIXPHARMA|R$ 85,13|R$ 90,61
+Pentasa Mesalazina 10mg/ml 7 Frascos com 100ml|Ferring|LOGIXPHARMA|R$ 297,27|R$ 349,73
+Pentasa Mesalazina 500mg 50 Comprimidos|Cellera Farma|LOGIXPHARMA|R$ 542,94|R$ 556,35
+Betnovate Valerato de Betametasona 1mg/g 30g Pomada|GSK|LOGIXPHARMA|R$ 59,71|R$ 60,31
+Mytro Trometamol Cetorolaco 10mg 20 Comprimidos Sublinguais|Myralis|LOGIXPHARMA|R$ 39,73|R$ 40,13
+Bioflan Harpagophytum Procumbens 150mg 30 comprimidos|Myralis|LOGIXPHARMA|R$ 105,92|R$ 113,72
+    
     `),
   },
   {
@@ -4006,12 +4423,9 @@ Arcoxia Etoricoxibe 90mg 7 Comprimidos|Organon|Programa parceiro|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antiulcerosos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Tratamentos para refluxo, gastrite e proteção gástrica, com orientação sobre tempo de uso.",
     items: parsePbmLines(`
-Omeprazol 20mg 28 Cápsulas|EMS|PBM Genéricos|R$ 18,90|R$ 29,90
-Pantoprazol 40mg 28 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
-Nexium Esomeprazol 40mg 28 Comprimidos|Astrazeneca|Programa FazBem|Sob consulta|
-Dexilant Dexlansoprazol 60mg 30 Cápsulas|Takeda|Programa parceiro|Sob consulta|
-Luftal Simeticona 125mg 10 Cápsulas|Reckitt|Programa parceiro|R$ 12,90|R$ 18,90
-Esomeprazol 20mg 28 Comprimidos|Neo Química|PBM Genéricos|Sob consulta|
+Nexium Esomeprazol Magnésico 40mg 28 Comprimidos|Astrazeneca|PROGRAMA FAZBEM|R$ 392,99|R$ 437,63
+Nexium Esomeprazol Magnésico 20mg 28 Comprimidos|Astrazeneca|PROGRAMA FAZBEM|R$ 186,99|R$ 209,39
+    
     `),
   },
   {
@@ -4020,12 +4434,18 @@ Esomeprazol 20mg 28 Comprimidos|Neo Química|PBM Genéricos|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Fitoter%C3%A1picos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Produtos fitoterápicos e naturais, com consulta de indicação, composição e disponibilidade.",
     items: parsePbmLines(`
-Pasalix 20 Comprimidos|Marjan|Programa parceiro|Sob consulta|
-Abrilar Hedera Helix Xarope 100ml|Farmoquímica|Programa parceiro|Sob consulta|
-Calman 20 Comprimidos|Marjan|Programa parceiro|Sob consulta|
-Valeriana 45mg 30 Cápsulas|Catarinense|Programa parceiro|Sob consulta|
-Tamarine Geleia 150g|Hypermarcas|Mantecorp Saúde|Sob consulta|
-Ginkgo Biloba 80mg 30 Cápsulas|Neo Química|PBM Fitoterápicos|Sob consulta|
+Ammy Drospirenona 4mg 24 Comprimidos Revestidos + 4 Comprimidos Placebos|Mantecorp Farmasa|LOGIXPHARMA|R$ 132,71|R$ 134,05
+Ajovy 225mg/1,5ml Teva 1,5ml 1 Seringa Preenchida|Teva|PROGRAMA DE DESCONTOS AJOVY|R$ 1.099,90|R$ 3.257,55
+Arpadol Harpagophytum Procumbens 400mg 60 Comprimidos Revestidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|R$ 216,80|R$ 235,11
+Vivencia Patch 5cm² Rivastigmina 9mg 4,6mg/24h 30 Adesivos Transdérmicos|Aché|LOGIXPHARMA|R$ 402,82|R$ 406,87
+Canabidiol Greencare 23,75mg 30ml Gotas|GreenCare|LOGIXPHARMA|R$ 158,33|R$ 475,00
+Vivencia Patch 10cm² Rivastigmina 18mg 9,5mg/24h 30 Adesivos Transdérmicos|Aché|LOGIXPHARMA|R$ 555,25|R$ 560,86
+Vivencia Patch 15cm² Rivastigmina 27mg 13,3mg/24h 30 Adesivos Transdérmicos|Aché|LOGIXPHARMA|R$ 555,25|R$ 560,86
+Climatrix Trifolium Pratense L 100mg 30 comprimidos revestidos|Myralis|LOGIXPHARMA|R$ 137,10|R$ 151,20
+Extrato de Cannabis Sativa Greencare 79,14mg 10ml Gotas|Nunature|LOGIXPHARMA|R$ 110,00|R$ 330,00
+Piascledine Abacate 100mg + Soja 200mg 30 Cápsulas|Abbott|Abbott - Abrace a Vida|R$ 316,53|R$ 357,92
+Extrato De Cannabis Sativa 200mg/ml Zion 30ml + Conta-Gotas|Zion|ENDOGEN - CANN DOC|R$ 990,90|R$ 997,00
+    
     `),
   },
   {
@@ -4034,12 +4454,55 @@ Ginkgo Biloba 80mg 30 Cápsulas|Neo Química|PBM Fitoterápicos|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Os%20Ossos?PS=48&map=c,specificationFilter_143,specificationFilter_179",
     description: "Tratamentos para saúde óssea, cálcio, vitamina D e osteoporose, conforme prescrição.",
     items: parsePbmLines(`
-Addera D3 7000UI 8 Cápsulas|Hypermarcas|Mantecorp Saúde|Sob consulta|
-Fosamax Alendronato 70mg 4 Comprimidos|Organon|Programa parceiro|Sob consulta|
-Prolia Denosumabe 60mg 1 Seringa|Amgen|Programa parceiro|Sob consulta|
-Caltrate 600 + D 60 Comprimidos|Haleon|Programa de benefícios|Sob consulta|
-Osteonutri 30 Comprimidos|Aché|Cuidados pela Vida|Sob consulta|
-Alendronato 70mg 4 Comprimidos|EMS|PBM Genéricos|Sob consulta|
+Mecobe Mecobalamina 1000mcg 30 Comprimidos sublinguais|Myralis|LOGIXPHARMA|R$ 30,33|R$ 50,06
+Mecobe Mecobalamina 1000mcg 90 Comprimidos Sublinguais|Myralis|LOGIXPHARMA|R$ 66,37|R$ 132,74
+D Prev Vitamina D 7000UI 4 Comprimidos|Dprev|LOGIXPHARMA|R$ 16,82|R$ 19,36
+Dprev Vitamina D 14.000UI 4 Comprimidos Revestidos|Dprev|LOGIXPHARMA|R$ 36,20|R$ 44,90
+DPrev Vitamina D 7000UI 30 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 38,88|R$ 75,75
+Sany D Vitamina D 14000UI 4 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 32,44|R$ 35,58
+Addera D3 Colecalciferol 14.000UI 4 Cápsulas Moles|Mantecorp Farmasa|LOGIXPHARMA|R$ 79,03|R$ 79,83
+D Prev Vitamina D 10.000UI 30 Comprimidos|Dprev|LOGIXPHARMA|R$ 108,49|R$ 137,37
+DPrev Vitamina D 50.000UI 4 Cápsulas|Myralis|LOGIXPHARMA|R$ 58,92|R$ 83,07
+DPrev Vitamina D 50000UI 4 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 58,92|R$ 77,72
+Dprev Colecalciferol 4000UI 30 Comprimidos Revestidos|Dprev|LOGIXPHARMA|R$ 48,59|R$ 59,04
+Osteotrat Risedronato Sódico 35mg 12 Comprimidos|Aché|LOGIXPHARMA|R$ 240,04|R$ 242,46
+Sany D Vitamina D 7.000UI 30 Cápsulas|Aché|LOGIXPHARMA|Sob consulta|
+Addera D3 Vitamina D 7000UI 30 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 177,47|R$ 179,26
+Addera D3 Vitamina D 5.000UI 30 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 135,00|R$ 136,36
+DPrev Vitamina D 2.000UI 60 Comprimidos|Myralis|LOGIXPHARMA|R$ 54,96|R$ 76,81
+Arpadol Harpagophytum Procumbens 400mg 60 Comprimidos Revestidos|Apsen|PROGRAMA SOU MAIS VIDA - APSEN|R$ 216,80|R$ 235,11
+Addera D3 Vitamina D 50.000UI 4 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 71,44|R$ 142,88
+Prolia Denosumabe 60mg/mL Amgen 1ml|Amgen|LOGIXPHARMA|R$ 384,53|R$ 1.153,59
+Mecobe Mecobalamina 500mcg 30 Comprimidos Sublinguais|Myralis|LOGIXPHARMA|Sob consulta|
+Sany D Vitamina D 10.000UI 4 Cápsulas|Aché|LOGIXPHARMA|R$ 27,49|R$ 27,77
+Sany D Vitamina D 50.000UI 4 Cápsulas|Aché|LOGIXPHARMA|R$ 81,33|R$ 82,15
+DPrev Vitamina D 5.000UI 30 Cápsulas|Myralis|LOGIXPHARMA|R$ 72,72|R$ 94,35
+Sany D Vitamina D 50.000UI 8 Comprimidos|Aché|LOGIXPHARMA|R$ 139,30|R$ 140,71
+Sany D Vitamina D 10.000UI 4 Comprimidos|Aché|LOGIXPHARMA|R$ 24,74|R$ 28,61
+Osteoban Ibandronato De Sódio 150mg 3 Comprimidos|Aché|LOGIXPHARMA|R$ 147,59|R$ 162,62
+Dprev Vitamina D 10000UI 8 Cápsulas|Myralis|LOGIXPHARMA|R$ 44,19|R$ 55,80
+Dprev Vitamina D 7000UI 12 Cápsulas|Myralis|LOGIXPHARMA|R$ 32,29|R$ 39,76
+DPrev Vitamina D 10.000UI 8 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 40,68|R$ 50,73
+DPrev Vitamina D 50.000ui 8 Comprimidos Revestidos|Myralis|LOGIXPHARMA|R$ 102,40|R$ 131,27
+Addera D3 Vitamina D 7.000UI 4 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 45,04|R$ 45,49
+Sany D Vitamina D 50.000UI 4 Comprimidos|Aché|LOGIXPHARMA|R$ 88,78|R$ 89,68
+Risedross Risedronato Sódico 35mg 12 Comprimidos|EMS|LOGIXPHARMA|R$ 253,15|R$ 255,71
+Sany D Vitamina D 4000UI 30 Comprimidos Revestidos|Aché|LOGIXPHARMA|R$ 53,05|R$ 58,15
+Sany D Vitamina D 5.000UI 30 Cápsulas|Aché|LOGIXPHARMA|R$ 84,64|R$ 87,62
+Sany D Vitamina D 7.000UI 8 Cápsulas|Aché|LOGIXPHARMA|R$ 27,15|R$ 27,42
+Sany D Vitamina D 7.000UI 8 Comprimidos|Aché|LOGIXPHARMA|R$ 26,32|R$ 36,69
+Osteotrat Risedronato Sódico 35mg 4 Comprimidos|Aché|LOGIXPHARMA|R$ 107,25|R$ 108,33
+Denbonli Denosumabe 60mg/ml 1ml Seringa Preenchida Solução Injetável Subcutânea|Sandoz|LOGIXPHARMA|R$ 706,86|R$ 1.070,90
+Sany D Vitamina D 50.000UI 8 Cápsulas|Aché|LOGIXPHARMA|R$ 139,30|R$ 140,71
+Sany D Vitamina D 2.000UI 60 Comprimidos|Aché|LOGIXPHARMA|R$ 75,17|R$ 75,93
+Addera D3 Vitamina D 50.000UI 8 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 238,59|R$ 258,73
+Addera D3 Vitamina D 50.000UI 10 Cápsulas|Mantecorp Farmasa|LOGIXPHARMA|R$ 283,14|R$ 309,29
+Osteoban Ibandronato De Sódio 150mg 1 Comprimido|Aché|LOGIXPHARMA|R$ 58,59|R$ 62,08
+Sany D Vitamina D 7.000UI 12 Cápsulas|Aché|LOGIXPHARMA|Sob consulta|
+Sany D Vitamina D 5.000UI 30 Comprimidos|Aché|LOGIXPHARMA|R$ 86,74|R$ 87,62
+Sany D Vitamina D 7.000UI 30 Comprimidos|Aché|LOGIXPHARMA|R$ 99,99|R$ 101,00
+Addera D3 Vitamina D 50.000UI 8 Comprimidos|Mantecorp Farmasa|LOGIXPHARMA|R$ 238,59|R$ 259,33
+    
     `),
   },
   {
@@ -4048,12 +4511,21 @@ Alendronato 70mg 4 Comprimidos|EMS|PBM Genéricos|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Psicoestimulantes?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Medicamentos controlados para atenção e cognição, com prescrição e regras específicas.",
     items: parsePbmLines(`
-Venvanse Lisdexanfetamina 30mg 28 Cápsulas|Takeda|Programa parceiro|Sob consulta|
-Concerta Metilfenidato 18mg 30 Comprimidos|Janssen|Programa parceiro|Sob consulta|
-Ritalina LA 10mg 30 Cápsulas|Novartis|Vale Mais Saúde|Sob consulta|
-Stavigile Modafinila 100mg 30 Comprimidos|Libbs|Programa parceiro|Sob consulta|
-Atentah Atomoxetina 40mg 30 Cápsulas|Apsen|Programa Sou Mais Vida|Sob consulta|
-Metilfenidato 10mg 30 Comprimidos|EMS|PBM Controlados|Sob consulta|
+Lyberdia Dimesilato De Lisdexanfetamina 50mg 30 Cápsulas Duras|EMS|LOGIXPHARMA|R$ 446,26|R$ 450,77
+Lyberdia Dimesilato De Lisdexanfetamina 30mg 30 Cápsulas Duras|EMS|LOGIXPHARMA|R$ 368,03|R$ 371,75
+Ritalina LA Cloridrato De Metilfenidato 10mg 30 Comprimidos|Novartis|VMS|R$ 132,27|R$ 139,23
+Lidexor Dimesilato De Lisdexanfetamina 70mg 30 Cápsulas|Brace Pharma|LOGIXPHARMA|R$ 357,58|R$ 361,19
+Lidexor Dimesilato De Lisdexanfetamina 50mg 30 Cápsulas|Brace Pharma|LOGIXPHARMA|R$ 357,58|R$ 361,19
+Lidexor Dimesilato De Lisdexanfetamina 30mg 30 Cápsulas|Brace Pharma|LOGIXPHARMA|R$ 294,88|R$ 297,86
+Lyberdia Dimesilato De Lisdexanfetamina 40mg/ml 50ml Solução Gotas|EMS|LOGIXPHARMA|R$ 568,19|R$ 573,93
+Lyberdia Dimesilato De Lisdexanfetamina 70mg 30 Cápsulas|EMS|LOGIXPHARMA|R$ 446,26|R$ 450,77
+Lisvenx Dimesilato De Lisdexanfetamina 70mg 30 Cápsulas|Torrent|LOGIXPHARMA|R$ 425,55|R$ 477,61
+Ritalina LA Cloridrato De Metilfenidato 20mg  30 Comprimidos|Novartis|VMS|R$ 367,51|R$ 371,22
+Lisvenx Dimesilato De Lisdexanfetamina 50mg 30 Cápsulas|Torrent|LOGIXPHARMA|R$ 425,55|R$ 477,61
+Ritalina LA Cloridrato De Metilfenidato 40mg  30 Comprimidos|Novartis|VMS|R$ 405,11|R$ 409,20
+Ritalina LA Cloridrato De Metilfenidato 30mg  30 Comprimidos|Novartis|VMS|R$ 385,88|R$ 389,78
+Lidexor Dimesilato De Lisdexanfetamina 40mg/ml 50ml Gotas|Brace Pharma|LOGIXPHARMA|R$ 568,21|R$ 573,95
+    
     `),
   },
   {
@@ -4062,12 +4534,22 @@ Metilfenidato 10mg 30 Comprimidos|EMS|PBM Controlados|Sob consulta|
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Hormonais?PS=48&map=c,specificationFilter_143,specificationFilter_180",
     description: "Tratamentos hormonais, tireoide, anticoncepcionais e terapias específicas com prescrição.",
     items: parsePbmLines(`
-Puran T4 Levotiroxina 50mcg 30 Comprimidos|Sanofi|LOGIXPHARMA|Sob consulta|
-Synthroid Levotiroxina 75mcg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|Sob consulta|
-Euthyrox Levotiroxina 88mcg 30 Comprimidos|Merck|Programa parceiro|Sob consulta|
-Climene Estradiol + Acetato de Ciproterona 21 Drágeas|Bayer|Bayer Para Você|Sob consulta|
-Selene Etinilestradiol + Ciproterona 21 Comprimidos|Eurofarma|Programa parceiro|Sob consulta|
-Depo-Provera Medroxiprogesterona 150mg 1 Ampola|Pfizer|Programa parceiro|Sob consulta|
+Synthroid Levotiroxina Sódica 50mcg 30 Cápsulas|Abbott|Abbott - Abrace a Vida|R$ 45,48|R$ 46,98
+Synthroid Levotiroxina Sódica 75mcg 30 Cápsulas|Abbott|Abbott - Abrace a Vida|R$ 50,94|R$ 52,63
+Synthroid Levotiroxina Sódica 100mcg 30 Cápsulas|Abbott|Abbott - Abrace a Vida|R$ 52,75|R$ 54,49
+Synthroid Levotiroxina Sódica 88mcg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 51,86|R$ 53,57
+Synthroid Levotiroxina Sódica 25mcg 30 Cápsulas|Abbott|Abbott - Abrace a Vida|R$ 40,10|R$ 41,43
+Synthroid Levotiroxina Sódica 150mcg 30 Cápsulas|Abbott|Abbott - Abrace a Vida|R$ 62,36|R$ 64,41
+Synthroid Levotiroxina Sódica 112mcg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 55,18|R$ 57,00
+Synthroid Levotiroxina Sódica 125mcg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 57,86|R$ 59,77
+Synthroid Levotiroxina Sódica 137mg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 60,19|R$ 62,18
+Nebido Undecilato De Testosterona 250mg/ml 4ml Solução Intramuscular|Bayer|CONEXAO COM VOCE|R$ 817,59|R$ 882,26
+Diost Dienogeste 2mg 30 Comprimidos|Myralis|LOGIXPHARMA|R$ 44,90|R$ 70,67
+Synthroid Levotiroxina Sódica 175mcg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 68,57|R$ 70,83
+Synthroid Levotiroxina Sódica 200mcg 30 Comprimidos|Abbott|Abbott - Abrace a Vida|R$ 75,50|R$ 77,99
+Evenity 90mg/ml Amgen 2 Seringas Preenchidas 1,17ml|Amgen|LOGIXPHARMA|R$ 4.227,59|R$ 5.607,52
+Femara 2,5mg Novartis 28 Comprimidos Revestidos|Novartis|VMS|R$ 1.300,90|R$ 1.306,50
+    
     `),
   },
   {
@@ -4076,12 +4558,61 @@ Depo-Provera Medroxiprogesterona 150mg 1 Ampola|Pfizer|Programa parceiro|Sob con
     source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Para%20Os%20Olhos?PS=48&map=c,specificationFilter_143,specificationFilter_179",
     description: "Colírios e tratamentos oftálmicos, incluindo glaucoma e lubrificação, conforme prescrição.",
     items: parsePbmLines(`
-Lumigan RC Bimatoprosta 0,1mg/ml 3ml|Allergan|Programas Comerciais Abbvie|R$ 170,30|R$ 172,52
-Xalatan Latanoprosta 50mcg/ml 2,5ml|Viatris|LOGIXPHARMA|R$ 248,76|R$ 259,25
-Combigan Brimonidina + Timolol 5ml|Allergan|Programas Comerciais Abbvie|R$ 162,14|R$ 164,24
-Hyabak Solução Oftálmica 10ml|Thea|Programa parceiro|Sob consulta|
-Systane UL Solução Oftálmica 10ml|Alcon|Programa parceiro|Sob consulta|
-Lacrifilm Solução Oftálmica 15ml|Latinofarma|Programa parceiro|Sob consulta|
+Patanol S Cloridrato De Olopatadina 2,22 mg/ml 2,5ml Solução Oftalmológica|Novartis|VMS|R$ 83,48|R$ 84,32
+Dorzal Cloridrato De Dorzolamida 20mg/ml 5ml|Legrand Pharma|LOGIXPHARMA|R$ 86,45|R$ 87,32
+Dorzal MT Cloridrato de Dorzolamida 20mg/ml + Maleato de Timolol 5mg/ml 5ml|Legrand Pharma|LOGIXPHARMA|R$ 123,12|R$ 124,36
+Colírio Azorga Brinzolamida 10mg/ml + Maleato de Timolol 5mg/ml 6ml|Novartis|VMS|R$ 136,43|R$ 137,81
+Lumigan RC Bimatoprosta 0,1mg/ml 3ml Solução Estéril|Allergan|Programas Comerciais Abbvie|R$ 170,30|R$ 172,52
+Colírio Drenatan Latanoprosta 50mcg/ml 2,5ml|Legrand Pharma|LOGIXPHARMA|R$ 184,67|R$ 186,54
+Ganfort Bimatoprosta 0,3mg/ml + Timolol 5mg/ml 3ml Solução Oftálmica|Allergan|Programas Comerciais Abbvie|R$ 172,84|R$ 175,08
+Alphagan-Z Tartarato De Brimonidina 1mg/ml 5ml Solução Oftálmica Estéril|Allergan|Programas Comerciais Abbvie|R$ 73,89|R$ 74,85
+Restasis Ciclosporina 0,5mg/ml 30 Flaconetes 0,4ml Emulsão|Allergan|Programas Comerciais Abbvie|R$ 308,35|R$ 312,38
+Xalatan Latanoprosta 50mcg/ml 2,5ml Solução Oftálmica|Viatris|LOGIXPHARMA|R$ 248,76|R$ 259,25
+Timoptol XE Maleato De Timolol 5mg/ml 5ml Solução Oftálmica Gel|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 68,99|R$ 84,91
+Xalacom Latanoprosta 50mcg/ml + Maleato de Timolol 5mg/ml 2,5ml Gotas|Viatris|LOGIXPHARMA|R$ 279,50|R$ 291,28
+Ganfort UD Bimatoprosta 0,3mg/ml + Timolol 5mg/ml 30 Flaconetes de 0,4ml Solução Oftálmica|Allergan|Programas Comerciais Abbvie|R$ 242,68|R$ 245,13
+Colírio Simbrinza Brinzolamida 10mg/ml + Tartarato de Brimonidina 2mg/ml 8ml|Novartis|VMS|R$ 166,54|R$ 168,22
+Latonan Latanoprosta 0,05mg/ml + Timolol 5mg/ml 2,5ml Solução Oftálmica|Legrand Pharma|LOGIXPHARMA|R$ 223,67|R$ 225,93
+Colírio Ganfort Bimatoprosta 0,3mg/ml + Maleato de Timolol 5mg/ml 5ml|Allergan|Programas Comerciais Abbvie|R$ 288,11|R$ 291,86
+Travatan Travoprosta 0,04mg/mL 5ml|Novartis|VMS|R$ 389,95|R$ 393,89
+Colírio Lumigan RC Bimatoprosta 0,1mg/ml 5ml|Allergan|Programas Comerciais Abbvie|R$ 283,77|R$ 287,46
+Combigan Tartarato de Brimonidina 2mg/ml + Maleato de Timolol 5mg/ml 10ml Gotas|Allergan|Programas Comerciais Abbvie|R$ 255,28|R$ 258,61
+Combigan Tartarato de Brimonidina 2mg/ml + Maleato de Timolol 5mg/ml 5ml solução|Allergan|Programas Comerciais Abbvie|R$ 162,14|R$ 164,24
+Cosopt Dorzolamida 2% + Maleato de Timolol 0,5% 10ml Solução Oftálmica|Mundipharma|PROGRAMA CUIDAR - MUNDIPHARMA|R$ 393,30|R$ 397,27
+Alphagan Tartarato De Brimonidina 2mg/ml 5ml Solução Oftálmica|Allergan|Programas Comerciais Abbvie|R$ 141,01|R$ 142,82
+Travatan Travoprosta 0,04mg/ml 2,5ml Frasco Conta-Gotas Solução Oftálmica|Novartis|VMS|R$ 195,00|R$ 196,97
+Alphagan P Tartarato De Brimonidina 1,5mg/ml 5ml Solução Oftálmica Estéril|Allergan|Programas Comerciais Abbvie|R$ 141,39|R$ 142,82
+    
+    `),
+  },
+  {
+    id: "antidiabeticos",
+    label: "Antidiabéticos",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antidiab%C3%A9ticos?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Tratamentos para diabetes e controle glicêmico, com validação de CPF, prescrição e estoque.",
+    items: parsePbmLines(`
+Ozempic Semaglutida 1mg 1 Sistema de Aplicação|Novo Nordisk|Novo Dia|Sob consulta|
+Rybelsus Semaglutida 7mg 30 Comprimidos|Novo Nordisk|Novo Dia|Sob consulta|
+Jardiance Empagliflozina 25mg 30 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|Sob consulta|
+Forxiga Dapagliflozina 10mg 30 Comprimidos|AstraZeneca|Programa FazBem|Sob consulta|
+Xigduo XR Dapagliflozina + Metformina 10mg/1000mg 30 Comprimidos|AstraZeneca|Programa FazBem|Sob consulta|
+Trayenta Linagliptina 5mg 30 Comprimidos|Boehringer|Abraçar a Vida - Boehringer|Sob consulta|
+Galvus Met Vildagliptina + Metformina 50mg/1000mg 56 Comprimidos|Novartis|Vale Mais Saúde|Sob consulta|
+Glifage XR Metformina 500mg 30 Comprimidos|Merck|Programa parceiro|Sob consulta|
+    `),
+  },
+  {
+    id: "saude-capilar",
+    label: "Saúde capilar",
+    source: "https://www.drogariasaopaulo.com.br/medicamentos/Desconto%20de%20Laborat%C3%B3rio/Antiqueda%20Capilar?PS=48&map=c,specificationFilter_143,specificationFilter_180",
+    description: "Produtos para queda capilar e fortalecimento dos fios, com campanhas de laboratório e recorrência.",
+    items: parsePbmLines(`
+Allovita Minoxidil 50mg/ml 50ml Solução Capilar Spray|Legrand Pharma|LOGIXPHARMA|R$ 57,21|R$ 63,60
+Allovita Minoxidil 50mg/ml 50ml Solução Capilar Spray 2 Unidades|Legrand Pharma|LOGIXPHARMA|R$ 89,09|R$ 94,57
+Pielus MX Minoxidil 50mg/ml 100ml|Mantecorp Skincare|LOGIXPHARMA|R$ 103,94|R$ 112,55
+Pant 90 Cápsulas|Biolab|Saúde em Evolução|Sob consulta|
+Exímia Fortalize Kera D 30 Cápsulas|Mantecorp Farmasa|Mantecorp Saúde|Sob consulta|
+Lavitan Cabelos e Unhas 60 Comprimidos|Cimed|Programa parceiro|R$ 29,90|R$ 39,90
     `),
   },
 );
@@ -5107,6 +5638,167 @@ function getSelectedStore() {
   return pickupStores.find((store) => store.id === storeId) || pickupStores[0];
 }
 
+function requiresPrescriptionBeforeCheckout(product) {
+  if (!product) return false;
+
+  const parent = product.parentId ? getProduct(product.parentId) : null;
+  const profile = product.medicine || parent?.medicine || {};
+  const override = medicineDetailOverrides[product.id] || medicineDetailOverrides[product.parentId] || {};
+  const text = normalizeText(
+    [
+      product.name,
+      product.detail,
+      product.category,
+      product.subcategory,
+      product.keywords,
+      product.tag,
+      product.caution,
+      product.description,
+      profile.classification,
+      profile.drugClass,
+      override.classification,
+      override.drugClass,
+      override.conditions,
+    ]
+      .filter(Boolean)
+      .join(" "),
+  );
+
+  return [
+    "antibiotico",
+    "antibioticos",
+    "antimicrobiano",
+    "controlado",
+    "controlados",
+    "tarja preta",
+    "retencao receita",
+    "retencao de receita",
+    "benzodiazepinico",
+    "psicotropico",
+  ].some((term) => text.includes(term));
+}
+
+function checkoutPrescriptionItems(items = calculateCart().items) {
+  return items.filter((item) => requiresPrescriptionBeforeCheckout(item));
+}
+
+function checkoutPrescriptionStore() {
+  return getSelectedStore();
+}
+
+function prescriptionStatusIsValid(items = calculateCart().items) {
+  const requiredItems = checkoutPrescriptionItems(items);
+  if (!requiredItems.length) return true;
+
+  const store = checkoutPrescriptionStore();
+  return Boolean(
+    state.prescriptionFileName &&
+      state.prescriptionSent &&
+      state.prescriptionStoreId === store.id,
+  );
+}
+
+function checkoutPrescriptionWhatsappMessage(store, items) {
+  const customerName = state.customer.fullName || state.customer.name || "Cliente Onorio";
+  const customerCpf = maskCpfForDisplay(state.customer.cpf);
+  const itemLines = items
+    .map((item) => `- ${item.name} ${item.detail || ""} (${item.quantity} un.)`.trim())
+    .join("\n");
+
+  return [
+    `Olá, ${store.name}!`,
+    "Estou enviando a receita para conferência antes de finalizar meu pedido no site da Drogaria Onório.",
+    `Cliente: ${customerName}`,
+    `CPF: ${customerCpf}`,
+    `Arquivo selecionado: ${state.prescriptionFileName || "receita anexada pelo cliente"}`,
+    "Produtos que precisam de receita:",
+    itemLines,
+    "",
+    "Vou anexar a receita nesta conversa para a equipe validar antes da separação.",
+  ].join("\n");
+}
+
+function prescriptionCheckoutMarkup(items = calculateCart().items) {
+  const requiredItems = checkoutPrescriptionItems(items);
+  if (!requiredItems.length) return "";
+
+  const store = checkoutPrescriptionStore();
+  const hasFile = Boolean(state.prescriptionFileName);
+  const sentToCurrentStore = state.prescriptionSent && state.prescriptionStoreId === store.id;
+  const statusText = sentToCurrentStore
+    ? `Receita enviada para conferência da ${store.name}.`
+    : hasFile
+      ? `Arquivo pronto para enviar ao WhatsApp da ${store.name}.`
+      : "Anexe a receita antes de finalizar.";
+
+  return `
+    <section class="checkout-prescription-card ${sentToCurrentStore ? "is-sent" : ""}" data-prescription-panel>
+      <div class="prescription-card-head">
+        <span>Receita obrigatória</span>
+        <h2>Antibióticos e controlados precisam de conferência</h2>
+        <p>A equipe da ${escapeHtml(store.name)} precisa receber a receita pelo WhatsApp antes de liberar o pedido.</p>
+      </div>
+      <div class="prescription-item-list" aria-label="Produtos que exigem receita">
+        ${requiredItems
+          .map(
+            (item) => `
+              <div>
+                <strong>${escapeHtml(item.name)}</strong>
+                <span>${escapeHtml(item.detail)} · ${item.quantity} un.</span>
+              </div>
+            `,
+          )
+          .join("")}
+      </div>
+      <div class="prescription-upload-row">
+        <label class="prescription-upload-field">
+          <span>${hasFile ? "Trocar receita" : "Anexar receita"}</span>
+          <input type="file" accept=".pdf,image/*" data-prescription-file />
+        </label>
+        <button type="button" class="checkout-primary prescription-whatsapp-button" data-send-prescription>
+          Enviar para WhatsApp da loja
+        </button>
+      </div>
+      <div class="prescription-status ${sentToCurrentStore ? "is-ok" : ""}">
+        ${svg(sentToCurrentStore ? "shield" : "ticket")}
+        <span>${escapeHtml(statusText)}</span>
+      </div>
+      ${hasFile ? `<small class="prescription-file-name">Arquivo selecionado: ${escapeHtml(state.prescriptionFileName)}</small>` : ""}
+      <small>O WhatsApp será aberto com a mensagem pronta. Por segurança do navegador, o cliente anexa o arquivo selecionado dentro da conversa.</small>
+    </section>
+  `;
+}
+
+function highlightPrescriptionPanel() {
+  window.requestAnimationFrame(() => {
+    const panel = document.querySelector("[data-prescription-panel]");
+    if (!panel) return;
+    panel.scrollIntoView({ behavior: "smooth", block: "center" });
+    panel.classList.add("is-attention");
+    window.setTimeout(() => panel.classList.remove("is-attention"), 1400);
+  });
+}
+
+function validatePrescriptionBeforeFinalize() {
+  const items = calculateCart().items;
+  const requiredItems = checkoutPrescriptionItems(items);
+  if (!requiredItems.length || prescriptionStatusIsValid(items)) {
+    return true;
+  }
+
+  const store = checkoutPrescriptionStore();
+  const missingFileMessage = state.prescriptionFileName
+    ? `Envie a receita pelo WhatsApp da ${store.name} antes de finalizar.`
+    : "Anexe a receita dos antibióticos/controlados antes de finalizar.";
+  showToast(missingFileMessage);
+  if (window.location.hash !== "#pagamento") {
+    window.location.hash = "#pagamento";
+    renderCart();
+  }
+  highlightPrescriptionPanel();
+  return false;
+}
+
 function normalizeCep(value = "") {
   return String(value).replace(/\D/g, "").slice(0, 8);
 }
@@ -5685,7 +6377,7 @@ function normalizeCouponCode(code = "") {
 
 function findCoupon(code = "") {
   const normalized = normalizeCouponCode(code);
-  return availableCoupons.find((coupon) => normalizeCouponCode(coupon.code) === normalized) || null;
+  return allCoupons.find((coupon) => normalizeCouponCode(coupon.code) === normalized) || null;
 }
 
 function couponValueLabel(coupon) {
@@ -5731,9 +6423,28 @@ function productInCategoryConfig(product, routeKey) {
   );
 }
 
+function campaignCouponItemMatches(coupon, product) {
+  const text = productTextForCoupon(product);
+  const routeMatch = (coupon.routeKeys || []).some((routeKey) => productInCategoryConfig(product, routeKey));
+  const categoryMatch = (coupon.productCategories || []).some((categoryName) => {
+    const normalizedCategory = normalizeText(categoryName);
+    return (
+      normalizeText(product.category).includes(normalizedCategory) ||
+      normalizeText(product.subcategory).includes(normalizedCategory)
+    );
+  });
+  const keywordMatch = (coupon.keywords || []).some((keyword) => text.includes(normalizeText(keyword)));
+
+  return routeMatch || categoryMatch || keywordMatch;
+}
+
 function couponItemMatches(coupon, product) {
   if (!coupon || !product) return false;
   if (coupon.scope === "all") return true;
+
+  if (coupon.scope === "campaign") {
+    return campaignCouponItemMatches(coupon, product);
+  }
 
   const text = productTextForCoupon(product);
 
@@ -5811,6 +6522,20 @@ function couponEligibility(coupon, subtotal = 0, items = cartItemsFromState()) {
     return { eligible: false, reason: "Cupom nao encontrado." };
   }
 
+  if (!isCouponActive(coupon)) {
+    return {
+      eligible: false,
+      reason: `Cupom válido apenas em ${CAMPAIGN_MONTH_NAMES[coupon.activeMonth]}.`,
+    };
+  }
+
+  if (hasCustomerUsedCoupon(coupon)) {
+    return {
+      eligible: false,
+      reason: "Cupom já utilizado para este CPF.",
+    };
+  }
+
   if (subtotal < (coupon.minSubtotal || 0)) {
     return {
       eligible: false,
@@ -5854,6 +6579,57 @@ function couponDiscountForCart(subtotal = 0, items = cartItemsFromState()) {
     coupon,
     eligibility,
     discount: roundMoney(Math.min(discount, subtotal)),
+  };
+}
+
+function applyCouponCode(couponCode = "") {
+  const enteredCode = String(couponCode || "").trim();
+  const coupon = findCoupon(enteredCode);
+  const { subtotal, items } = calculateCart();
+  const eligibility = couponEligibility(coupon, subtotal, items);
+
+  state.couponDraft = enteredCode;
+
+  if (!enteredCode) {
+    state.coupon = "";
+    state.couponPanelOpen = true;
+    return {
+      applied: false,
+      reason: "Digite ou escolha um cupom para aplicar.",
+    };
+  }
+
+  if (!coupon) {
+    state.coupon = "";
+    state.couponPanelOpen = true;
+    return {
+      applied: false,
+      reason: "Cupom nao encontrado.",
+    };
+  }
+
+  if (!eligibility.eligible) {
+    state.coupon = "";
+    state.couponPanelOpen = true;
+    return {
+      applied: false,
+      coupon,
+      eligibility,
+      reason: eligibility.reason,
+    };
+  }
+
+  state.coupon = coupon.code;
+  state.couponDraft = coupon.code;
+  state.usePoints = false;
+  state.couponPanelOpen = false;
+
+  const result = couponDiscountForCart(subtotal, items);
+  return {
+    applied: true,
+    coupon,
+    eligibility,
+    discount: result.discount,
   };
 }
 
@@ -6167,6 +6943,28 @@ function pbmComparableText(value = "") {
     .join(" ");
 }
 
+function pbmNameTokens(value = "") {
+  return pbmComparableText(value)
+    .split(" ")
+    .filter((token) => token.length > 2);
+}
+
+function pbmRequiredPresentationTokens(product, selectedVariant = null) {
+  const detailText = normalizeText(`${selectedVariant?.label || ""} ${selectedVariant?.detail || product.detail || ""}`);
+  const strengthTokens = detailText.match(/\d+(?:[,.]\d+)?\s*(?:mg|mcg|g|ml|%)/g) || [];
+  const quantityTokens = detailText.match(/\d+\s*(?:comprimidos?|capsulas?|capsulas?|drageas?|envelopes?|doses?|adesivos?|flaconetes?|saches?|ml)/g) || [];
+
+  return [...new Set([...strengthTokens, ...quantityTokens].map((token) => token.replace(/\s+/g, " ").trim()))];
+}
+
+function pbmPresentationMatches(product, item, selectedVariant = null) {
+  const itemText = normalizeText(item.name);
+  const requiredTokens = pbmRequiredPresentationTokens(product, selectedVariant);
+  if (!requiredTokens.length) return true;
+
+  return requiredTokens.every((token) => itemText.includes(token));
+}
+
 function pbmMatchScore(product, item, selectedVariant = null) {
   const productName = pbmComparableText(product.name);
   const itemName = pbmComparableText(item.name);
@@ -6174,9 +6972,18 @@ function pbmMatchScore(product, item, selectedVariant = null) {
   const itemBrand = pbmComparableText(item.brand || "");
   const productMaker = pbmComparableText(product.medicine?.manufacturer || "");
   const variantText = pbmComparableText(selectedVariant?.detail || product.detail || "");
+  const productNameTokens = pbmNameTokens(product.name);
+  const hasNameMatch =
+    itemName.includes(productName) ||
+    productName.includes(itemName) ||
+    (productNameTokens.length > 0 && productNameTokens.every((token) => itemName.includes(token)));
+
+  if (!hasNameMatch || !pbmPresentationMatches(product, item, selectedVariant)) {
+    return 0;
+  }
 
   let score = 0;
-  if (itemName.includes(productName) || productName.includes(itemName)) score += 70;
+  if (itemName.includes(productName) || productName.includes(itemName)) score += 80;
   productName.split(" ").forEach((token) => {
     if (token && itemName.includes(token)) score += 18;
   });
@@ -6198,7 +7005,7 @@ function productPbmInfo(product, selectedVariant = null) {
   pbmTreatmentGroups.forEach((group) => {
     group.items.forEach((item) => {
       const score = pbmMatchScore(product, item, selectedVariant);
-      if (score >= 22 && (!bestMatch || score > bestMatch.score)) {
+      if (score >= 70 && (!bestMatch || score > bestMatch.score)) {
         bestMatch = { group, item, score };
       }
     });
@@ -6239,15 +7046,14 @@ function renderProductLabDiscountMarkup(product, pbmInfo, displayPrice) {
         ${svg("ticket")}
       </div>
       <div class="product-lab-discount-copy">
-        <span>Desconto laboratório Onório</span>
+        <span>Desconto laboratório</span>
         <strong>${escapeHtml(pbmInfo.item.program || "Programa parceiro")}</strong>
-        <p>Benefício consultado pelo CPF, conforme regra do laboratório e estoque da loja.</p>
+        <p>Exclusivo para clientes cadastrados no programa parceiro.</p>
         <button type="button" data-info-page="pbm">Saiba mais</button>
       </div>
       <div class="product-lab-discount-price">
         <small>Preço PBM médio</small>
-        ${oldPriceLabel ? `<del>${escapeHtml(oldPriceLabel)}</del>` : ""}
-        <strong>${escapeHtml(priceLabel)}</strong>
+        <span>${oldPriceLabel ? `<del>${escapeHtml(oldPriceLabel)}</del>` : ""}<strong>${escapeHtml(priceLabel)}</strong></span>
         <em>${escapeHtml(savingLabel)}</em>
       </div>
       <button type="button" class="product-lab-discount-action" data-pbm-activate>
@@ -6339,7 +7145,6 @@ function productPurchasePanel(product, selectedItemId, displayPrice, selectedQua
         </div>
         <strong class="product-offer-price">${formatCurrency(displayPrice)}</strong>
         <small>${productPageInstallmentText(displayPrice)}</small>
-        ${productPaymentPopoverMarkup()}
         <div class="product-offer-quantity">
           <label for="product-quantity-select">Quantidade</label>
           <select id="product-quantity-select" data-product-quantity-select data-product-id="${escapeHtml(product.parentId || product.id)}" data-item-id="${escapeHtml(selectedItemId)}">
@@ -6402,7 +7207,7 @@ function checkoutHeader() {
   const { items, total } = calculateCart();
   const itemCount = getCartItemCount(items);
   const cartItemLabel = `${itemCount} ${itemCount === 1 ? "item" : "itens"}`;
-  const customerTitle = state.loggedIn ? getCustomerHeaderName() : "Cliente Onório";
+  const customerTitle = state.loggedIn ? getCustomerHeaderName() : "Cliente ON";
   const customerSubtitle = state.loggedIn ? "Minha conta" : "Entrar ou cadastrar";
 
   return `
@@ -6724,7 +7529,7 @@ function renderReviewPage() {
         <h2>${svg("ticket")} Cupom de desconto</h2>
         <span>Digite seu cupom de desconto:</span>
         <div class="inline-form coupon-form">
-          <input id="coupon-input" data-coupon-input type="text" placeholder="Insira seu cupom" value="${escapeHtml(state.coupon)}" autocomplete="off" />
+          <input id="coupon-input" data-coupon-input type="text" placeholder="Insira seu cupom" value="${escapeHtml(state.couponDraft || state.coupon)}" autocomplete="off" />
           <button type="button" data-apply-coupon>Adicionar</button>
         </div>
         ${couponSuggestionsMarkup(subtotal, items)}
@@ -7038,10 +7843,11 @@ function buildPixPayload(amount) {
 }
 
 function renderPaymentPage() {
-  const { total, pixDiscount, pointsDiscount, availablePointsDiscount } = calculateCart();
+  const { total, pixDiscount, pointsDiscount, availablePointsDiscount, couponDiscount, coupon, items } = calculateCart();
   const pixPayload = buildPixPayload(total);
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=190x190&margin=8&data=${encodeURIComponent(pixPayload)}`;
   const pointsBalance = getCustomerPointsBalance();
+  const pointsBlockedByCoupon = couponDiscount > 0;
 
   return `
     ${checkoutHeader()}
@@ -7054,14 +7860,19 @@ function renderPaymentPage() {
             <div>
               <span>Cliente ON</span>
               <strong>Deseja utilizar seus pontos para abater no valor da compra?</strong>
-              <small>Saldo disponível: ${pointsBalance} pontos = ${formatCurrency(availablePointsDiscount)} para abater neste pedido. A cada 100 pontos, abate R$ 1,00. Pontos acumulados valem por ${LOYALTY_POINTS_VALIDITY_MONTHS} meses.</small>
+              <small>${pointsBlockedByCoupon
+                ? `Cupom ${escapeHtml(coupon?.code || "")} aplicado. Como o cupom não é cumulativo, os pontos Cliente ON ficam guardados para outra compra.`
+                : `Saldo disponível: ${pointsBalance} pontos = ${formatCurrency(availablePointsDiscount)} para abater neste pedido. A cada 100 pontos, abate R$ 1,00. Pontos acumulados valem por ${LOYALTY_POINTS_VALIDITY_MONTHS} meses.`}</small>
             </div>
             <div class="points-choice-row">
-              <button type="button" class="${state.usePoints ? "is-active" : ""}" data-use-points="true">Sim, usar pontos</button>
+              <button type="button" class="${state.usePoints && !pointsBlockedByCoupon ? "is-active" : ""}" data-use-points="true" ${pointsBlockedByCoupon ? "disabled" : ""}>Sim, usar pontos</button>
               <button type="button" class="${!state.usePoints ? "is-active" : ""}" data-use-points="false">Não usar agora</button>
             </div>
-            ${state.usePoints ? `<em>Desconto Cliente ON aplicado: - ${formatCurrency(pointsDiscount)}</em>` : `<em>Os pontos só entram no total se o cliente confirmar aqui.</em>`}
+            ${pointsBlockedByCoupon
+              ? `<em>Cupom aplicado: pontos Cliente ON não entram neste pedido.</em>`
+              : (state.usePoints ? `<em>Desconto Cliente ON aplicado: - ${formatCurrency(pointsDiscount)}</em>` : `<em>Os pontos só entram no total se o cliente confirmar aqui.</em>`)}
           </section>
+          ${prescriptionCheckoutMarkup(items)}
           <label class="payment-choice ${state.customer.payment === "Pix" ? "is-selected" : ""}">
             <input type="radio" name="checkout-payment" value="Pix" ${state.customer.payment === "Pix" ? "checked" : ""} data-payment-select="Pix" />
             <span class="radio-mark"></span>
@@ -7211,6 +8022,8 @@ function currentOrderSignature() {
     state.coupon,
     state.deliveryQuote?.formattedCep || "",
     state.deliveryQuote?.fee || "",
+    state.prescriptionFileName || "",
+    state.prescriptionSent ? state.prescriptionStoreId : "rx-pending",
   ].join("::");
 }
 
@@ -7266,6 +8079,15 @@ function buildOrderSnapshot() {
     savings,
     pointsEarned: cart.pointsEarned,
     pointsExpireAt,
+    prescriptionRequiredItems: checkoutPrescriptionItems(cart.items).map((item) => ({
+      id: item.id,
+      name: item.name,
+      detail: item.detail,
+      quantity: item.quantity,
+    })),
+    prescriptionFileName: state.prescriptionFileName,
+    prescriptionStoreId: state.prescriptionStoreId,
+    prescriptionSent: state.prescriptionSent,
   };
 }
 
@@ -7292,6 +8114,9 @@ function finalizeCurrentOrder() {
   }
 
   state.currentOrder = applyLoyaltyBalanceToOrder(buildOrderSnapshot());
+  if (state.currentOrder.couponCode) {
+    markCouponUsedForCustomer(state.currentOrder.couponCode ? findCoupon(state.currentOrder.couponCode) : null, state.currentOrder);
+  }
   return state.currentOrder;
 }
 
@@ -7331,6 +8156,9 @@ function renderFinishedPage() {
     ? order.store.fullAddress || order.store.address
     : order.deliveryAddress || order.customerCep || "Endereço cadastrado";
   const paymentDescription = orderPaymentDescription(order);
+  const loyaltyBalanceValue = Number.isFinite(order.pointsBalanceAfter)
+    ? pointsToDiscount(order.pointsBalanceAfter)
+    : 0;
 
   return `
     ${checkoutHeader()}
@@ -7367,6 +8195,7 @@ function renderFinishedPage() {
               <span>Validade dos pontos: até ${escapeHtml(order.pointsExpireAt || "")}</span>
               ${Number.isFinite(order.pointsBalanceAfter) ? `<span>Saldo Cliente ON após pedido: ${order.pointsBalanceAfter} pontos</span>` : ""}
               <span>Código de retirada: ${escapeHtml(order.pickupCode)}</span>
+              ${order.prescriptionRequiredItems?.length ? `<span>Receita enviada: ${escapeHtml(order.prescriptionFileName || "arquivo informado no WhatsApp")}</span>` : ""}
             </div>
           </article>
 
@@ -7426,6 +8255,11 @@ function renderFinishedPage() {
             <div>
               <span>Saldo Cliente ON</span>
               <strong>${order.pointsBalanceAfter}</strong>
+            </div>
+            <div class="order-receipt-loyalty-card">
+              <span>Próxima compra</span>
+              <strong>${formatCurrency(loyaltyBalanceValue)}</strong>
+              <small>em pontos Cliente ON para abater, válidos até ${escapeHtml(order.pointsExpireAt || "")}</small>
             </div>
           ` : ""}
         </div>
@@ -7823,7 +8657,7 @@ function renderInfoStores() {
 
 function renderPharmaceuticalServices() {
   return `
-    <section class="pharma-service-grid" aria-label="Lista de serviços farmacêuticos">
+    <section class="pharma-service-grid" aria-label="Lista de Serviços Farmacêuticos">
       ${pharmaceuticalServices
         .map(
           (service) => `
@@ -7858,6 +8692,7 @@ function pbmMedicineCardMarkup(item) {
     <article class="pbm-medicine-card">
       <div>
         <span class="pbm-medicine-program">${escapeHtml(item.program || "PBM")}</span>
+        ${item.treatment ? `<small class="pbm-medicine-treatment">${escapeHtml(item.treatment)}</small>` : ""}
         <h3>${escapeHtml(item.name)}</h3>
         <p>${escapeHtml(item.brand || "Laboratório participante")}</p>
       </div>
@@ -7996,12 +8831,12 @@ function renderPbmHeroBenefits() {
 }
 
 function renderPbmProgramPage() {
-  const pbmProducts = products
-    .filter((product) => {
-      const source = normalizeText(`${product.promo || ""} ${product.keywords || ""} ${product.description || ""}`);
-      return source.includes("pbm") || source.includes("programa") || product.id === "allegra-120" || product.id === "losartana-generica";
-    })
-    .slice(0, 4);
+  const pbmMedicineItems = pbmTreatmentGroups.flatMap((group) =>
+    group.items.map((item) => ({
+      ...item,
+      treatment: group.label,
+    })),
+  );
 
   return `
     <section class="pbm-hero-panel" aria-label="Programa PBM Drogaria Onório">
@@ -8029,7 +8864,7 @@ function renderPbmProgramPage() {
           <span>consulta de benefícios</span>
           <em>%</em>
         </div>
-        <img src="assets/category-wellness-real.jpg" alt="" loading="lazy" />
+        <img src="assets/pbm-benefits-woman-phone.svg" alt="" loading="lazy" />
       </div>
     </section>
 
@@ -8069,14 +8904,15 @@ function renderPbmProgramPage() {
 
     ${renderPbmPartnerProgramCarousel()}
 
-    ${pbmProducts.length ? `
+    ${pbmMedicineItems.length ? `
       <section class="pbm-products-panel">
         <div class="pbm-section-title">
           <span>Vitrine demonstrativa</span>
-          <h2>Medicamentos que podem entrar no fluxo PBM</h2>
+          <h2>Todos os medicamentos cadastrados no fluxo PBM</h2>
+          <p>${pbmTreatmentGroups.length} categorias e ${pbmMedicineItems.length} apresentações organizadas para consulta por CPF, validação de benefício e futura integração com estoque da Onório.</p>
         </div>
-        <div class="catalog-product-grid product-grid">
-          ${pbmProducts.map((product) => productCardMarkup(product, "catalog-product-card")).join("")}
+        <div class="pbm-medicine-grid">
+          ${pbmMedicineItems.map(pbmMedicineCardMarkup).join("")}
         </div>
       </section>
     ` : ""}
@@ -8291,7 +9127,7 @@ function couponPageCardMarkup(coupon) {
           Copiar
         </button>
       </div>
-      <small>${escapeHtml(coupon.rule)} Valido ate ${escapeHtml(coupon.validUntil)}.</small>
+      <small>${escapeHtml(coupon.rule)} Válido até ${escapeHtml(coupon.validUntil)}.</small>
       <a href="#" data-route="#revisao">Aplicar na cesta</a>
     </article>
   `;
@@ -8310,7 +9146,7 @@ function renderCouponProgramPage() {
       <div class="coupon-page-heading">
         <span>Cupons ativos</span>
         <h2>Cupons ativos no momento</h2>
-        <p>Copie o nome do cupom e aplique no resumo da cesta. O site aceita apenas um cupom por compra, CPF e cadastro.</p>
+        <p>Copie o nome do cupom e aplique no resumo da cesta. O site mostra automaticamente os cupons da campanha do mês vigente.</p>
       </div>
       <div class="coupon-page-grid">
         ${availableCoupons.map(couponPageCardMarkup).join("")}
@@ -8345,7 +9181,8 @@ function renderCouponProgramPage() {
       <h2>Regras gerais dos cupons</h2>
       <div>
         <span>Um cupom por CPF e cadastro.</span>
-        <span>Cupons nao acumulam entre si, Cliente ON, PBM ou outras campanhas quando a regra impedir.</span>
+        <span>O cupom não é cumulativo e não permite usar pontos Cliente ON no mesmo pedido.</span>
+        <span>Cupons de campanha valem do primeiro ao último dia do mês vigente.</span>
         <span>O desconto de categoria vale apenas para produtos participantes da cesta.</span>
       </div>
     </section>
@@ -8373,7 +9210,7 @@ function renderHelpGuidePage() {
       items: [
         ["Como funciona o compre e retire?", "O cliente escolhe retirar na loja, seleciona a filial e finaliza o pedido. A equipe separa os itens e avisa quando estiver pronto para retirada."],
         ["Quanto tempo leva para retirar?", "A proposta do prototipo e retirada gratis em ate 60 minutos, conforme disponibilidade de estoque e confirmacao da farmacia."],
-        ["Quais lojas aparecem?", "Loja 1 na Av. Arnaldo Victaliano, 1191 - Iguatemi, e Loja 2 na Av. Portugal, 2777 - Jardim Botanico, dentro do Posto Copercana."],
+        ["Quais lojas aparecem?", "Loja 1 na Av. Arnaldo Victaliano, 1155 - Iguatemi, e Loja 2 na Av. Portugal, 2777 - Jardim Botanico, dentro do Posto Copercana."],
       ],
     },
     {
@@ -8405,7 +9242,7 @@ function renderHelpGuidePage() {
       text: "Cupons Onorio, PBM e Cliente ON.",
       items: [
         ["Como usar um cupom?", "Abra a pagina de cupons, copie o codigo e cole no resumo da cesta. O site aceita um cupom por compra, CPF e cadastro."],
-        ["Os cupons valem para tudo?", "Depende. ONORIO10 vale para o site todo; LEITE10, DERMO5, HIGIENE10 e HOMEM10 aplicam desconto apenas nos produtos participantes da categoria."],
+        ["Os cupons valem para tudo?", "Depende. O cupom de boas-vindas vale para a primeira compra, e os cupons mensais valem somente para produtos ligados a campanha vigente."],
         ["PBM combina com cupom?", "Por regra do prototipo, os beneficios ficam separados. Na versao real, cada PBM, cupom e campanha deve respeitar a regra do laboratorio e da drogaria."],
       ],
     },
@@ -8435,21 +9272,21 @@ function renderHelpGuidePage() {
       id: "atendimento",
       icon: "headset",
       title: "Atendimento",
-      text: "Canais para falar com a Onorio.",
+      text: "Canais para falar com a Onório.",
       items: [
-        ["Quais telefones posso usar?", "Loja 1: (16) 3618-0883. Loja 2: (16) 3442-2440. WhatsApp principal: (16) 99799-7878."],
-        ["Qual e-mail de contato?", "O e-mail principal do prototipo e onoriodrogaria@gmail.com."],
-        ["Qual horario de atendimento?", "A informacao legal do rodape indica segunda a sexta das 8h as 20h e sabado das 8h as 15h."],
+        ["Quais telefones posso usar?", "Loja 1: (16) 3618-0883. Loja 2: (16) 3442-2440."],
+        ["Qual e-mail de contato?", "O e-mail principal é onoriodrogaria@gmail.com."],
+        ["Qual horário de atendimento?", "Segunda a sábado das 7h às 22h, domingo das 7h às 13h e feriados das 7h às 19h."],
       ],
     },
   ];
 
   return `
-    <section class="help-guide-hero" aria-label="Central de ajuda Drogaria Onorio">
+    <section class="help-guide-hero" aria-label="Central de ajuda Drogaria Onório">
       <div>
-        <span>Central de ajuda Onorio</span>
-        <h2>Resolva sua duvida em poucos cliques.</h2>
-        <p>Um guia rapido para o cliente entender como comprar, pagar, retirar, receber em casa e falar com a Drogaria Onorio.</p>
+        <span>Central de ajuda Onório</span>
+        <h2>Resolva sua dúvida em poucos cliques.</h2>
+        <p>Um guia rápido para o cliente entender como comprar, pagar, retirar, receber em casa e falar com a Drogaria Onório.</p>
       </div>
       <div class="help-guide-search" role="search">
         ${svg("eye")}
@@ -8504,12 +9341,13 @@ function renderHelpGuidePage() {
     <section class="help-contact-panel">
       <div>
         <span>Ainda precisa de ajuda?</span>
-        <h2>Fale com a equipe da Drogaria Onorio.</h2>
-        <p>Se a duvida envolver pedido, receita, troca, disponibilidade ou cancelamento, a loja confirma pelo atendimento.</p>
+        <h2>Fale com a equipe da Drogaria Onório.</h2>
+        <p>Se a dúvida envolver pedido, receita, troca, disponibilidade ou cancelamento, a loja confirma pelo atendimento.</p>
       </div>
-      <div>
-        <a class="checkout-primary" href="${whatsappUrl("Ola, Drogaria Onorio! Preciso de ajuda pelo site.")}" target="_blank" rel="noopener">Chamar no WhatsApp</a>
-        <a class="checkout-outline" href="tel:+551634422440">Ligar para a loja</a>
+      <div class="help-whatsapp-group" aria-label="Chamar no WhatsApp">
+        <strong>Chamar no WhatsApp</strong>
+        <a href="https://wa.me/5516996207433?text=${encodeURIComponent("Olá, Drogaria Onório! Preciso de ajuda pelo site.")}" target="_blank" rel="noopener">Loja 1 - (16) 99620-7433</a>
+        <a href="https://wa.me/5516997997878?text=${encodeURIComponent("Olá, Drogaria Onório! Preciso de ajuda pelo site.")}" target="_blank" rel="noopener">Loja 2 - (16) 99799-7878</a>
       </div>
     </section>
   `;
@@ -8534,15 +9372,21 @@ function renderInfoPage(pageKey = "atendimento") {
   const isPbmPage = pageKey === "pbm";
   const isHistoryPage = pageKey === "historia";
   const hasCustomInfoPage = isPbmPage || pageKey === "ajuda" || isHistoryPage;
+  const safePageClass = String(pageKey).replace(/[^a-z0-9-]/gi, "");
   return `
     ${checkoutHeader()}
-    <main class="checkout-page info-page ${isPbmPage ? "info-page-pbm" : ""} ${pageKey === "ajuda" ? "info-page-ajuda" : ""} ${isHistoryPage ? "info-page-historia" : ""}">
+    <main class="checkout-page info-page info-page-${safePageClass} ${isPbmPage ? "info-page-pbm" : ""} ${pageKey === "ajuda" ? "info-page-ajuda" : ""} ${isHistoryPage ? "info-page-historia" : ""}">
       <button type="button" class="checkout-back" data-route="#home">‹ Voltar para a loja</button>
       ${hasCustomInfoPage ? "" : `
-        <section class="info-hero">
+        <section class="info-hero ${page.heroMascot ? "info-hero-with-mascot" : ""}">
           <span>${escapeHtml(page.eyebrow)}</span>
           <h1>${escapeHtml(page.title)}</h1>
           <p>${escapeHtml(page.text)}</p>
+          ${page.heroMascot ? `
+            <div class="info-hero-mascot" aria-hidden="true">
+              <img src="${escapeHtml(page.heroMascot)}" alt="" loading="lazy" />
+            </div>
+          ` : ""}
         </section>
       `}
       ${!hasCustomInfoPage && page.cards?.length ? `
@@ -8561,7 +9405,7 @@ function renderInfoPage(pageKey = "atendimento") {
       ` : ""}
       ${renderInfoExtras(pageKey, page)}
       <div class="info-actions">
-        ${infoPrimaryAction(page)}
+        ${pageKey === "ajuda" ? "" : infoPrimaryAction(page)}
         <button type="button" class="checkout-outline" data-route="#home">Continuar navegando</button>
       </div>
     </main>
@@ -8637,6 +9481,10 @@ function navigateTo(route) {
   closeCartDrawer();
   closeModal();
   closePbmAuthDialog();
+
+  if (route === "#finalizado" && !validatePrescriptionBeforeFinalize()) {
+    return;
+  }
 
   if (route === "#finalizado") {
     finalizeCurrentOrder();
@@ -8872,7 +9720,7 @@ function calculateCart() {
   const couponDiscount = couponResult.discount;
   const pixDiscount = state.customer.payment === "Pix" ? roundMoney(subtotal * PIX_DISCOUNT_RATE) : 0;
   const availablePointsDiscount = availablePointsDiscountForCart(subtotal, pixDiscount + couponDiscount);
-  const pointsDiscount = state.usePoints && subtotal > 0
+  const pointsDiscount = state.usePoints && couponDiscount <= 0 && subtotal > 0
     ? availablePointsDiscount
     : 0;
   const shipping = state.delivery === "home" && subtotal > 0 ? currentDeliveryFee() : 0;
@@ -9282,6 +10130,8 @@ function initCampaignCarousel() {
   const carousel = document.querySelector("#campaign-carousel");
   if (!carousel) return;
 
+  applyCurrentMonthlyCampaignHero();
+
   const slides = [...carousel.querySelectorAll("[data-campaign-slide]")];
   const dots = [...carousel.querySelectorAll("[data-campaign-dot]")];
   const prev = carousel.querySelector("[data-campaign-prev]");
@@ -9494,6 +10344,7 @@ function bindEvents() {
     const paymentSelect = event.target.closest("[data-payment-select]");
     const copyPixButton = event.target.closest("[data-copy-pix]");
     const usePointsButton = event.target.closest("[data-use-points]");
+    const prescriptionSendButton = event.target.closest("[data-send-prescription]");
     const whatsappFormButton = event.target.closest("[data-whatsapp-form]");
     const serviceMoreButton = event.target.closest("[data-service-more]");
     const addAddressButton = event.target.closest("[data-add-address]");
@@ -9545,6 +10396,31 @@ function bindEvents() {
       } else {
         openCartDrawer();
       }
+      return;
+    }
+
+    if (prescriptionSendButton) {
+      event.preventDefault();
+      const items = calculateCart().items;
+      const requiredItems = checkoutPrescriptionItems(items);
+      const store = checkoutPrescriptionStore();
+
+      if (!requiredItems.length) {
+        showToast("Nenhum item da cesta exige receita agora.");
+        return;
+      }
+
+      if (!state.prescriptionFileName) {
+        showToast("Anexe a receita antes de abrir o WhatsApp da loja.");
+        highlightPrescriptionPanel();
+        return;
+      }
+
+      state.prescriptionSent = true;
+      state.prescriptionStoreId = store.id;
+      window.open(storeWhatsappUrl(store, checkoutPrescriptionWhatsappMessage(store, requiredItems)), "_blank", "noopener");
+      renderCart();
+      showToast(`Receita encaminhada para o WhatsApp da ${store.name}.`);
       return;
     }
 
@@ -9777,6 +10653,7 @@ function bindEvents() {
 
     if (couponInput) {
       state.couponPanelOpen = true;
+      state.couponDraft = state.couponDraft || state.coupon;
       renderCart();
       window.requestAnimationFrame(() => {
         const input = document.querySelector("#coupon-input");
@@ -9799,39 +10676,21 @@ function bindEvents() {
 
     if (couponOptionButton) {
       const couponCode = couponOptionButton.dataset.couponCode || "";
-      const coupon = findCoupon(couponCode);
-      const { subtotal, items } = calculateCart();
-      const eligibility = couponEligibility(coupon, subtotal, items);
-
-      if (!eligibility.eligible) {
-        showToast(eligibility.reason);
-        return;
-      }
-
-      state.coupon = coupon.code;
-      const result = couponDiscountForCart(subtotal, items);
-      state.couponPanelOpen = false;
+      const result = applyCouponCode(couponCode);
       renderCart();
-      showToast(`Cupom ${coupon.code} aplicado: - ${formatCurrency(result.discount)}.`);
+      showToast(result.applied
+        ? `Cupom ${result.coupon.code} aplicado: - ${formatCurrency(result.discount)}.`
+        : result.reason);
       return;
     }
 
     if (applyCouponButton) {
-      state.coupon = document.querySelector("#coupon-input")?.value.trim() || "";
-      const { couponDiscount, couponEligibility: eligibility } = calculateCart();
-      const coupon = findCoupon(state.coupon);
-      state.couponPanelOpen = false;
-
-      if (!state.coupon) {
-        state.couponPanelOpen = true;
-        showToast("Digite ou escolha um cupom para aplicar.");
-      } else if (!couponDiscount) {
-        showToast(eligibility?.reason || "Cupom nao disponivel para esta cesta.");
-      } else {
-        state.coupon = coupon?.code || state.coupon;
-        showToast(`Cupom ${state.coupon.toUpperCase()} aplicado: - ${formatCurrency(couponDiscount)}.`);
-      }
+      const enteredCode = document.querySelector("#coupon-input")?.value.trim() || state.couponDraft || "";
+      const result = applyCouponCode(enteredCode);
       renderCart();
+      showToast(result.applied
+        ? `Cupom ${result.coupon.code} aplicado: - ${formatCurrency(result.discount)}.`
+        : result.reason);
       return;
     }
 
@@ -9879,7 +10738,15 @@ function bindEvents() {
     }
 
     if (usePointsButton) {
-      state.usePoints = usePointsButton.dataset.usePoints === "true";
+      const wantsPoints = usePointsButton.dataset.usePoints === "true";
+      const { couponDiscount } = calculateCart();
+      if (wantsPoints && couponDiscount > 0) {
+        state.usePoints = false;
+        showToast("Cupom não é cumulativo: pontos Cliente ON ficam guardados para outra compra.");
+        renderCart();
+        return;
+      }
+      state.usePoints = wantsPoints;
       showToast(state.usePoints ? "Desconto Cliente ON aplicado." : "Pontos guardados para a próxima compra.");
       renderCart();
       return;
@@ -10007,6 +10874,10 @@ function bindEvents() {
 
     if (campaignActionButton) {
       const action = campaignActionButton.dataset.campaignAction;
+      if (action === "monthly-campaign") {
+        navigateTo("#pagina/cupons");
+        return;
+      }
       if (action === "health-services") {
         navigateTo("#pagina/servicos-saude");
       }
@@ -10068,7 +10939,8 @@ function bindEvents() {
     navigateToCatalog("todos");
   });
 
-  document.querySelector("#see-offers").addEventListener("click", () => {
+  document.querySelector("#see-offers")?.addEventListener("click", (event) => {
+    if (event.currentTarget.dataset.campaignAction) return;
     navigateToCatalog("top-ofertas");
   });
 
@@ -10126,7 +10998,7 @@ function bindEvents() {
     }
 
     if (couponField) {
-      state.coupon = couponField.value;
+      state.couponDraft = couponField.value;
     }
 
     if (helpSearchField) {
@@ -10150,14 +11022,29 @@ function bindEvents() {
     const paymentField = event.target.closest("[data-payment-select]");
     const storeField = event.target.closest('input[name="pickup-store"]');
     const productQuantitySelect = event.target.closest("[data-product-quantity-select]");
+    const prescriptionFileInput = event.target.closest("[data-prescription-file]");
 
     if (paymentField) {
       state.customer.payment = paymentField.dataset.paymentSelect;
       renderCart();
     }
 
+    if (prescriptionFileInput) {
+      const file = prescriptionFileInput.files?.[0];
+      state.prescriptionFileName = file?.name || "";
+      state.prescriptionSent = false;
+      state.prescriptionStoreId = "";
+      renderCart();
+      if (state.prescriptionFileName) {
+        showToast("Receita anexada. Agora envie pelo WhatsApp da loja.");
+      }
+    }
+
     if (storeField) {
       state.selectedStore = storeField.value;
+      if (state.prescriptionSent && state.prescriptionStoreId !== state.selectedStore) {
+        state.prescriptionSent = false;
+      }
     }
 
     if (productQuantitySelect) {

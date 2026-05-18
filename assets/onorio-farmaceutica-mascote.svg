@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-label="Farmacêutica virtual da Drogaria Onório">
+  <defs>
+    <linearGradient id="skin" x1="95" y1="70" x2="225" y2="255" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f6c39c"/>
+      <stop offset=".55" stop-color="#df9a67"/>
+      <stop offset="1" stop-color="#b9673d"/>
+    </linearGradient>
+    <linearGradient id="hair" x1="86" y1="34" x2="232" y2="206" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4b332d"/>
+      <stop offset=".52" stop-color="#231918"/>
+      <stop offset="1" stop-color="#15100f"/>
+    </linearGradient>
+    <linearGradient id="coat" x1="50" y1="215" x2="304" y2="404" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/>
+      <stop offset=".58" stop-color="#f1f7f1"/>
+      <stop offset="1" stop-color="#d9e9dd"/>
+    </linearGradient>
+    <linearGradient id="scrub" x1="130" y1="230" x2="230" y2="390" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0d7b56"/>
+      <stop offset="1" stop-color="#005f3f"/>
+    </linearGradient>
+    <linearGradient id="tablet" x1="180" y1="194" x2="296" y2="295" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e4f2eb"/>
+    </linearGradient>
+    <radialGradient id="cheek" cx="50%" cy="50%" r="50%">
+      <stop stop-color="#dc7a64" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#dc7a64" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="avatarShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="20" stdDeviation="15" flood-color="#06351f" flood-opacity=".24"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#ffffff" flood-opacity=".35"/>
+    </filter>
+    <filter id="cardShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#06351f" flood-opacity=".18"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#avatarShadow)">
+    <ellipse cx="177" cy="386" rx="110" ry="22" fill="#004b31" opacity=".16"/>
+
+    <path fill="url(#hair)" d="M103 106c-12 35-4 81 19 105 18 19 83 19 109-1 28-22 37-79 24-117-13-40-47-65-84-65-34 0-57 21-68 78Z"/>
+    <path fill="url(#hair)" d="M94 144c-20 11-31 34-28 60 3 29 24 51 48 53 17-27 18-74-20-113Z"/>
+    <path fill="url(#hair)" d="M244 138c29 14 45 45 39 78-5 29-28 49-57 49-3-44 2-86 18-127Z"/>
+
+    <path fill="url(#skin)" d="M105 123c2-55 32-88 74-88 43 0 73 33 75 88 3 70-32 114-74 115-43 1-78-44-75-115Z"/>
+    <path fill="url(#hair)" d="M109 111c33-6 70-21 95-51 17 18 31 39 50 45-4-48-35-79-77-79-43 0-70 31-68 85Z"/>
+    <path fill="#2a1d1b" d="M122 47c9-27 45-42 79-35 32 6 55 30 59 64-38-20-86-23-138-29Z" opacity=".96"/>
+    <path fill="#2a1d1b" d="M111 83c-15 22-18 58-9 89 11-36 35-62 67-88-22 5-42 5-58-1Z" opacity=".96"/>
+
+    <path fill="#c4774d" d="M101 139c-17-5-28 8-22 27 6 18 22 28 35 21M257 139c17-5 28 8 22 27-6 18-22 28-35 21"/>
+    <ellipse cx="132" cy="158" rx="18" ry="12" fill="url(#cheek)"/>
+    <ellipse cx="224" cy="158" rx="18" ry="12" fill="url(#cheek)"/>
+    <path d="M131 137c11-8 24-8 35 0M193 137c11-8 24-8 35 0" fill="none" stroke="#3a241e" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="150" cy="154" r="6" fill="#231715"/>
+    <circle cx="211" cy="154" r="6" fill="#231715"/>
+    <path d="M175 163c-5 15-10 30-2 37 6 5 17 4 24 0" fill="none" stroke="#965936" stroke-width="4" stroke-linecap="round"/>
+    <path d="M143 209c23 23 61 23 84-1" fill="none" stroke="#7b3129" stroke-width="5" stroke-linecap="round"/>
+    <path d="M151 212c19 10 48 10 67 0" fill="none" stroke="#fff7ef" stroke-width="6" stroke-linecap="round"/>
+
+    <path fill="#b86c44" d="M135 226c12 17 28 25 46 25 19 0 36-9 49-25l13 49H120l15-49Z"/>
+    <path fill="url(#coat)" d="M62 285c16-49 60-77 117-77 58 0 102 28 118 77l31 97H31l31-97Z"/>
+    <path fill="url(#scrub)" d="M127 242c18 20 60 22 85 0 16 34 22 78 22 136H109c0-57 4-102 18-136Z"/>
+    <path fill="#ffffff" d="M129 222c18 24 63 27 84 1l-17 70-18 34-20-34-29-71Z" opacity=".92"/>
+    <path fill="#ff8a13" d="M169 268h24l-12 30-12-30Z"/>
+    <path fill="#0c6547" d="M148 226c17 19 47 20 68 0-10 17-22 31-37 46-16-14-25-27-31-46Z"/>
+
+    <path fill="#f0b083" d="M86 291c34 15 66 32 96 53l-23 34c-30-25-62-43-99-55-15-5-21-18-16-29 6-11 24-12 42-3Z"/>
+    <path fill="#e7a171" d="M284 292c-35 16-69 34-100 55l22 35c31-25 66-45 104-59 15-5 21-18 15-29-6-11-24-12-41-2Z"/>
+
+    <g filter="url(#cardShadow)">
+      <rect x="172" y="249" width="102" height="126" rx="20" fill="url(#tablet)" transform="rotate(6 223 312)"/>
+      <rect x="188" y="268" width="70" height="85" rx="12" fill="#0a6b48" transform="rotate(6 223 310)"/>
+      <path d="M199 291h44M197 312h49M203 333h33" stroke="#d7f5ea" stroke-width="9" stroke-linecap="round" transform="rotate(6 223 310)"/>
+      <circle cx="219" cy="360" r="6" fill="#f7fff9"/>
+      <rect x="57" y="257" width="78" height="56" rx="13" fill="#fffaf2" transform="rotate(-12 96 285)"/>
+      <rect x="69" y="279" width="54" height="16" rx="5" fill="#ff8a13" transform="rotate(-12 96 287)"/>
+      <path d="M83 268h28" stroke="#0b6b43" stroke-width="6" stroke-linecap="round" transform="rotate(-12 97 271)"/>
+      <circle cx="116" cy="298" r="13" fill="#0b6b43"/>
+      <path d="M116 291v14M109 298h14" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+    </g>
+
+    <path d="M83 281c13 9 27 15 43 17" fill="none" stroke="#f0b083" stroke-width="18" stroke-linecap="round"/>
+    <path d="M277 284c-13 9-27 16-42 19" fill="none" stroke="#e7a171" stroke-width="18" stroke-linecap="round"/>
+    <path d="M71 287c-8-5-16-7-25-5" fill="none" stroke="#f0b083" stroke-width="12" stroke-linecap="round"/>
+    <path d="M304 288c8-5 16-7 25-5" fill="none" stroke="#e7a171" stroke-width="12" stroke-linecap="round"/>
+
+    <path d="M63 294c-8 21-13 48-15 82" fill="none" stroke="#ffffff" stroke-width="26" stroke-linecap="round" opacity=".94"/>
+    <path d="M294 294c9 21 15 48 17 82" fill="none" stroke="#ffffff" stroke-width="26" stroke-linecap="round" opacity=".94"/>
+    <path d="M65 294c-8 20-12 47-14 79M294 294c8 20 13 47 15 79" fill="none" stroke="#dbeee3" stroke-width="15" stroke-linecap="round"/>
+
+    <circle cx="91" cy="331" r="17" fill="#ff8a13"/>
+    <path d="M91 322v18M82 331h18" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="270" cy="331" r="17" fill="#0b6b43"/>
+    <path d="M270 322v18M261 331h18" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>

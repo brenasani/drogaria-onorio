@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 520" role="img" aria-label="Cliente consultando benefícios pelo celular">
+  <defs>
+    <linearGradient id="skin" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#9a5a35"/>
+      <stop offset="1" stop-color="#6f3a24"/>
+    </linearGradient>
+    <linearGradient id="blouse" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#d7d3cc"/>
+      <stop offset="1" stop-color="#8e958d"/>
+    </linearGradient>
+    <filter id="softShadow" x="-30%" y="-20%" width="160%" height="150%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#2d2926" flood-opacity=".18"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <path fill="#b9e3e6" opacity=".55" d="M274 42h82c24 0 44 20 44 44v120c0 24-20 44-44 44h-82c-24 0-44-20-44-44V86c0-24 20-44 44-44Z"/>
+    <path fill="#f7fbf8" d="M284 67h62c16 0 29 13 29 29v101c0 16-13 29-29 29h-62c-16 0-29-13-29-29V96c0-16 13-29 29-29Z"/>
+    <path fill="#9ed4dc" d="M294 139h42v13h-42zM283 173h64v10h-64z" opacity=".85"/>
+    <path fill="#9ed4dc" d="m292 111 11-11 45 45-11 11zM345 100l11 11-45 45-11-11z" opacity=".85"/>
+
+    <g transform="translate(48 18)">
+      <path fill="#231918" d="M155 54c70 0 112 50 115 126 2 59-23 107-72 121-19 6-73 6-96-1-51-15-74-63-69-124C38 104 84 54 155 54Z"/>
+      <g fill="#2a1a1a">
+        <circle cx="65" cy="142" r="25"/><circle cx="82" cy="104" r="26"/><circle cx="122" cy="70" r="25"/>
+        <circle cx="173" cy="65" r="27"/><circle cx="215" cy="88" r="27"/><circle cx="247" cy="129" r="26"/>
+        <circle cx="262" cy="179" r="24"/><circle cx="45" cy="190" r="23"/><circle cx="235" cy="222" r="23"/>
+        <circle cx="88" cy="230" r="24"/><circle cx="139" cy="245" r="23"/><circle cx="196" cy="247" r="22"/>
+      </g>
+
+      <path fill="url(#skin)" d="M95 165c3-52 29-83 68-83 43 0 72 32 72 83 0 57-31 95-71 95-39 0-72-37-69-95Z"/>
+      <path fill="#231918" d="M91 164c14-6 38-26 46-51 19 22 60 36 99 38-2-47-32-78-76-78-43 0-71 33-69 91Z"/>
+      <path fill="#7a4128" d="M93 169c-16-3-25 8-20 25 5 16 17 25 30 19M237 169c16-3 25 8 20 25-5 16-17 25-30 19"/>
+      <path d="M128 163c9-8 21-8 31-1M177 163c11-8 24-7 33 1" fill="none" stroke="#1d1413" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="143" cy="178" r="5" fill="#211616"/>
+      <circle cx="194" cy="178" r="5" fill="#211616"/>
+      <path d="M163 188c-3 11-9 24-3 29 4 4 12 3 17 1" fill="none" stroke="#6a3624" stroke-width="4" stroke-linecap="round"/>
+      <path d="M138 226c20 15 48 15 68-1" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+      <path d="M135 221c23 21 54 22 76 0" fill="none" stroke="#6a2f25" stroke-width="4" stroke-linecap="round"/>
+
+      <path fill="#6f3a24" d="M112 257c17 19 32 27 52 27 21 0 37-9 53-27l15 56H97l15-56Z"/>
+      <path fill="url(#blouse)" d="M67 322c15-48 58-74 96-74s82 26 98 74l39 128H26l41-128Z"/>
+      <path fill="#f3f1ec" opacity=".42" d="M135 268c16 15 40 16 56 0l-28 73-28-73Z"/>
+      <path fill="#7f867e" d="M70 326c37 34 142 34 184 0l13 42c-54 28-155 28-211 0l14-42Z" opacity=".26"/>
+
+      <path fill="url(#skin)" d="M82 345c32 9 66 24 88 43l-19 28c-27-22-56-37-87-44-12-3-20-11-18-20 3-9 18-11 36-7Z"/>
+      <path fill="url(#skin)" d="M247 345c-31 9-66 24-88 43l19 28c27-22 56-37 87-44 12-3 20-11 18-20-3-9-18-11-36-7Z"/>
+      <rect x="124" y="333" width="83" height="128" rx="16" fill="#143b37" transform="rotate(-8 165.5 397)"/>
+      <rect x="136" y="348" width="58" height="89" rx="8" fill="#1f645a" transform="rotate(-8 165 392.5)"/>
+      <circle cx="171" cy="447" r="5" fill="#cde7df"/>
+      <path fill="#ffffff" opacity=".88" d="M146 373h42v7h-42zM143 392h48v7h-48zM151 411h30v7h-30z" transform="rotate(-8 167 395)"/>
+      <path fill="url(#skin)" d="M145 391c-9-8-23-8-31 0-6 7-1 18 10 20l25 4 8-16-12-8Z"/>
+      <path fill="url(#skin)" d="M189 389c9-8 23-8 31 1 6 7 0 18-11 20l-25 4-8-16 13-9Z"/>
+    </g>
+  </g>
+</svg>
