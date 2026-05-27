@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
 #[Fillable([
+    'store_id',
     'customer_name',
     'customer_email',
     'customer_phone',
@@ -62,6 +64,11 @@ class Order extends Model
     public function getRouteKeyName(): string
     {
         return 'pickup_code';
+    }
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class);
     }
 
     public function items(): HasMany
@@ -157,19 +164,29 @@ class Order extends Model
                         ->whereKey($item->product_id)
                         ->lockForUpdate()
                         ->first();
+                    $storeStock = ProductStoreStock::query()
+                        ->where('product_id', $item->product_id)
+                        ->where('store_id', $this->store_id)
+                        ->lockForUpdate()
+                        ->first();
 
-                    if (! $product || $product->stock_quantity < $item->quantity) {
+                    if (! $product || ! $storeStock || $storeStock->quantity < $item->quantity) {
                         throw new RuntimeException('Estoque insuficiente para '.$item->product_name.'.');
                     }
 
-                    $product->decrement('stock_quantity', $item->quantity);
+                    $storeStock->decrement('quantity', $item->quantity);
+                    $storeStock->refresh();
+                    $product->forceFill([
+                        'stock_quantity' => max(0, $product->stock_quantity - $item->quantity),
+                    ])->save();
                     $product->refresh();
 
                     StockMovement::query()->create([
                         'product_id' => $product->id,
                         'order_id' => $this->id,
+                        'store_id' => $this->store_id,
                         'quantity_delta' => -1 * $item->quantity,
-                        'stock_after' => $product->stock_quantity,
+                        'stock_after' => $storeStock->quantity,
                         'reason' => 'order_paid',
                         'actor' => 'system',
                         'note' => 'Baixa autom?tica ap?s pagamento aprovado.',

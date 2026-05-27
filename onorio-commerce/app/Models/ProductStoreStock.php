@@ -8,24 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
     'product_id',
-    'order_id',
     'store_id',
-    'quantity_delta',
-    'stock_after',
-    'reason',
-    'actor',
-    'note',
+    'quantity',
 ])]
-class StockMovement extends Model
+class ProductStoreStock extends Model
 {
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
-    }
-
-    public function order(): BelongsTo
-    {
-        return $this->belongsTo(Order::class);
     }
 
     public function store(): BelongsTo

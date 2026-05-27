@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\ProductStoreStock;
+use App\Models\Store;
 use App\Services\MercadoPagoCheckout;
 use App\Support\Cart;
+use App\Support\StoreContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +30,8 @@ class CheckoutController extends Controller
             'lines' => $lines,
             'total' => Cart::money(Cart::totalCents()),
             'cartCount' => Cart::count(),
+            'stores' => StoreContext::stores(),
+            'selectedStore' => StoreContext::current(),
         ]);
     }
 
@@ -38,7 +43,7 @@ class CheckoutController extends Controller
             return redirect()->route('storefront')->with('status', 'Seu carrinho ficou vazio.');
         }
 
-        $stockProblem = $lines->first(fn (array $line): bool => $line['quantity'] > $line['product']->stock_quantity);
+        $stockProblem = $lines->first(fn (array $line): bool => $line['quantity'] > $line['store_stock']);
 
         if ($stockProblem) {
             return redirect()->route('cart.show')->with('status', 'Um item do carrinho mudou de estoque. Revise antes de pagar.');
@@ -52,8 +57,16 @@ class CheckoutController extends Controller
             'pickup_person_name' => ['required', 'string', 'max:120'],
             'pickup_person_phone' => ['required', 'string', 'max:30'],
             'notes' => ['nullable', 'string', 'max:500'],
+            'pickup_store_id' => ['nullable', 'integer', 'exists:stores,id'],
             'prescription_file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
         ]);
+
+        $store = Store::query()
+            ->where('is_active', true)
+            ->where('has_pickup', true)
+            ->findOrFail($data['pickup_store_id'] ?? StoreContext::id());
+
+        session(['store_id' => $store->id]);
 
         $requiresPrescription = $lines->contains(fn (array $line): bool => (bool) $line['product']->requires_prescription);
 
@@ -66,9 +79,12 @@ class CheckoutController extends Controller
         $prescription = $request->file('prescription_file');
         $prescriptionPath = $prescription?->store('prescriptions');
 
-        $order = DB::transaction(function () use ($data, $lines, $requiresPrescription, $prescription, $prescriptionPath): Order {
+        $order = DB::transaction(function () use ($data, $lines, $requiresPrescription, $prescription, $prescriptionPath, $store): Order {
+            unset($data['pickup_store_id']);
+
             $order = Order::query()->create([
                 ...$data,
+                'store_id' => $store->id,
                 'status' => Order::STATUS_PENDING_PAYMENT,
                 'payment_status' => Order::PAYMENT_PENDING,
                 'payment_provider' => 'mercado_pago',
@@ -87,8 +103,13 @@ class CheckoutController extends Controller
                     ->whereKey($product->id)
                     ->lockForUpdate()
                     ->first();
+                $storeStock = ProductStoreStock::query()
+                    ->where('product_id', $product->id)
+                    ->where('store_id', $store->id)
+                    ->lockForUpdate()
+                    ->first();
 
-                if (! $freshProduct || ! $freshProduct->is_active || $freshProduct->stock_quantity < $line['quantity']) {
+                if (! $freshProduct || ! $freshProduct->is_active || ! $storeStock || $storeStock->quantity < $line['quantity']) {
                     throw new \RuntimeException('Produto sem estoque suficiente: '.$product->name);
                 }
 
@@ -116,8 +137,10 @@ class CheckoutController extends Controller
     public function status(Order $order): View
     {
         return view('orders.status', [
-            'order' => $order->load('items', 'payment'),
+            'order' => $order->load('items', 'payment', 'store'),
             'cartCount' => Cart::count(),
+            'stores' => StoreContext::stores(),
+            'selectedStore' => StoreContext::current(),
         ]);
     }
 

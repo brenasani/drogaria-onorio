@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AdminAuditLog;
 use App\Models\Order;
+use App\Models\Store;
 use App\Support\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,10 +18,12 @@ class AdminOrderController extends Controller
     public function index(Request $request): View
     {
         $status = $request->string('status')->toString();
+        $storeId = $request->integer('loja') ?: null;
 
         $orders = Order::query()
-            ->with('items', 'payment')
+            ->with('items', 'payment', 'store')
             ->when($status, fn ($query) => $query->where('status', $status))
+            ->when($storeId, fn ($query) => $query->where('store_id', $storeId))
             ->latest()
             ->paginate(20)
             ->withQueryString();
@@ -29,6 +32,8 @@ class AdminOrderController extends Controller
             'orders' => $orders,
             'statuses' => Order::statusOptions(),
             'selectedStatus' => $status,
+            'stores' => Store::query()->where('is_active', true)->orderBy('sort_order')->get(),
+            'selectedStoreId' => $storeId,
             'cartCount' => Cart::count(),
         ]);
     }

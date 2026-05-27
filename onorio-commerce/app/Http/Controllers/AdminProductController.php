@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\AdminAuditLog;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductStoreStock;
+use App\Models\Store;
 use App\Models\StockMovement;
 use App\Support\Cart;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +24,7 @@ class AdminProductController extends Controller
         $categoryId = $request->integer('categoria') ?: null;
 
         $products = Product::query()
-            ->with('category')
+            ->with('category', 'storeStocks.store')
             ->when($search, function ($query) use ($search): void {
                 $query->where(function ($inner) use ($search): void {
                     $inner->where('name', 'like', "%{$search}%")
@@ -40,6 +42,7 @@ class AdminProductController extends Controller
             'categories' => $this->categories(),
             'search' => $search,
             'selectedCategoryId' => $categoryId,
+            'stores' => $this->stores(),
             'cartCount' => Cart::count(),
         ]);
     }
@@ -55,16 +58,18 @@ class AdminProductController extends Controller
                 'image_color' => '#39896A',
             ]),
             'categories' => $this->categories(),
+            'stores' => $this->stores(),
             'cartCount' => Cart::count(),
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $data = $this->validatedData($request);
-        $product = Product::query()->create($data);
-        $this->recordStockAdjustment($product, $data['stock_quantity'], 'product_created');
-        AdminAuditLog::record('product.created', $product, ['data' => $data], $request);
+        $payload = $this->validatedData($request);
+        $product = Product::query()->create($payload['product']);
+        $this->syncStoreStocks($product, $payload['store_stocks'], 'product_created', 0);
+        $product->refresh();
+        AdminAuditLog::record('product.created', $product, ['data' => $payload['product'], 'store_stocks' => $payload['store_stocks']], $request);
 
         return redirect()->route('admin.products.index')
             ->with('status', 'Produto criado com sucesso.');
@@ -73,8 +78,9 @@ class AdminProductController extends Controller
     public function edit(Product $product): View
     {
         return view('admin.products.form', [
-            'product' => $product,
+            'product' => $product->load('storeStocks'),
             'categories' => $this->categories(),
+            'stores' => $this->stores(),
             'cartCount' => Cart::count(),
         ]);
     }
@@ -83,15 +89,12 @@ class AdminProductController extends Controller
     {
         $before = $product->only(['name', 'price_cents', 'stock_quantity', 'is_active', 'requires_prescription']);
         $previousStock = $product->stock_quantity;
-        $data = $this->validatedData($request, $product);
-        $product->update($data);
+        $payload = $this->validatedData($request, $product);
+        $product->update($payload['product']);
+        $this->syncStoreStocks($product, $payload['store_stocks'], 'admin_adjustment', $previousStock);
         $product->refresh();
 
-        if ($previousStock !== $product->stock_quantity) {
-            $this->recordStockAdjustment($product, $product->stock_quantity - $previousStock, 'admin_adjustment');
-        }
-
-        AdminAuditLog::record('product.updated', $product, ['before' => $before, 'after' => $data], $request);
+        AdminAuditLog::record('product.updated', $product, ['before' => $before, 'after' => $payload['product'], 'store_stocks' => $payload['store_stocks']], $request);
 
         return redirect()->route('admin.products.index')
             ->with('status', 'Produto atualizado com sucesso.');
@@ -128,6 +131,8 @@ class AdminProductController extends Controller
             'description' => ['required', 'string', 'max:1000'],
             'price' => ['required', 'string', 'max:20'],
             'stock_quantity' => ['required', 'integer', 'min:0', 'max:999999'],
+            'store_stocks' => ['nullable', 'array'],
+            'store_stocks.*' => ['nullable', 'integer', 'min:0', 'max:999999'],
             'minimum_stock' => ['required', 'integer', 'min:0', 'max:999999'],
             'requires_prescription' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
@@ -145,24 +150,66 @@ class AdminProductController extends Controller
             $imagePath = $request->file('image_file')->store('products', 'public');
         }
 
+        $storeStocks = collect($data['store_stocks'] ?? [])
+            ->mapWithKeys(fn ($quantity, $storeId): array => [(int) $storeId => (int) $quantity])
+            ->all();
+        $totalStock = $storeStocks === [] ? (int) $data['stock_quantity'] : array_sum($storeStocks);
+
         return [
-            'category_id' => (int) $data['category_id'],
-            'name' => $data['name'],
-            'slug' => Str::slug(($data['slug'] ?? '') ?: $data['name']),
-            'description' => $data['description'],
-            'price_cents' => $this->moneyToCents($data['price']),
-            'stock_quantity' => (int) $data['stock_quantity'],
-            'minimum_stock' => (int) $data['minimum_stock'],
-            'requires_prescription' => $request->boolean('requires_prescription'),
-            'is_active' => $request->boolean('is_active'),
-            'image_color' => $data['image_color'] ?: '#39896A',
-            'image_text' => $data['image_text'] ? Str::upper($data['image_text']) : null,
-            'image_path' => $imagePath,
+            'product' => [
+                'category_id' => (int) $data['category_id'],
+                'name' => $data['name'],
+                'slug' => Str::slug(($data['slug'] ?? '') ?: $data['name']),
+                'description' => $data['description'],
+                'price_cents' => $this->moneyToCents($data['price']),
+                'stock_quantity' => $totalStock,
+                'minimum_stock' => (int) $data['minimum_stock'],
+                'requires_prescription' => $request->boolean('requires_prescription'),
+                'is_active' => $request->boolean('is_active'),
+                'image_color' => $data['image_color'] ?: '#39896A',
+                'image_text' => $data['image_text'] ? Str::upper($data['image_text']) : null,
+                'image_path' => $imagePath,
+            ],
+            'store_stocks' => $storeStocks,
         ];
     }
 
 
-    private function recordStockAdjustment(Product $product, int $delta, string $reason): void
+
+    private function syncStoreStocks(Product $product, array $storeStocks, string $reason, int $previousTotalStock): void
+    {
+        if ($storeStocks === []) {
+            $this->recordStockAdjustment($product, $product->stock_quantity - $previousTotalStock, $reason);
+
+            return;
+        }
+
+        foreach ($this->stores() as $store) {
+            if (! array_key_exists($store->id, $storeStocks)) {
+                continue;
+            }
+
+            $stock = ProductStoreStock::query()->firstOrCreate(
+                ['product_id' => $product->id, 'store_id' => $store->id],
+                ['quantity' => 0],
+            );
+            $previous = $stock->quantity;
+            $stock->forceFill(['quantity' => $storeStocks[$store->id]])->save();
+            $delta = $stock->quantity - $previous;
+
+            if ($delta !== 0) {
+                $this->recordStockAdjustment($product, $delta, $reason, $store->id, $stock->quantity);
+            }
+        }
+
+        $product->forceFill([
+            'stock_quantity' => ProductStoreStock::query()
+                ->where('product_id', $product->id)
+                ->sum('quantity') ?: $product->stock_quantity,
+        ])->save();
+    }
+
+    private function recordStockAdjustment(Product $product, int $delta, string $reason, ?int $storeId = null, ?int $stockAfter = null): void
     {
         if ($delta === 0) {
             return;
@@ -170,8 +217,9 @@ class AdminProductController extends Controller
 
         StockMovement::query()->create([
             'product_id' => $product->id,
+            'store_id' => $storeId,
             'quantity_delta' => $delta,
-            'stock_after' => $product->stock_quantity,
+            'stock_after' => $stockAfter ?? $product->stock_quantity,
             'reason' => $reason,
             'actor' => 'admin',
         ]);
@@ -189,5 +237,10 @@ class AdminProductController extends Controller
     private function categories()
     {
         return Category::query()->orderBy('sort_order')->orderBy('name')->get();
+    }
+
+    private function stores()
+    {
+        return Store::query()->where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
     }
 }

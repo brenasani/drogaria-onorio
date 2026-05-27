@@ -9,13 +9,15 @@ class Cart
 {
     public static function add(Product $product, int $quantity = 1): void
     {
-        if (! $product->is_active || $product->stock_quantity < 1) {
+        $stock = $product->stockForStore(StoreContext::id());
+
+        if (! $product->is_active || $stock < 1) {
             return;
         }
 
         $cart = session('cart', []);
         $currentQuantity = (int) ($cart[$product->id] ?? 0);
-        $cart[$product->id] = min($product->stock_quantity, $currentQuantity + max(1, $quantity));
+        $cart[$product->id] = min($stock, $currentQuantity + max(1, $quantity));
 
         session(['cart' => $cart]);
     }
@@ -28,8 +30,9 @@ class Cart
             return;
         }
 
+        $stock = $product->stockForStore(StoreContext::id());
         $cart = session('cart', []);
-        $cart[$product->id] = min($product->stock_quantity, $quantity);
+        $cart[$product->id] = min($stock, $quantity);
         session(['cart' => $cart]);
     }
 
@@ -55,7 +58,7 @@ class Cart
         }
 
         $products = Product::query()
-            ->with('category')
+            ->with('category', 'storeStocks')
             ->whereIn('id', array_keys($cart))
             ->get()
             ->keyBy('id');
@@ -68,7 +71,8 @@ class Cart
                     return null;
                 }
 
-                $quantity = min($quantity, $product->stock_quantity);
+                $stock = $product->stockForStore(StoreContext::id());
+                $quantity = min($quantity, $stock);
 
                 if ($quantity < 1) {
                     return null;
@@ -77,6 +81,7 @@ class Cart
                 return [
                     'product' => $product,
                     'quantity' => $quantity,
+                    'store_stock' => $stock,
                     'subtotal_cents' => $product->price_cents * $quantity,
                 ];
             })

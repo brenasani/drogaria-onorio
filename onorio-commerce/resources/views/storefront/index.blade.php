@@ -56,6 +56,7 @@
                             <span class="category-name">{{ $product->category->name }}</span>
                             <h3><a href="{{ route('products.show', $product) }}">{{ $product->name }}</a></h3>
                             <p>{{ $product->description }}</p>
+                            <p class="small-copy">Estoque nesta unidade: {{ $product->stockForStore($selectedStore?->id) }}</p>
                             @if ($product->requires_prescription)
                                 <strong class="notice">Receita na retirada</strong>
                             @endif

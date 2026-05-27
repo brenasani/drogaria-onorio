@@ -1613,3 +1613,56 @@ legend {
 .legal-copy {
     line-height: 1.8;
 }
+
+
+.store-selector {
+    min-width: 220px;
+}
+
+.store-selector label {
+    display: grid;
+    gap: 4px;
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 800;
+}
+
+.store-selector select {
+    border: 1px solid rgba(45, 41, 38, .14);
+    border-radius: 14px;
+    padding: 10px 12px;
+    color: var(--green-dark);
+    font-weight: 800;
+    background: #fff;
+}
+
+.hero-store {
+    background: rgba(255, 255, 255, .18);
+    border-radius: 16px;
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 14px;
+}
+
+.store-stock-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.store-stock-grid > span {
+    grid-column: 1 / -1;
+    color: var(--green-dark);
+    font-weight: 900;
+}
+
+.store-stock-grid small {
+    color: var(--muted);
+}
+
+@media (max-width: 920px) {
+    .store-selector {
+        min-width: 100%;
+        order: 3;
+    }
+}

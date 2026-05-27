@@ -23,6 +23,12 @@
                     <option value="{{ $value }}" @selected($selectedStatus === $value)>{{ $label }}</option>
                 @endforeach
             </select>
+            <select name="loja">
+                <option value="">Todas as unidades</option>
+                @foreach ($stores as $store)
+                    <option value="{{ $store->id }}" @selected($selectedStoreId === $store->id)>{{ $store->name }}</option>
+                @endforeach
+            </select>
             <button class="button secondary" type="submit">Filtrar</button>
         </form>
 
@@ -32,6 +38,9 @@
                     <div>
                         <span class="category-name">{{ $order->pickup_code }}</span>
                         <h2>{{ $order->customer_name }}</h2>
+                        @if ($order->store)
+                            <p class="small-copy"><strong>Unidade:</strong> {{ $order->store->name }} ? {{ $order->store->address }}</p>
+                        @endif
                         <p>{{ $order->total() }} ? {{ $order->items->count() }} item(ns) ? {{ $order->created_at->format('d/m/Y H:i') }}</p>
                         @if ($order->prescription_file_path)
                             <p class="small-copy">Receita: {{ $order->prescriptionStatusLabel() }}</p>

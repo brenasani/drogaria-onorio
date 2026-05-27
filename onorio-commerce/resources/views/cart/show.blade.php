@@ -31,7 +31,7 @@
                                 @method('PATCH')
                                 <label>
                                     Qtd.
-                                    <input type="number" name="quantity" min="0" max="{{ min(20, $product->stock_quantity) }}" value="{{ $line['quantity'] }}">
+                                    <input type="number" name="quantity" min="0" max="{{ min(20, $line['store_stock']) }}" value="{{ $line['quantity'] }}">
                                 </label>
                                 <button class="button secondary" type="submit">Atualizar</button>
                             </form>

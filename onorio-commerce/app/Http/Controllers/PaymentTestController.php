@@ -12,7 +12,7 @@ class PaymentTestController extends Controller
     public function show(Order $order): View
     {
         return view('payments.test', [
-            'order' => $order->load('items', 'payment'),
+            'order' => $order->load('items', 'payment', 'store'),
             'cartCount' => Cart::count(),
         ]);
     }

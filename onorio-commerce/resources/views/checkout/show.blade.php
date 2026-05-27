@@ -30,6 +30,22 @@
                 @endif
 
                 <fieldset>
+                    <legend>Unidade de retirada</legend>
+                    <label>Escolha a loja
+                        <select name="pickup_store_id" required>
+                            @foreach ($stores as $store)
+                                <option value="{{ $store->id }}" @selected((int) old('pickup_store_id', $selectedStore?->id) === $store->id)>
+                                    {{ $store->name }} ? {{ $store->address }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </label>
+                    @if ($selectedStore)
+                        <p class="small-copy"><strong>Hor?rio:</strong> {{ $selectedStore->hours }} ? <strong>Telefone:</strong> {{ $selectedStore->phone }}</p>
+                    @endif
+                </fieldset>
+
+                <fieldset>
                     <legend>Retirada na loja</legend>
                     <label>Nome de quem retira <input name="pickup_person_name" value="{{ old('pickup_person_name') }}" required></label>
                     <label>Telefone de quem retira <input name="pickup_person_phone" value="{{ old('pickup_person_phone') }}" required></label>

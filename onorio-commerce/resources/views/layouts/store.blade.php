@@ -15,6 +15,8 @@
 </head>
 <body>
     @php($headerCartTotal = $cartTotal ?? \App\Support\Cart::money(\App\Support\Cart::totalCents()))
+    @php($headerStores = $stores ?? \App\Support\StoreContext::stores())
+    @php($headerSelectedStore = $selectedStore ?? \App\Support\StoreContext::current())
 
     <header class="commerce-header">
         <div class="commerce-header-main">
@@ -33,6 +35,20 @@
                     <span class="mobile-search-label">Ir</span>
                 </button>
             </form>
+
+            @if ($headerStores->isNotEmpty())
+                <form class="store-selector" method="POST" action="{{ route('stores.select') }}">
+                    @csrf
+                    <label>
+                        <span>Retirar em</span>
+                        <select name="store_id" onchange="this.form.submit()">
+                            @foreach ($headerStores as $store)
+                                <option value="{{ $store->id }}" @selected($headerSelectedStore?->id === $store->id)>{{ $store->name }}</option>
+                            @endforeach
+                        </select>
+                    </label>
+                </form>
+            @endif
 
             <nav class="commerce-actions" aria-label="Atalhos do cliente">
                 <a class="commerce-action" href="#">

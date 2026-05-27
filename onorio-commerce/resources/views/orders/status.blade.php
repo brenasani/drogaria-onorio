@@ -41,6 +41,12 @@
                 <h2>Retirada</h2>
                 <p><strong>{{ $order->pickup_person_name }}</strong></p>
                 <p>{{ $order->pickup_person_phone }}</p>
+                @if ($order->store)
+                    <p><strong>{{ $order->store->name }}</strong></p>
+                    <p>{{ $order->store->address }}</p>
+                    <p>{{ $order->store->phone }}</p>
+                    <p class="small-copy">{{ $order->store->hours }}</p>
+                @endif
                 <p class="small-copy">Apresente o código {{ $order->pickup_code }} e documento na loja.</p>
                 <a class="button secondary full" href="{{ route('storefront') }}">Comprar mais</a>
             </aside>

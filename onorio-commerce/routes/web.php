@@ -12,9 +12,11 @@ use App\Http\Controllers\LegalPageController;
 use App\Http\Controllers\MercadoPagoWebhookController;
 use App\Http\Controllers\PaymentTestController;
 use App\Http\Controllers\StorefrontController;
+use App\Http\Controllers\StoreSelectionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StorefrontController::class, 'home'])->name('home');
+Route::post('/unidade', [StoreSelectionController::class, 'update'])->name('stores.select');
 Route::get('/comprar', [StorefrontController::class, 'index'])->name('storefront');
 Route::get('/produto/{product:slug}', [StorefrontController::class, 'show'])->name('products.show');
 Route::get('/privacidade', [LegalPageController::class, 'privacy'])->name('legal.privacy');

@@ -8,6 +8,9 @@
             <span class="category-name">Ambiente local</span>
             <h1>Pagamento teste</h1>
             <p>O pedido {{ $order->pickup_code }} foi criado. Quando a credencial do Mercado Pago for colocada no arquivo .env, esta etapa redireciona para o checkout real.</p>
+            @if ($order->store)
+                <p class="small-copy"><strong>Retirada:</strong> {{ $order->store->name }} ? {{ $order->store->address }}</p>
+            @endif
             <div class="summary-row">
                 <span>Total</span>
                 <strong>{{ $order->total() }}</strong>

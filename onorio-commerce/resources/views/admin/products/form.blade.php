@@ -50,10 +50,25 @@
                 <input name="price" value="{{ old('price', $product->exists ? number_format($product->price_cents / 100, 2, ',', '.') : '') }}" placeholder="Ex: 18,90" required>
             </label>
 
-            <label>
-                <span>Estoque</span>
-                <input type="number" name="stock_quantity" min="0" value="{{ old('stock_quantity', $product->stock_quantity) }}" required>
-            </label>
+            @if (($stores ?? collect())->isNotEmpty())
+                <input type="hidden" name="stock_quantity" value="{{ old('stock_quantity', $product->stock_quantity) }}">
+                <div class="full-field store-stock-grid">
+                    <span>Estoque por unidade</span>
+                    @foreach ($stores as $store)
+                        @php($storeStock = $product->storeStocks?->firstWhere('store_id', $store->id)?->quantity ?? 0)
+                        <label>
+                            <span>{{ $store->name }}</span>
+                            <input type="number" name="store_stocks[{{ $store->id }}]" min="0" value="{{ old('store_stocks.'.$store->id, $storeStock) }}" required>
+                            <small>{{ $store->address }}</small>
+                        </label>
+                    @endforeach
+                </div>
+            @else
+                <label>
+                    <span>Estoque</span>
+                    <input type="number" name="stock_quantity" min="0" value="{{ old('stock_quantity', $product->stock_quantity) }}" required>
+                </label>
+            @endif
 
             <label>
                 <span>Estoque mínimo</span>
