@@ -1,30 +1,38 @@
-# Drogaria Onório - Protótipo de app de compras
+# Drogaria — Protótipo de App de Compras
 
-Protótipo navegável em HTML, CSS e JavaScript puro para validar a experiência inicial de compra dos clientes da Drogaria Onório.
+Protótipo navegável desenvolvido com HTML, CSS e JavaScript puro para simular a experiência inicial de compra online em uma drogaria.
 
-## O que já funciona
+O projeto permite que o usuário pesquise produtos, filtre por categorias, monte um carrinho, escolha entre retirada ou entrega e visualize um resumo do pedido antes da finalização.
+
+## Tecnologias utilizadas
+
+- HTML
+- CSS
+- JavaScript
+
+## Funcionalidades
 
 - Busca por produto, categoria ou detalhe.
 - Filtro por categorias: Medicamentos, Conveniência, Suplementos, Cosméticos e Perfumaria.
-- Carrinho com adicionar, remover, aumentar e diminuir quantidade.
+- Carrinho com opção de adicionar, remover, aumentar e diminuir quantidades.
 - Escolha entre retirada na loja e entrega.
 - Resumo de finalização do pedido em modal.
 - Layout responsivo para desktop e celular.
 
-## Como abrir
+## Como executar o projeto
 
-Abra `index.html` no navegador ou rode um servidor local simples na pasta do projeto.
+Abra o arquivo `index.html` diretamente no navegador ou rode um servidor local simples na pasta do projeto:
 
-```powershell
-python -m http.server 4173
-```
+`python -m http.server 4173`
 
-Depois acesse `http://localhost:4173`.
+Depois acesse:
 
-## Próximos passos naturais
+`http://localhost:4173`
 
-- Ligar produtos a uma planilha, ERP ou banco de dados.
-- Adicionar login/cadastro de cliente.
-- Criar painel administrativo para preço, estoque e pedidos.
-- Integrar o checkout com WhatsApp sem enviar automaticamente.
-- Tratar regras para itens com receita e medicamentos controlados.
+## Melhorias futuras
+
+- Conectar os produtos a uma planilha, ERP ou banco de dados.
+- Adicionar login e cadastro de clientes.
+- Criar painel administrativo para gerenciamento de preços, estoque e pedidos.
+- Integrar o checkout com WhatsApp, mantendo confirmação manual antes do envio.
+- Tratar regras específicas para medicamentos com receita e itens controlados.
