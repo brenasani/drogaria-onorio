@@ -12611,3 +12611,135 @@ body.cart-open::before {
 .discount-live-benefits article {
   padding: 10px 18px;
 }
+
+
+/* Vers?o ainda mais comprimida da se??o de descontos */
+.discount-hub-live {
+  max-width: 860px;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.discount-hub-live .discount-live-heading h2 {
+  font-size: clamp(20px, 2.4vw, 28px);
+}
+
+.discount-hub-live .discount-live-heading p {
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.discount-live-grid {
+  gap: 12px;
+}
+
+.discount-live-card {
+  min-height: 270px;
+  border-radius: 12px;
+}
+
+.discount-live-card-medicine,
+.discount-live-card-coupons {
+  grid-template-columns: minmax(150px, .78fr) minmax(170px, 1fr);
+}
+
+.discount-live-copy {
+  gap: 7px;
+  padding: 16px;
+}
+
+.discount-live-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+}
+
+.discount-live-copy h3 {
+  max-width: 180px;
+  font-size: clamp(18px, 2vw, 23px);
+  line-height: 1.02;
+}
+
+.discount-live-copy p {
+  max-width: 175px;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.discount-live-button {
+  min-height: 30px;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 10px;
+}
+
+.discount-live-photo::before {
+  width: 150px;
+  inset-left: -70px;
+}
+
+.discount-live-card-coupons .discount-live-photo {
+  min-height: 170px;
+  max-height: 190px;
+}
+
+.discount-live-card-coupons .discount-live-photo img {
+  height: 190px;
+  padding: 4px;
+}
+
+.discount-live-note {
+  left: 16px;
+  right: 32%;
+  bottom: 16px;
+  min-height: 40px;
+  gap: 7px;
+  border-radius: 9px;
+  padding: 7px 10px;
+  font-size: 9px;
+}
+
+.discount-live-note span,
+.discount-live-benefits span {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+.discount-coupon-strip {
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  gap: 6px;
+}
+
+.discount-coupon-strip span {
+  min-height: 38px;
+  border-radius: 8px;
+}
+
+.discount-coupon-strip strong {
+  font-size: 15px;
+}
+
+.discount-coupon-strip small {
+  font-size: 9px;
+}
+
+.discount-live-benefits {
+  border-radius: 12px;
+}
+
+.discount-live-benefits article {
+  min-height: 46px;
+  gap: 6px 12px;
+  padding: 8px 14px;
+}
+
+.discount-live-benefits strong {
+  font-size: 12px;
+}
+
+.discount-live-benefits small {
+  font-size: 10px;
+}
