@@ -12772,3 +12772,11 @@ body.cart-open::before {
     max-width: 100%;
   }
 }
+/* Rounded corners for the pharmaceutical services banner. */
+.info-page-servicos-saude .info-hero-image-only {
+  border-radius: 18px;
+}
+
+.info-page-servicos-saude .info-hero-image-only img {
+  border-radius: inherit;
+}
