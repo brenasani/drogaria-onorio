@@ -12760,3 +12760,15 @@ body.cart-open::before {
     max-height: 360px;
   }
 }
+/* Align the home service strip with the compact discounts block. */
+.discount-hub-live + .service-row {
+  width: 100%;
+  max-width: 860px;
+  margin: 22px auto 0;
+}
+
+@media (max-width: 920px) {
+  .discount-hub-live + .service-row {
+    max-width: 100%;
+  }
+}
