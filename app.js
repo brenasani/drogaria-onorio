@@ -8864,7 +8864,7 @@ function renderPbmProgramPage() {
           <span>consulta de benefícios</span>
           <em>%</em>
         </div>
-        <img src="assets/pbm-benefits-woman-phone.svg" alt="" loading="lazy" />
+        <img class="pbm-pharmacist-photo" src="assets/discount-medicamentos-photo.png" alt="" loading="lazy" />
       </div>
     </section>
 

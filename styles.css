@@ -12743,3 +12743,20 @@ body.cart-open::before {
 .discount-live-benefits small {
   font-size: 10px;
 }
+/* PBM hero: use the pharmacist product photo instead of the illustration. */
+.pbm-hero-visual .pbm-pharmacist-photo {
+  width: min(370px, 82%);
+  max-height: 390px;
+  border-radius: 26px;
+  object-fit: contain;
+  object-position: center bottom;
+  box-shadow: 0 18px 34px rgba(0, 82, 56, 0.18);
+  filter: none;
+}
+
+@media (max-width: 780px) {
+  .pbm-hero-visual .pbm-pharmacist-photo {
+    width: min(330px, 84%);
+    max-height: 360px;
+  }
+}
