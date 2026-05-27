@@ -3703,7 +3703,7 @@ Object.assign(infoPages, {
     text: "Cuidados realizados na drogaria com acolhimento, orientação e disponibilidade conforme unidade.",
     cards: [],
     serviceGrid: true,
-    heroMascot: "assets/onorio-farmaceutica-mascote.svg",
+    heroImage: "assets/servicos-farmaceuticos-onorio-banner.png",
     sections: [],
     primary: ["Falar no WhatsApp", "whatsapp"],
   },
@@ -9377,7 +9377,11 @@ function renderInfoPage(pageKey = "atendimento") {
     ${checkoutHeader()}
     <main class="checkout-page info-page info-page-${safePageClass} ${isPbmPage ? "info-page-pbm" : ""} ${pageKey === "ajuda" ? "info-page-ajuda" : ""} ${isHistoryPage ? "info-page-historia" : ""}">
       <button type="button" class="checkout-back" data-route="#home">‹ Voltar para a loja</button>
-      ${hasCustomInfoPage ? "" : `
+      ${hasCustomInfoPage ? "" : page.heroImage ? `
+        <section class="info-hero info-hero-image-only" aria-label="${escapeHtml(page.title)}">
+          <img src="${escapeHtml(page.heroImage)}" alt="${escapeHtml(page.title)}" loading="eager" />
+        </section>
+      ` : `
         <section class="info-hero ${page.heroMascot ? "info-hero-with-mascot" : ""}">
           <span>${escapeHtml(page.eyebrow)}</span>
           <h1>${escapeHtml(page.title)}</h1>
