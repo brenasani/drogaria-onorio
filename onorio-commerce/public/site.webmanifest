@@ -1,0 +1,25 @@
+{
+    "name": "Drogaria Onório",
+    "short_name": "Onório",
+    "description": "E-commerce com retirada na loja da Drogaria Onório.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#FFFDF9",
+    "theme_color": "#39896A",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/assets/onorio-avatar.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/assets/onorio-avatar.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
