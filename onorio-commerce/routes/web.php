@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminAuditLogController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
@@ -31,12 +32,14 @@ Route::post('/webhooks/mercado-pago', MercadoPagoWebhookController::class)->name
 
 Route::prefix('admin')->name('admin.')->group(function (): void {
     Route::get('/login', [AdminSessionController::class, 'create'])->name('login');
-    Route::post('/login', [AdminSessionController::class, 'store'])->name('login.store');
+    Route::post('/login', [AdminSessionController::class, 'store'])->middleware('throttle:admin-login')->name('login.store');
     Route::post('/logout', [AdminSessionController::class, 'destroy'])->name('logout');
 
     Route::middleware('admin')->group(function (): void {
+        Route::get('/auditoria', [AdminAuditLogController::class, 'index'])->name('audit.index');
         Route::get('/pedidos', [AdminOrderController::class, 'index'])->name('orders.index');
         Route::patch('/pedidos/{order}', [AdminOrderController::class, 'update'])->name('orders.update');
+        Route::get('/pedidos/{order}/receita', [AdminOrderController::class, 'prescription'])->name('orders.prescription');
         Route::resource('categorias', AdminCategoryController::class)
             ->except(['show'])
             ->parameters(['categorias' => 'category'])

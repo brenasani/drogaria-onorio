@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminAuditLog;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\StockMovement;
 use App\Support\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -57,7 +59,10 @@ class AdminProductController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        Product::query()->create($this->validatedData($request));
+        $data = $this->validatedData($request);
+        $product = Product::query()->create($data);
+        $this->recordStockAdjustment($product, $data['stock_quantity'], 'product_created');
+        AdminAuditLog::record('product.created', $product, ['data' => $data], $request);
 
         return redirect()->route('admin.products.index')
             ->with('status', 'Produto criado com sucesso.');
@@ -74,7 +79,17 @@ class AdminProductController extends Controller
 
     public function update(Request $request, Product $product): RedirectResponse
     {
-        $product->update($this->validatedData($request, $product));
+        $before = $product->only(['name', 'price_cents', 'stock_quantity', 'is_active', 'requires_prescription']);
+        $previousStock = $product->stock_quantity;
+        $data = $this->validatedData($request, $product);
+        $product->update($data);
+        $product->refresh();
+
+        if ($previousStock !== $product->stock_quantity) {
+            $this->recordStockAdjustment($product, $product->stock_quantity - $previousStock, 'admin_adjustment');
+        }
+
+        AdminAuditLog::record('product.updated', $product, ['before' => $before, 'after' => $data], $request);
 
         return redirect()->route('admin.products.index')
             ->with('status', 'Produto atualizado com sucesso.');
@@ -84,11 +99,13 @@ class AdminProductController extends Controller
     {
         if ($product->orderItems()->exists()) {
             $product->update(['is_active' => false]);
+            AdminAuditLog::record('product.disabled', $product);
 
             return redirect()->route('admin.products.index')
                 ->with('status', 'Produto tem histórico de pedidos e foi desativado.');
         }
 
+        AdminAuditLog::record('product.deleted', $product, ['name' => $product->name]);
         $product->delete();
 
         return redirect()->route('admin.products.index')
@@ -127,6 +144,22 @@ class AdminProductController extends Controller
             'image_color' => $data['image_color'] ?: '#39896A',
             'image_text' => $data['image_text'] ? Str::upper($data['image_text']) : null,
         ];
+    }
+
+
+    private function recordStockAdjustment(Product $product, int $delta, string $reason): void
+    {
+        if ($delta === 0) {
+            return;
+        }
+
+        StockMovement::query()->create([
+            'product_id' => $product->id,
+            'quantity_delta' => $delta,
+            'stock_after' => $product->stock_quantity,
+            'reason' => $reason,
+            'actor' => 'admin',
+        ]);
     }
 
     private function moneyToCents(string $value): int

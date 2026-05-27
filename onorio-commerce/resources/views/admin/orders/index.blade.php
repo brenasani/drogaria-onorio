@@ -1,12 +1,12 @@
 @extends('layouts.store')
 
-@section('title', 'Pedidos da loja | Drogaria Onorio')
+@section('title', 'Pedidos da loja | Drogaria On?rio')
 
 @section('content')
     <section class="page-shell">
         <div class="section-heading">
             <h1>Pedidos da loja</h1>
-            <p>Acompanhe pagamentos, separação e retirada.</p>
+            <p>Acompanhe pagamentos, separa??o e retirada.</p>
         </div>
 
         <form method="POST" action="{{ route('admin.logout') }}">
@@ -32,7 +32,11 @@
                     <div>
                         <span class="category-name">{{ $order->pickup_code }}</span>
                         <h2>{{ $order->customer_name }}</h2>
-                        <p>{{ $order->total() }} · {{ $order->items->count() }} item(ns) · {{ $order->created_at->format('d/m/Y H:i') }}</p>
+                        <p>{{ $order->total() }} ? {{ $order->items->count() }} item(ns) ? {{ $order->created_at->format('d/m/Y H:i') }}</p>
+                        @if ($order->prescription_file_path)
+                            <p class="small-copy">Receita: {{ $order->prescriptionStatusLabel() }}</p>
+                            <a class="text-button" href="{{ route('admin.orders.prescription', $order) }}">Baixar receita</a>
+                        @endif
                     </div>
                     <form method="POST" action="{{ route('admin.orders.update', $order) }}">
                         @csrf
@@ -42,6 +46,13 @@
                                 <option value="{{ $value }}" @selected($order->status === $value)>{{ $label }}</option>
                             @endforeach
                         </select>
+                        @if ($order->prescription_file_path)
+                            <select name="prescription_status">
+                                @foreach (\App\Models\Order::prescriptionStatusOptions() as $value => $label)
+                                    <option value="{{ $value }}" @selected($order->prescription_status === $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        @endif
                         <button class="button primary" type="submit">Salvar</button>
                     </form>
                     <a class="text-button" href="{{ route('orders.status', $order) }}">Abrir pedido</a>

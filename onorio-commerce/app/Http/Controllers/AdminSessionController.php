@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminAuditLog;
 use App\Support\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,11 +34,15 @@ class AdminSessionController extends Controller
         $request->session()->regenerate();
         $request->session()->put('admin_authenticated', true);
 
+        AdminAuditLog::record('admin.login', metadata: ['email' => 'password_login'], request: $request);
+
         return redirect()->route('admin.orders.index');
     }
 
     public function destroy(Request $request): RedirectResponse
     {
+        AdminAuditLog::record('admin.logout', request: $request);
+
         $request->session()->forget('admin_authenticated');
         $request->session()->regenerateToken();
 

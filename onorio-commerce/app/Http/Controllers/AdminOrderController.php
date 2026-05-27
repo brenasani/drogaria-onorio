@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminAuditLog;
 use App\Models\Order;
 use App\Support\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminOrderController extends Controller
 {
@@ -15,7 +19,7 @@ class AdminOrderController extends Controller
         $status = $request->string('status')->toString();
 
         $orders = Order::query()
-            ->with('items')
+            ->with('items', 'payment')
             ->when($status, fn ($query) => $query->where('status', $status))
             ->latest()
             ->paginate(20)
@@ -33,7 +37,10 @@ class AdminOrderController extends Controller
     {
         $data = $request->validate([
             'status' => ['required', 'string', 'in:'.implode(',', array_keys(Order::statusOptions()))],
+            'prescription_status' => ['nullable', 'string', Rule::in(array_keys(Order::prescriptionStatusOptions()))],
         ]);
+
+        $before = $order->only(['status', 'payment_status', 'prescription_status']);
 
         if ($data['status'] === Order::STATUS_PAID && $order->payment_status !== Order::PAYMENT_APPROVED) {
             $order->markAsPaid('manual-'.$order->pickup_code);
@@ -44,6 +51,30 @@ class AdminOrderController extends Controller
             ])->save();
         }
 
+        if (isset($data['prescription_status']) && $order->prescription_file_path) {
+            $order->forceFill([
+                'prescription_status' => $data['prescription_status'],
+                'prescription_reviewed_at' => now(),
+            ])->save();
+        }
+
+        AdminAuditLog::record('order.updated', $order, [
+            'before' => $before,
+            'after' => $order->fresh()->only(['status', 'payment_status', 'prescription_status']),
+        ], $request);
+
         return back()->with('status', 'Status do pedido atualizado.');
+    }
+
+    public function prescription(Order $order): StreamedResponse
+    {
+        abort_unless($order->prescription_file_path && Storage::exists($order->prescription_file_path), 404);
+
+        AdminAuditLog::record('order.prescription_downloaded', $order);
+
+        return Storage::download(
+            $order->prescription_file_path,
+            $order->prescription_original_name ?: 'receita-'.$order->pickup_code
+        );
     }
 }

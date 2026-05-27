@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminAuditLog;
 use App\Models\Category;
 use App\Support\Cart;
 use Illuminate\Http\RedirectResponse;
@@ -35,7 +36,8 @@ class AdminCategoryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validatedData($request);
-        Category::query()->create($data);
+        $category = Category::query()->create($data);
+        AdminAuditLog::record('category.created', $category, ['data' => $data], $request);
 
         return redirect()->route('admin.categories.index')
             ->with('status', 'Categoria criada com sucesso.');
@@ -51,7 +53,10 @@ class AdminCategoryController extends Controller
 
     public function update(Request $request, Category $category): RedirectResponse
     {
-        $category->update($this->validatedData($request, $category));
+        $before = $category->only(['name', 'slug', 'sort_order']);
+        $data = $this->validatedData($request, $category);
+        $category->update($data);
+        AdminAuditLog::record('category.updated', $category, ['before' => $before, 'after' => $data], $request);
 
         return redirect()->route('admin.categories.index')
             ->with('status', 'Categoria atualizada com sucesso.');
@@ -65,6 +70,7 @@ class AdminCategoryController extends Controller
             ]);
         }
 
+        AdminAuditLog::record('category.deleted', $category, ['name' => $category->name]);
         $category->delete();
 
         return redirect()->route('admin.categories.index')

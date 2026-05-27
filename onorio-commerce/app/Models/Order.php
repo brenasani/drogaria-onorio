@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 #[Fillable([
     'customer_name',
@@ -16,6 +17,11 @@ use Illuminate\Support\Facades\DB;
     'pickup_person_name',
     'pickup_person_phone',
     'notes',
+    'prescription_file_path',
+    'prescription_original_name',
+    'prescription_mime_type',
+    'prescription_status',
+    'prescription_reviewed_at',
     'status',
     'payment_status',
     'payment_provider',
@@ -38,12 +44,18 @@ class Order extends Model
     public const PAYMENT_PENDING = 'pending';
     public const PAYMENT_APPROVED = 'approved';
 
+    public const PRESCRIPTION_NOT_REQUIRED = 'not_required';
+    public const PRESCRIPTION_PENDING = 'pending';
+    public const PRESCRIPTION_APPROVED = 'approved';
+    public const PRESCRIPTION_REJECTED = 'rejected';
+
     protected function casts(): array
     {
         return [
             'paid_at' => 'datetime',
             'ready_at' => 'datetime',
             'stock_reduced_at' => 'datetime',
+            'prescription_reviewed_at' => 'datetime',
         ];
     }
 
@@ -60,6 +72,11 @@ class Order extends Model
     public function payment(): HasOne
     {
         return $this->hasOne(Payment::class);
+    }
+
+    public function stockMovements(): HasMany
+    {
+        return $this->hasMany(StockMovement::class);
     }
 
     public function total(): string
@@ -84,6 +101,33 @@ class Order extends Model
         ];
     }
 
+
+    public function requiresPrescription(): bool
+    {
+        $this->loadMissing('items.product');
+
+        return $this->items->contains(fn (OrderItem $item): bool => (bool) $item->product?->requires_prescription);
+    }
+
+    public function prescriptionStatusLabel(): string
+    {
+        return [
+            self::PRESCRIPTION_NOT_REQUIRED => 'N?o exige receita',
+            self::PRESCRIPTION_PENDING => 'Receita enviada para confer?ncia',
+            self::PRESCRIPTION_APPROVED => 'Receita aprovada',
+            self::PRESCRIPTION_REJECTED => 'Receita recusada',
+        ][$this->prescription_status] ?? $this->prescription_status;
+    }
+
+    public static function prescriptionStatusOptions(): array
+    {
+        return [
+            self::PRESCRIPTION_PENDING => 'Pendente',
+            self::PRESCRIPTION_APPROVED => 'Aprovada',
+            self::PRESCRIPTION_REJECTED => 'Recusada',
+        ];
+    }
+
     public function markAsPaid(?string $paymentReference = null): void
     {
         DB::transaction(function () use ($paymentReference): void {
@@ -105,12 +149,31 @@ class Order extends Model
                 $this->loadMissing('items.product');
 
                 foreach ($this->items as $item) {
-                    if ($item->product) {
-                        Product::query()
-                            ->whereKey($item->product_id)
-                            ->where('stock_quantity', '>=', $item->quantity)
-                            ->decrement('stock_quantity', $item->quantity);
+                    if (! $item->product_id) {
+                        continue;
                     }
+
+                    $product = Product::query()
+                        ->whereKey($item->product_id)
+                        ->lockForUpdate()
+                        ->first();
+
+                    if (! $product || $product->stock_quantity < $item->quantity) {
+                        throw new RuntimeException('Estoque insuficiente para '.$item->product_name.'.');
+                    }
+
+                    $product->decrement('stock_quantity', $item->quantity);
+                    $product->refresh();
+
+                    StockMovement::query()->create([
+                        'product_id' => $product->id,
+                        'order_id' => $this->id,
+                        'quantity_delta' => -1 * $item->quantity,
+                        'stock_after' => $product->stock_quantity,
+                        'reason' => 'order_paid',
+                        'actor' => 'system',
+                        'note' => 'Baixa autom?tica ap?s pagamento aprovado.',
+                    ]);
                 }
 
                 $this->forceFill(['stock_reduced_at' => now()])->save();

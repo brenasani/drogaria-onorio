@@ -9,7 +9,7 @@
             <p>Pagamento online com retirada presencial na Drogaria Onório.</p>
         </div>
 
-        <form class="checkout-layout" method="POST" action="{{ route('checkout.store') }}">
+        <form class="checkout-layout" method="POST" action="{{ route('checkout.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="checkout-form">
                 <fieldset>
@@ -19,6 +19,15 @@
                     <label>Telefone <input name="customer_phone" value="{{ old('customer_phone') }}" required></label>
                     <label>CPF ou documento <input name="customer_document" value="{{ old('customer_document') }}"></label>
                 </fieldset>
+
+                @php($requiresPrescription = $lines->contains(fn ($line) => $line['product']->requires_prescription))
+                @if ($requiresPrescription)
+                    <fieldset>
+                        <legend>Receita m?dica</legend>
+                        <p class="small-copy">Seu carrinho tem produto que exige receita. Envie foto ou PDF para confer?ncia da farm?cia antes da retirada.</p>
+                        <label>Arquivo da receita <input type="file" name="prescription_file" accept=".jpg,.jpeg,.png,.pdf" required></label>
+                    </fieldset>
+                @endif
 
                 <fieldset>
                     <legend>Retirada na loja</legend>

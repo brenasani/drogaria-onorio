@@ -8,6 +8,8 @@ use App\Support\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -50,20 +52,46 @@ class CheckoutController extends Controller
             'pickup_person_name' => ['required', 'string', 'max:120'],
             'pickup_person_phone' => ['required', 'string', 'max:30'],
             'notes' => ['nullable', 'string', 'max:500'],
+            'prescription_file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
         ]);
 
-        $order = DB::transaction(function () use ($data, $lines): Order {
+        $requiresPrescription = $lines->contains(fn (array $line): bool => (bool) $line['product']->requires_prescription);
+
+        if ($requiresPrescription && ! $request->hasFile('prescription_file')) {
+            return back()
+                ->withErrors(['prescription_file' => 'Envie a receita m?dica para produto controlado.'])
+                ->withInput();
+        }
+
+        $prescription = $request->file('prescription_file');
+        $prescriptionPath = $prescription?->store('prescriptions');
+
+        $order = DB::transaction(function () use ($data, $lines, $requiresPrescription, $prescription, $prescriptionPath): Order {
             $order = Order::query()->create([
                 ...$data,
                 'status' => Order::STATUS_PENDING_PAYMENT,
                 'payment_status' => Order::PAYMENT_PENDING,
                 'payment_provider' => 'mercado_pago',
+                'prescription_file_path' => $prescriptionPath,
+                'prescription_original_name' => $prescription?->getClientOriginalName(),
+                'prescription_mime_type' => $prescription?->getMimeType(),
+                'prescription_status' => $requiresPrescription ? Order::PRESCRIPTION_PENDING : Order::PRESCRIPTION_NOT_REQUIRED,
                 'total_cents' => Cart::totalCents(),
                 'pickup_code' => $this->pickupCode(),
             ]);
 
             foreach ($lines as $line) {
                 $product = $line['product'];
+
+                $freshProduct = \App\Models\Product::query()
+                    ->whereKey($product->id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (! $freshProduct || ! $freshProduct->is_active || $freshProduct->stock_quantity < $line['quantity']) {
+                    throw new \RuntimeException('Produto sem estoque suficiente: '.$product->name);
+                }
+
                 $order->items()->create([
                     'product_id' => $product->id,
                     'product_name' => $product->name,

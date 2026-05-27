@@ -25,6 +25,10 @@ class AdminCatalogTest extends TestCase
             'slug' => 'higiene-pessoal',
             'sort_order' => 8,
         ]);
+
+        $this->assertDatabaseHas('admin_audit_logs', [
+            'action' => 'category.created',
+        ]);
     }
 
     public function test_admin_can_create_and_update_product(): void
@@ -52,6 +56,11 @@ class AdminCatalogTest extends TestCase
 
         $this->assertSame(1990, $product->price_cents);
         $this->assertTrue($product->requires_prescription);
+        $this->assertDatabaseHas('stock_movements', [
+            'product_id' => $product->id,
+            'quantity_delta' => 15,
+            'reason' => 'product_created',
+        ]);
 
         $this->put(route('admin.products.update', $product), [
             'category_id' => $category->id,
@@ -70,6 +79,12 @@ class AdminCatalogTest extends TestCase
             'price_cents' => 2450,
             'stock_quantity' => 9,
             'requires_prescription' => false,
+        ]);
+
+        $this->assertDatabaseHas('stock_movements', [
+            'product_id' => $product->id,
+            'quantity_delta' => -6,
+            'reason' => 'admin_adjustment',
         ]);
     }
 

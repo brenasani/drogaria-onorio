@@ -82,3 +82,55 @@ Depois de publicado em HTTPS:
 
 - Android/Chrome: menu de três pontos -> Instalar app ou Adicionar à tela inicial.
 - iPhone/Safari: Compartilhar -> Adicionar à Tela de Início.
+
+
+## Checklist final antes de produ??o
+
+### Receita m?dica
+
+- Produtos com `requires_prescription=true` exigem envio de arquivo no checkout.
+- Arquivos aceitos: PDF, JPG, JPEG e PNG at? 5 MB.
+- As receitas ficam no disco privado do Laravel (`storage/app/private/prescriptions`) e s? o painel admin consegue baixar.
+- No painel de pedidos, revise a receita como pendente, aprovada ou recusada.
+
+### Estoque
+
+- O estoque ? conferido no checkout e novamente no momento em que o pagamento ? aprovado.
+- A baixa de estoque gera registro em `stock_movements`.
+- Ajustes manuais feitos pelo painel de produtos tamb?m geram movimenta??o.
+
+### Auditoria e seguran?a do admin
+
+- O painel admin exige senha (`ADMIN_PASSWORD`).
+- Login do admin tem rate limit de 5 tentativas por minuto por IP.
+- A??es administrativas gravam registros em `admin_audit_logs`.
+- Confira os logs em `/admin/auditoria`.
+- Use uma senha forte e exclusiva em produ??o.
+
+### Mercado Pago real
+
+Configure no `.env` de produ??o:
+
+```env
+MERCADO_PAGO_ACCESS_TOKEN=APP_USR...
+MERCADO_PAGO_SANDBOX=false
+MERCADO_PAGO_WEBHOOK_SECRET=segredo-configurado-no-webhook
+```
+
+No painel do Mercado Pago, configure o webhook para:
+
+```text
+https://seu-dominio.com.br/webhooks/mercado-pago
+```
+
+Se `MERCADO_PAGO_WEBHOOK_SECRET` estiver preenchido, o app valida a assinatura `x-signature` do webhook.
+
+### Backup Postgres
+
+Antes de abrir para clientes:
+
+- Ative backup autom?tico di?rio.
+- Teste restaura??o de backup.
+- Garanta SSL/TLS no acesso ao banco (`DB_SSLMODE=require`).
+- Guarde as vari?veis `.env` fora do GitHub.
+- Rode `php artisan migrate --force` ap?s o deploy.
