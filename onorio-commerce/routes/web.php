@@ -12,6 +12,7 @@ use App\Http\Controllers\LegalPageController;
 use App\Http\Controllers\MercadoPagoWebhookController;
 use App\Http\Controllers\PaymentTestController;
 use App\Http\Controllers\StorefrontController;
+use App\Http\Controllers\ExternalStockWebhookController;
 use App\Http\Controllers\StoreSelectionController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,7 @@ Route::get('/pagamento-teste/{order}', [PaymentTestController::class, 'show'])->
 Route::post('/pagamento-teste/{order}/aprovar', [PaymentTestController::class, 'approve'])->name('payments.test.approve');
 
 Route::post('/webhooks/mercado-pago', MercadoPagoWebhookController::class)->name('webhooks.mercado_pago');
+Route::post('/integrations/erp/stock', ExternalStockWebhookController::class)->name('integrations.erp.stock');
 
 Route::prefix('admin')->name('admin.')->group(function (): void {
     Route::get('/login', [AdminSessionController::class, 'create'])->name('login');

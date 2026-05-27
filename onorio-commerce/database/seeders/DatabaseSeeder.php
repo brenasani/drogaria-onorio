@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
     {
         $stores = collect([
             [
+                'external_store_id' => 'iguatemi',
                 'name' => 'Drogaria Onorio - Iguatemi',
                 'slug' => 'iguatemi',
                 'address' => 'Av. Arnaldo Victaliano, 1155 - Iguatemi - Ribeirao Preto/SP',
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
                 'sort_order' => 1,
             ],
             [
+                'external_store_id' => 'jardim-botanico',
                 'name' => 'Drogaria Onorio - Jardim Botanico',
                 'slug' => 'jardim-botanico',
                 'address' => 'Av. Portugal, 2777 - Jardim Botanico - Ribeirao Preto/SP',
@@ -40,6 +42,7 @@ class DatabaseSeeder extends Seeder
                 ['slug' => $store['slug']],
                 [
                     ...$store,
+                    'external_store_id' => $store['external_store_id'],
                     'has_pickup' => true,
                     'is_active' => true,
                 ],
@@ -78,6 +81,8 @@ class DatabaseSeeder extends Seeder
             $model = Product::query()->updateOrCreate(
                 ['slug' => Str::slug($product['name'])],
                 [
+                    'external_id' => Str::slug($product['name']),
+                    'barcode' => $product['barcode'] ?? null,
                     'category_id' => $categories[$product['category']]->id,
                     'name' => $product['name'],
                     'description' => $product['description'],
@@ -87,6 +92,7 @@ class DatabaseSeeder extends Seeder
                     'is_active' => true,
                     'image_color' => $product['image_color'],
                     'image_text' => $product['image_text'],
+                    'external_synced_at' => now(),
                 ],
             );
 

@@ -22,6 +22,14 @@ return [
         'key' => env('RESEND_API_KEY'),
     ],
 
+
+    'erp' => [
+        'base_url' => env('ERP_API_BASE_URL'),
+        'token' => env('ERP_API_TOKEN'),
+        'catalog_path' => env('ERP_CATALOG_PATH', '/products'),
+        'webhook_token' => env('ERP_WEBHOOK_TOKEN'),
+    ],
+
     'mercado_pago' => [
         'access_token' => env('MERCADO_PAGO_ACCESS_TOKEN'),
         'sandbox' => env('MERCADO_PAGO_SANDBOX', true),

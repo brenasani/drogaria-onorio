@@ -141,3 +141,51 @@ Antes de abrir para clientes:
 ## Admin com usuarios reais
 
 O seed cria um usuario administrador usando `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Apos configurar o `.env`, rode `php artisan db:seed --force` uma vez ou crie usuarios diretamente no banco com `is_admin=true`.
+
+
+## Integracao com ERP / sistema da loja
+
+A estrutura para integrar a API do sistema da drogaria ja esta preparada.
+
+Campos prontos:
+
+- `products.external_id`: codigo do produto no ERP.
+- `products.barcode`: codigo de barras/EAN.
+- `stores.external_store_id`: codigo da filial no ERP.
+- `product_store_stocks.external_synced_at`: ultima atualizacao de estoque por unidade.
+- `integration_logs`: historico de sincronizacoes, webhooks e erros.
+
+Variaveis do `.env`:
+
+```env
+ERP_API_BASE_URL=https://api-do-sistema.com.br
+ERP_API_TOKEN=token-fornecido-pelo-sistema
+ERP_CATALOG_PATH=/products
+ERP_WEBHOOK_TOKEN=token-secreto-para-webhook
+```
+
+Comando manual de sincronizacao:
+
+```bash
+php artisan erp:sync-catalog
+```
+
+Endpoint para o ERP enviar atualizacao de estoque:
+
+```text
+POST https://seu-dominio.com.br/integrations/erp/stock
+Authorization: Bearer ERP_WEBHOOK_TOKEN
+Content-Type: application/json
+```
+
+Payload aceito:
+
+```json
+{
+  "external_id": "codigo-produto-erp",
+  "external_store_id": "iguatemi",
+  "quantity": 20
+}
+```
+
+Tambem pode usar `barcode`/`ean` no lugar de `external_id`, e `stock` no lugar de `quantity`.

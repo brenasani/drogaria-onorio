@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
+    'external_id',
+    'barcode',
     'category_id',
     'name',
     'slug',
@@ -21,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'image_color',
     'image_text',
     'image_path',
+    'external_synced_at',
 ])]
 class Product extends Model
 {
@@ -29,6 +32,7 @@ class Product extends Model
         return [
             'requires_prescription' => 'boolean',
             'is_active' => 'boolean',
+            'external_synced_at' => 'datetime',
         ];
     }
 

@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->validateCsrfTokens(except: [
             'webhooks/mercado-pago',
+            'integrations/erp/stock',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
