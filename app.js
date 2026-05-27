@@ -3703,7 +3703,7 @@ Object.assign(infoPages, {
     text: "Cuidados realizados na drogaria com acolhimento, orientação e disponibilidade conforme unidade.",
     cards: [],
     serviceGrid: true,
-    heroImage: "assets/servicos-farmaceuticos-onorio-banner.png",
+    heroImage: "assets/servicos-farmaceuticos-onorio-banner-wide.png",
     sections: [],
     primary: ["Falar no WhatsApp", "whatsapp"],
   },
