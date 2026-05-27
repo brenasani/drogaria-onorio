@@ -104,6 +104,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Administrador Onorio',
                 'password' => Hash::make(env('ADMIN_PASSWORD', 'onorio-admin')),
                 'is_admin' => true,
+                'store_id' => null,
             ],
         );
     }

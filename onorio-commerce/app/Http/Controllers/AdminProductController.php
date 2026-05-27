@@ -6,8 +6,8 @@ use App\Models\AdminAuditLog;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductStoreStock;
-use App\Models\Store;
 use App\Models\StockMovement;
+use App\Support\AdminStoreScope;
 use App\Support\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -241,6 +241,6 @@ class AdminProductController extends Controller
 
     private function stores()
     {
-        return Store::query()->where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
+        return AdminStoreScope::stores();
     }
 }

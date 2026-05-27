@@ -23,12 +23,16 @@
                     <option value="{{ $value }}" @selected($selectedStatus === $value)>{{ $label }}</option>
                 @endforeach
             </select>
-            <select name="loja">
-                <option value="">Todas as unidades</option>
-                @foreach ($stores as $store)
-                    <option value="{{ $store->id }}" @selected($selectedStoreId === $store->id)>{{ $store->name }}</option>
-                @endforeach
-            </select>
+            @if ($stores->count() > 1)
+                <select name="loja">
+                    <option value="">Todas as unidades</option>
+                    @foreach ($stores as $store)
+                        <option value="{{ $store->id }}" @selected($selectedStoreId === $store->id)>{{ $store->name }}</option>
+                    @endforeach
+                </select>
+            @else
+                <input type="hidden" name="loja" value="{{ $stores->first()?->id }}">
+            @endif
             <button class="button secondary" type="submit">Filtrar</button>
         </form>
 

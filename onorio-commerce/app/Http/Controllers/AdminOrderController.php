@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AdminAuditLog;
 use App\Models\Order;
-use App\Models\Store;
+use App\Support\AdminStoreScope;
 use App\Support\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,9 +18,9 @@ class AdminOrderController extends Controller
     public function index(Request $request): View
     {
         $status = $request->string('status')->toString();
-        $storeId = $request->integer('loja') ?: null;
+        $storeId = AdminStoreScope::normalizeStoreFilter($request->integer('loja') ?: null);
 
-        $orders = Order::query()
+        $orders = AdminStoreScope::applyToOrders(Order::query())
             ->with('items', 'payment', 'store')
             ->when($status, fn ($query) => $query->where('status', $status))
             ->when($storeId, fn ($query) => $query->where('store_id', $storeId))
@@ -32,7 +32,7 @@ class AdminOrderController extends Controller
             'orders' => $orders,
             'statuses' => Order::statusOptions(),
             'selectedStatus' => $status,
-            'stores' => Store::query()->where('is_active', true)->orderBy('sort_order')->get(),
+            'stores' => AdminStoreScope::stores(),
             'selectedStoreId' => $storeId,
             'cartCount' => Cart::count(),
         ]);
@@ -40,6 +40,7 @@ class AdminOrderController extends Controller
 
     public function update(Request $request, Order $order): RedirectResponse
     {
+        abort_if(AdminStoreScope::allowedStoreId() && $order->store_id !== AdminStoreScope::allowedStoreId(), 403);
         $data = $request->validate([
             'status' => ['required', 'string', 'in:'.implode(',', array_keys(Order::statusOptions()))],
             'prescription_status' => ['nullable', 'string', Rule::in(array_keys(Order::prescriptionStatusOptions()))],
@@ -73,6 +74,7 @@ class AdminOrderController extends Controller
 
     public function prescription(Order $order): StreamedResponse
     {
+        abort_if(AdminStoreScope::allowedStoreId() && $order->store_id !== AdminStoreScope::allowedStoreId(), 403);
         abort_unless($order->prescription_file_path && Storage::exists($order->prescription_file_path), 404);
 
         AdminAuditLog::record('order.prescription_downloaded', $order);
