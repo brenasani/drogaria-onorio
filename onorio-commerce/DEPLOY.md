@@ -38,6 +38,7 @@ DB_PASSWORD=senha-forte
 DB_SSLMODE=require
 MERCADO_PAGO_ACCESS_TOKEN=APP_USR...
 MERCADO_PAGO_SANDBOX=false
+ADMIN_EMAIL=admin@seudominio.com.br
 ADMIN_PASSWORD=senha-forte-exclusiva-do-painel
 ```
 
@@ -69,6 +70,7 @@ Se a hospedagem tiver terminal/SSH:
 ```bash
 composer install --no-dev --optimize-autoloader
 php artisan migrate --force
+php artisan storage:link
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
@@ -84,32 +86,33 @@ Depois de publicado em HTTPS:
 - iPhone/Safari: Compartilhar -> Adicionar à Tela de Início.
 
 
-## Checklist final antes de produ??o
+## Checklist final antes de producao
 
-### Receita m?dica
+### Receita medica
 
 - Produtos com `requires_prescription=true` exigem envio de arquivo no checkout.
-- Arquivos aceitos: PDF, JPG, JPEG e PNG at? 5 MB.
-- As receitas ficam no disco privado do Laravel (`storage/app/private/prescriptions`) e s? o painel admin consegue baixar.
+- Arquivos aceitos: PDF, JPG, JPEG e PNG ate 5 MB.
+- As receitas ficam no disco privado do Laravel (`storage/app/private/prescriptions`) e so o painel admin consegue baixar.
 - No painel de pedidos, revise a receita como pendente, aprovada ou recusada.
 
 ### Estoque
 
-- O estoque ? conferido no checkout e novamente no momento em que o pagamento ? aprovado.
+- O estoque e conferido no checkout e novamente no momento em que o pagamento e aprovado.
 - A baixa de estoque gera registro em `stock_movements`.
-- Ajustes manuais feitos pelo painel de produtos tamb?m geram movimenta??o.
+- Ajustes manuais feitos pelo painel de produtos tambem geram movimentacao.
+- Produtos abaixo do minimo aparecem no dashboard do admin.
 
-### Auditoria e seguran?a do admin
+### Auditoria e seguranca do admin
 
-- O painel admin exige senha (`ADMIN_PASSWORD`).
+- O painel admin aceita usuario real por `ADMIN_EMAIL` + `ADMIN_PASSWORD`.
 - Login do admin tem rate limit de 5 tentativas por minuto por IP.
-- A??es administrativas gravam registros em `admin_audit_logs`.
+- Acoes administrativas gravam registros em `admin_audit_logs`.
 - Confira os logs em `/admin/auditoria`.
-- Use uma senha forte e exclusiva em produ??o.
+- Use uma senha forte e exclusiva em producao.
 
 ### Mercado Pago real
 
-Configure no `.env` de produ??o:
+Configure no `.env` de producao:
 
 ```env
 MERCADO_PAGO_ACCESS_TOKEN=APP_USR...
@@ -129,8 +132,12 @@ Se `MERCADO_PAGO_WEBHOOK_SECRET` estiver preenchido, o app valida a assinatura `
 
 Antes de abrir para clientes:
 
-- Ative backup autom?tico di?rio.
-- Teste restaura??o de backup.
+- Ative backup automatico diario.
+- Teste restauracao de backup.
 - Garanta SSL/TLS no acesso ao banco (`DB_SSLMODE=require`).
-- Guarde as vari?veis `.env` fora do GitHub.
-- Rode `php artisan migrate --force` ap?s o deploy.
+- Guarde as variaveis `.env` fora do GitHub.
+- Rode `php artisan migrate --force` apos o deploy.
+
+## Admin com usuarios reais
+
+O seed cria um usuario administrador usando `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Apos configurar o `.env`, rode `php artisan db:seed --force` uma vez ou crie usuarios diretamente no banco com `is_admin=true`.

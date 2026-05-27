@@ -9,6 +9,7 @@ use App\Models\StockMovement;
 use App\Support\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -48,6 +49,7 @@ class AdminProductController extends Controller
         return view('admin.products.form', [
             'product' => new Product([
                 'stock_quantity' => 0,
+                'minimum_stock' => 3,
                 'is_active' => true,
                 'requires_prescription' => false,
                 'image_color' => '#39896A',
@@ -126,11 +128,22 @@ class AdminProductController extends Controller
             'description' => ['required', 'string', 'max:1000'],
             'price' => ['required', 'string', 'max:20'],
             'stock_quantity' => ['required', 'integer', 'min:0', 'max:999999'],
+            'minimum_stock' => ['required', 'integer', 'min:0', 'max:999999'],
             'requires_prescription' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
             'image_color' => ['nullable', 'string', 'max:20'],
             'image_text' => ['nullable', 'string', 'max:12'],
+            'image_file' => ['nullable', 'image', 'max:4096'],
         ]);
+
+        $imagePath = $product?->image_path;
+
+        if ($request->hasFile('image_file')) {
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+            $imagePath = $request->file('image_file')->store('products', 'public');
+        }
 
         return [
             'category_id' => (int) $data['category_id'],
@@ -139,10 +152,12 @@ class AdminProductController extends Controller
             'description' => $data['description'],
             'price_cents' => $this->moneyToCents($data['price']),
             'stock_quantity' => (int) $data['stock_quantity'],
+            'minimum_stock' => (int) $data['minimum_stock'],
             'requires_prescription' => $request->boolean('requires_prescription'),
             'is_active' => $request->boolean('is_active'),
             'image_color' => $data['image_color'] ?: '#39896A',
             'image_text' => $data['image_text'] ? Str::upper($data['image_text']) : null,
+            'image_path' => $imagePath,
         ];
     }
 

@@ -1,4 +1,5 @@
-﻿<nav class="admin-tabs" aria-label="Administração">
+<nav class="admin-tabs" aria-label="Administração">
+    <a href="{{ route('admin.dashboard') }}" @class(['active' => request()->routeIs('admin.dashboard')])>Dashboard</a>
     <a href="{{ route('admin.orders.index') }}" @class(['active' => request()->routeIs('admin.orders.*')])>Pedidos</a>
     <a href="{{ route('admin.products.index') }}" @class(['active' => request()->routeIs('admin.products.*')])>Produtos</a>
     <a href="{{ route('admin.categories.index') }}" @class(['active' => request()->routeIs('admin.categories.*')])>Categorias</a>

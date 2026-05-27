@@ -46,6 +46,7 @@ class AdminCatalogTest extends TestCase
             'description' => 'Produto criado pelo painel.',
             'price' => '19,90',
             'stock_quantity' => 15,
+            'minimum_stock' => 3,
             'requires_prescription' => '1',
             'is_active' => '1',
             'image_color' => '#39896A',
@@ -68,6 +69,7 @@ class AdminCatalogTest extends TestCase
             'description' => 'Produto editado pelo painel.',
             'price' => '24,50',
             'stock_quantity' => 9,
+            'minimum_stock' => 4,
             'is_active' => '1',
             'image_color' => '#111111',
             'image_text' => 'T2',
@@ -78,6 +80,7 @@ class AdminCatalogTest extends TestCase
             'name' => 'Teste Produto 750mg',
             'price_cents' => 2450,
             'stock_quantity' => 9,
+            'minimum_stock' => 4,
             'requires_prescription' => false,
         ]);
 
@@ -101,3 +104,4 @@ class AdminCatalogTest extends TestCase
         ]);
     }
 }
+

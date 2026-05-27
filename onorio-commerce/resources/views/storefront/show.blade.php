@@ -5,7 +5,11 @@
 @section('content')
     <section class="detail">
         <div class="detail-art" style="--product-color: {{ $product->image_color }}">
-            <span>{{ $product->image_text }}</span>
+            @if ($product->imageUrl())
+                <img src="{{ $product->imageUrl() }}" alt="{{ $product->name }}">
+            @else
+                <span>{{ $product->image_text }}</span>
+            @endif
         </div>
 
         <div class="detail-copy">

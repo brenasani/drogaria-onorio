@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\AdminAuditLogController;
 use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminSessionController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\LegalPageController;
 use App\Http\Controllers\MercadoPagoWebhookController;
 use App\Http\Controllers\PaymentTestController;
 use App\Http\Controllers\StorefrontController;
@@ -15,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [StorefrontController::class, 'home'])->name('home');
 Route::get('/comprar', [StorefrontController::class, 'index'])->name('storefront');
 Route::get('/produto/{product:slug}', [StorefrontController::class, 'show'])->name('products.show');
+Route::get('/privacidade', [LegalPageController::class, 'privacy'])->name('legal.privacy');
+Route::get('/termos', [LegalPageController::class, 'terms'])->name('legal.terms');
 
 Route::get('/carrinho', [CartController::class, 'show'])->name('cart.show');
 Route::post('/carrinho/{product}', [CartController::class, 'add'])->name('cart.add');
@@ -36,6 +40,7 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
     Route::post('/logout', [AdminSessionController::class, 'destroy'])->name('logout');
 
     Route::middleware('admin')->group(function (): void {
+        Route::get('/', AdminDashboardController::class)->name('dashboard');
         Route::get('/auditoria', [AdminAuditLogController::class, 'index'])->name('audit.index');
         Route::get('/pedidos', [AdminOrderController::class, 'index'])->name('orders.index');
         Route::patch('/pedidos/{order}', [AdminOrderController::class, 'update'])->name('orders.update');

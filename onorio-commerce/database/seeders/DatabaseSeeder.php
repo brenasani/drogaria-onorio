@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -133,9 +134,13 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        User::factory()->create([
-            'name' => 'Equipe Onorio',
-            'email' => 'atendimento@drogariaonorio.test',
-        ]);
+        User::query()->updateOrCreate(
+            ['email' => env('ADMIN_EMAIL', 'admin@drogariaonorio.test')],
+            [
+                'name' => 'Administrador Onório',
+                'password' => Hash::make(env('ADMIN_PASSWORD', 'onorio-admin')),
+                'is_admin' => true,
+            ],
+        );
     }
 }

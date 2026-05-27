@@ -15,10 +15,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'description',
     'price_cents',
     'stock_quantity',
+    'minimum_stock',
     'requires_prescription',
     'is_active',
     'image_color',
     'image_text',
+    'image_path',
 ])]
 class Product extends Model
 {
@@ -43,6 +45,16 @@ class Product extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true)->where('stock_quantity', '>', 0);
+    }
+
+    public function isLowStock(): bool
+    {
+        return $this->stock_quantity <= $this->minimum_stock;
+    }
+
+    public function imageUrl(): ?string
+    {
+        return $this->image_path ? asset('storage/'.$this->image_path) : null;
     }
 
     public function price(): string

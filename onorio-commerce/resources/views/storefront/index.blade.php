@@ -46,7 +46,11 @@
                 @forelse ($products as $product)
                     <article class="product-card">
                         <a class="product-art" href="{{ route('products.show', $product) }}" style="--product-color: {{ $product->image_color }}">
-                            <span>{{ $product->image_text }}</span>
+                            @if ($product->imageUrl())
+                                <img src="{{ $product->imageUrl() }}" alt="{{ $product->name }}">
+                            @else
+                                <span>{{ $product->image_text }}</span>
+                            @endif
                         </a>
                         <div class="product-body">
                             <span class="category-name">{{ $product->category->name }}</span>

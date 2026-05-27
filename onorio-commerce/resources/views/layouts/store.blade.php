@@ -86,6 +86,11 @@
         @yield('content')
     </main>
 
+    <footer class="commerce-footer">
+        <a href="{{ route('legal.privacy') }}">Privacidade</a>
+        <a href="{{ route('legal.terms') }}">Termos de uso</a>
+    </footer>
+
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {

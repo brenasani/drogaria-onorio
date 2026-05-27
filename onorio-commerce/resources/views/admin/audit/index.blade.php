@@ -1,4 +1,4 @@
-﻿@extends('layouts.store')
+@extends('layouts.store')
 
 @section('title', 'Auditoria | Painel Drogaria Onório')
 

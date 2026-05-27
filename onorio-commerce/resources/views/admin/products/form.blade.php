@@ -1,4 +1,4 @@
-﻿@extends('layouts.store')
+@extends('layouts.store')
 
 @section('title', ($product->exists ? 'Editar produto' : 'Novo produto').' | Painel Drogaria Onório')
 
@@ -14,7 +14,7 @@
 
         @include('admin._tabs')
 
-        <form class="checkout-form admin-form" method="POST" action="{{ $product->exists ? route('admin.products.update', $product) : route('admin.products.store') }}">
+        <form class="checkout-form admin-form" method="POST" enctype="multipart/form-data" action="{{ $product->exists ? route('admin.products.update', $product) : route('admin.products.store') }}">
             @csrf
             @if ($product->exists)
                 @method('PUT')
@@ -56,6 +56,11 @@
             </label>
 
             <label>
+                <span>Estoque mínimo</span>
+                <input type="number" name="minimum_stock" min="0" value="{{ old('minimum_stock', $product->minimum_stock ?? 3) }}" required>
+            </label>
+
+            <label>
                 <span>Cor do card</span>
                 <input type="color" name="image_color" value="{{ old('image_color', $product->image_color ?: '#39896A') }}">
             </label>
@@ -64,7 +69,15 @@
                 <span>Texto/abreviação da imagem</span>
                 <input name="image_text" value="{{ old('image_text', $product->image_text) }}" maxlength="12" placeholder="Ex: RX, FPS, KIT">
             </label>
-
+            <label class="full-field">
+                <span>Foto do produto</span>
+                <input type="file" name="image_file" accept="image/*">
+                @if ($product->imageUrl())
+                    <small>Imagem atual cadastrada. Envie outra imagem para substituir.</small>
+                @else
+                    <small>Opcional: JPG, PNG ou WebP até 4 MB.</small>
+                @endif
+            </label>
             <label class="check-field">
                 <input type="checkbox" name="requires_prescription" value="1" @checked(old('requires_prescription', $product->requires_prescription))>
                 <span>Exige receita na retirada</span>
@@ -82,3 +95,4 @@
         </form>
     </section>
 @endsection
+

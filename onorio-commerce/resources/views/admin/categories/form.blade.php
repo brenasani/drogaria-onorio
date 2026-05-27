@@ -1,4 +1,4 @@
-﻿@extends('layouts.store')
+@extends('layouts.store')
 
 @section('title', ($category->exists ? 'Editar categoria' : 'Nova categoria').' | Painel Drogaria Onório')
 

@@ -22,11 +22,26 @@ class AdminAuthTest extends TestCase
 
         $this->post(route('admin.login.store'), [
             'password' => 'onorio-admin',
-        ])->assertRedirect(route('admin.orders.index'));
+        ])->assertRedirect(route('admin.dashboard'));
 
         $this->get(route('admin.orders.index'))
             ->assertOk()
             ->assertSee('Pedidos da loja');
+    }
+
+
+    public function test_admin_can_login_with_email_and_password(): void
+    {
+        $this->seed();
+
+        $this->post(route('admin.login.store'), [
+            'email' => 'admin@drogariaonorio.test',
+            'password' => 'onorio-admin',
+        ])->assertRedirect(route('admin.dashboard'));
+
+        $this->get(route('admin.dashboard'))
+            ->assertOk()
+            ->assertSee('Dashboard');
     }
 
     public function test_admin_can_update_order_after_login(): void
@@ -60,3 +75,4 @@ class AdminAuthTest extends TestCase
         ]);
     }
 }
+
